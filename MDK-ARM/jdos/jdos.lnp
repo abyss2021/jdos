@@ -1,0 +1,25 @@
+--cpu Cortex-M3
+"jdos\startup_stm32f103xe.o"
+"jdos\main.o"
+"jdos\stm32f1xx_it.o"
+"jdos\stm32f1xx_hal_msp.o"
+"jdos\jdos.o"
+"jdos\jdos_1.o"
+"jdos\stm32f1xx_hal_gpio_ex.o"
+"jdos\stm32f1xx_hal_tim.o"
+"jdos\stm32f1xx_hal_tim_ex.o"
+"jdos\stm32f1xx_hal.o"
+"jdos\stm32f1xx_hal_rcc.o"
+"jdos\stm32f1xx_hal_rcc_ex.o"
+"jdos\stm32f1xx_hal_gpio.o"
+"jdos\stm32f1xx_hal_dma.o"
+"jdos\stm32f1xx_hal_cortex.o"
+"jdos\stm32f1xx_hal_pwr.o"
+"jdos\stm32f1xx_hal_flash.o"
+"jdos\stm32f1xx_hal_flash_ex.o"
+"jdos\stm32f1xx_hal_exti.o"
+"jdos\system_stm32f1xx.o"
+--library_type=microlib --strict --scatter "jdos\jdos.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "jdos.map" -o jdos\jdos.axf

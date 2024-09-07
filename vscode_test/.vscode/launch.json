@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/Abyss/Desktop/jd_rtos/vscode_test",
-      "program": "c:/Users/Abyss/Desktop/jd_rtos/vscode_test/build/Debug/outDebug",
+      "cwd": "c:/Users/abyss/Desktop/jdos/vscode_test",
+      "program": "c:/Users/abyss/Desktop/jdos/vscode_test/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
