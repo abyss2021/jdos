@@ -140,10 +140,17 @@ int jd_delete_task(struct jd_task *jd_task)
 	jd_task_previous->next = jd_task_next;				//上一个节点的next指向下一个节点
 	jd_task_next->previous = jd_task_previous;			//下一个节点的previous指向上一个节点
 	free(jd_task->stack_sp);								//释放当前节点的堆栈内存
-	free(jd_task);		                                //释放当前节点内存
-    jd_task_sp = 	jd_task_next;															
+	free(jd_task);		                                //释放当前节点内存														
 	return JD_OK;
 }
+
+extern void jd_hw_task_switch();
+/*当前任务切换为下一个任务*/
+void jd_task_switch()
+{
+	jd_hw_task_switch(jd_task_sp->next->stack_sp);  //将下一个任务节点的堆栈指针传入
+}
+
 
 int jd_main();
 /*jd初始化*/
@@ -171,6 +178,7 @@ int jd_init()
     {
 			HAL_Delay(300);
 			HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
+			jd_task_switch();
     };
  }
  void task2()
@@ -180,6 +188,7 @@ int jd_init()
     {
 			HAL_Delay(500);
 			HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
+			jd_task_switch();
     };
  }
  void task3()
@@ -189,6 +198,7 @@ int jd_init()
     {
 			HAL_Delay(800);
 			HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
+			jd_task_switch();
     };
  }
 

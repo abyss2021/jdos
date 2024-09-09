@@ -4,6 +4,13 @@
 ARM Macro Assembler    Page 1 
 
 
+    1 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+3
+    2 00000000         jd_hw_task_switch
+                               PROC
+    3 00000000                 EXPORT           jd_hw_task_switch
+    4 00000000         
+    5 00000000                 ENDP
                        
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
 ork --depend=jdos\jdos_1.d -ojdos\jdos_1.o -I.\RTE\_jdos -ID:\Keil_V5\Packs\ARM
@@ -11,4 +18,27 @@ ork --depend=jdos\jdos_1.d -ojdos\jdos_1.o -I.\RTE\_jdos -ID:\Keil_V5\Packs\ARM
 ice\Include --predefine="__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA
  528" --predefine="_RTE_ SETA 1" --predefine="STM32F10X_HD SETA 1" --list=jdos.
 lst ..\jdos.s
-334 symbols in table
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 1 in file ..\jdos.s
+   Uses
+      None
+Comment: .text unused
+jd_hw_task_switch 00000000
+
+Symbol: jd_hw_task_switch
+   Definitions
+      At line 2 in file ..\jdos.s
+   Uses
+      At line 3 in file ..\jdos.s
+Comment: jd_hw_task_switch used once
+2 symbols
+336 symbols in table
