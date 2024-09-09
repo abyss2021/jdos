@@ -79,7 +79,7 @@ I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h)(0x66DBD41D)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h)(0x66DBD41D)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h)(0x66DBD41D)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h)(0x66DBD41D)
-F (..\jdos.c)(0x66DBE056)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_jdos-ID:\Keil_V5\Packs\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\Keil_V5\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include-D__UVISION_VERSION="528" -D_RTE_ -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o jdos\jdos.o --omf_browse jdos\jdos.crf --depend jdos\jdos.d)
+F (..\jdos.c)(0x66DC30CA)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_jdos-ID:\Keil_V5\Packs\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\Keil_V5\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include-D__UVISION_VERSION="528" -D_RTE_ -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o jdos\jdos.o --omf_browse jdos\jdos.crf --depend jdos\jdos.d)
 I (D:\Keil_V5\ARM\ARMCC\include\stdio.h)(0x5CEB79E2)
 I (D:\Keil_V5\ARM\ARMCC\include\stdlib.h)(0x5CEB79E2)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x66DBD41D)
@@ -106,7 +106,7 @@ I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h)(0x66DBD41D)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h)(0x66DBD41D)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h)(0x66DBD41D)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h)(0x66DBD41D)
-F (..\jdos.s)(0x66DBD969)(--cpu Cortex-M3 -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_jdos-ID:\Keil_V5\Packs\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\Keil_V5\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include--pd "__UVISION_VERSION SETA 528" --pd "_RTE_ SETA 1" --pd "STM32F10X_HD SETA 1"--list jdos.lst --xref -o jdos\jdos_1.o --depend jdos\jdos_1.d)
+F (..\jdos.s)(0x66DC3027)(--cpu Cortex-M3 -g --apcs=interwork --pd "__MICROLIB SETA 1"-I.\RTE\_jdos-ID:\Keil_V5\Packs\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\Keil_V5\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include--pd "__UVISION_VERSION SETA 528" --pd "_RTE_ SETA 1" --pd "STM32F10X_HD SETA 1"--list jdos.lst --xref -o jdos\jdos_1.o --depend jdos\jdos_1.d)
 F (../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio_ex.c)(0x66DBD41D)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_jdos-ID:\Keil_V5\Packs\ARM\CMSIS\5.5.1\CMSIS\Core\Include-ID:\Keil_V5\Packs\Keil\STM32F1xx_DFP\2.3.0\Device\Include-D__UVISION_VERSION="528" -D_RTE_ -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o jdos\stm32f1xx_hal_gpio_ex.o --omf_browse jdos\stm32f1xx_hal_gpio_ex.crf --depend jdos\stm32f1xx_hal_gpio_ex.d)
 I (../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h)(0x66DBD41D)
 I (../Core/Inc/stm32f1xx_hal_conf.h)(0x66DBD420)

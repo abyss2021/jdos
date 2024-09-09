@@ -98,7 +98,7 @@ struct jd_task *jd_create_task(void (*task_entry)(),unsigned int stack_size)
 	jd_task_sp->jd_task_statu = JD_TASK_PAUSE;                          //创建任务，状态为暂停状态，等待启动
 	jd_task_sp->stack_size = stack_size;																//记录当前任务堆栈大小
 	
-	jd_task_sp->stack_sp = jd_task_sp->stack_origin_addr+sizeof(struct all_register);  //腾出寄存器的空间
+	jd_task_sp->stack_sp = (unsigned long *)jd_task_sp->stack_origin_addr+sizeof(struct all_register);  //腾出寄存器的空间
 	struct all_register *stack_register = (struct all_register *)jd_task_sp->stack_sp;  //将指针转换成寄存器指针
 
 	//将任务运行数据搬移到内存中
@@ -139,10 +139,17 @@ int jd_delete_task(struct jd_task *jd_task)
 	jd_task_previous->next = jd_task_next;				//上一个节点的next指向下一个节点
 	jd_task_next->previous = jd_task_previous;			//下一个节点的previous指向上一个节点
 	free(jd_task->stack_sp);								//释放当前节点的堆栈内存
-	free(jd_task);		                                //释放当前节点内存
-    jd_task_sp = 	jd_task_next;															
+	free(jd_task);		                                //释放当前节点内存														
 	return JD_OK;
 }
+
+extern void jd_hw_task_switch();
+/*当前任务切换为下一个任务*/
+void jd_task_switch()
+{
+	jd_hw_task_switch(jd_task_sp->next->stack_sp);  //将下一个任务节点的堆栈指针传入
+}
+
 
 int jd_main();
 /*jd初始化*/
@@ -170,6 +177,7 @@ int jd_init()
     {
 			HAL_Delay(300);
 			HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
+			jd_task_switch();
     };
  }
  void task2()
@@ -179,6 +187,7 @@ int jd_init()
     {
 			HAL_Delay(500);
 			HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
+			jd_task_switch();
     };
  }
  void task3()
@@ -188,6 +197,7 @@ int jd_init()
     {
 			HAL_Delay(800);
 			HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
+			jd_task_switch();
     };
  }
 
