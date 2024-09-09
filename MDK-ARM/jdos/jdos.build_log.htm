@@ -5,7 +5,7 @@
 <h2>Tool Versions:</h2>
 IDE-Version: ��Vision V5.28.0.0
 Copyright (C) 2019 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: 1 abyss, 1, LIC=YA39H-WEYKV-562Q2-9XRIM-HVEY2-EZ1LW
+License Information: 1 Abyss, 1, LIC=MPPLD-8T1AD-EV21R-KE3FA-7GG94-HG7SW
  
 Tool Versions:
 Toolchain:       MDK-ARM Plus  Version: 5.28.0.0
@@ -21,21 +21,22 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.6.0
 Dialog DLL:      TCM.DLL V1.36.2.0
  
 <h2>Project:</h2>
-C:\Users\abyss\Desktop\jdos\MDK-ARM\jdos.uvprojx
-Project File Date:  09/07/2024
+C:\Users\Abyss\Desktop\jd_rtos\MDK-ARM\jdos.uvprojx
+Project File Date:  09/09/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'D:\Keil_V5\ARM\ARMCC\Bin'
 Build target 'jdos'
 compiling jdos.c...
-..\jdos.c(101): error:  #852: expression must be a pointer to a complete object type
-  	jd_task_sp->stack_sp = jd_task_sp->stack_origin_addr+sizeof(struct all_register);  //腾出寄存器的空间
 ..\jdos.c(147): warning:  #1295-D: Deprecated declaration jd_main - give arg types
   int jd_main();
 ..\jdos.c(156): warning:  #513-D: a value of type "int (*)()" cannot be assigned to an entity of type "void (*)()"
   	jd_task_sp_frist->task_entry = jd_main;							//任务入口
-..\jdos.c: 2 warnings, 1 error
-"jdos\jdos.axf" - 1 Error(s), 2 Warning(s).
+..\jdos.c: 2 warnings, 0 errors
+linking...
+Program Size: Code=3092 RO-data=372 RW-data=32 ZI-data=5120  
+FromELF: creating hex file...
+"jdos\jdos.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -58,8 +59,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.2.0
-Target not created.
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:05
 </pre>
 </body>
 </html>
