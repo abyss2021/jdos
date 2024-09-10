@@ -152,25 +152,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>211</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134221094</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\jdos.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\jdos\../jdos.c\211</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
           <LineNumber>250</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134220840</Address>
+          <Address>134220836</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -182,7 +166,7 @@
           <Expression>\\jdos\../jdos.c\250</Expression>
         </Bp>
         <Bp>
-          <Number>2</Number>
+          <Number>1</Number>
           <Type>0</Type>
           <LineNumber>54</LineNumber>
           <EnabledFlag>1</EnabledFlag>
@@ -196,38 +180,6 @@
           <Filename>..\jdos.s</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\jdos\../jdos.s\54</Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>233</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134221158</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\jdos.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\jdos\../jdos.c\233</Expression>
-        </Bp>
-        <Bp>
-          <Number>4</Number>
-          <Type>0</Type>
-          <LineNumber>222</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134221126</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\jdos.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\jdos\../jdos.c\222</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>

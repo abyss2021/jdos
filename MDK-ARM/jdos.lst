@@ -15,92 +15,74 @@ ARM Macro Assembler    Page 1
     4 00000000                 IMPORT           jd_task_next_stack_sp
     5 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
 3
-    6 00000000         jd_asm_task_switch
-                               PROC                         ;线程切换，早
-                                                            期测试版本
-    7 00000000                 EXPORT           jd_asm_task_switch
-    8 00000000         ;保护现场，将堆栈指针传出
-    9 00000000 E92D 0FF0       PUSH             {R4-R11}
-   10 00000004 4668            MOV              R0,SP
-   11 00000006 4916            LDR              R1,=jd_task_stack_sp
-   12 00000008 6008            STR              R0,[R1]
-   13 0000000A         
-   14 0000000A         ;取下一个任务的堆栈指针,恢复现场
-   15 0000000A 4916            LDR              R1,=jd_task_next_stack_sp
-   16 0000000C 468D            MOV              SP,R1
-   17 0000000E BC04            POP              {R2}
-   18 00000010 F382 8803       MSR              PSR,R2
-   19 00000014 E8BD 5FFF       POP              {R0-R12,LR}
-   20 00000018 4770            BX               LR
-   21 0000001A                 ENDP
-   22 0000001A         
-   23 0000001A         jd_asm_task_first_switch
-                               PROC                         ;进入main线程�
-                                                            �早期测试版本
-                                                            
-   24 0000001A                 EXPORT           jd_asm_task_first_switch
-   25 0000001A         ;设置PendSV的优先级为最低优先级
-   26 0000001A 4913            LDR              R1,=JD_PRI_14
-   27 0000001C F04F 02FF       LDR              R2,=0X000000FF
-   28 00000020 600A            STR              R2,[R1]
-   29 00000022         
-   30 00000022         ;保存堆栈指针地址
-   31 00000022 4601            MOV              R1,R0
-   32 00000024 6800            LDR              R0,[R0]
-   33 00000026 E8B0 0FF0       LDMFD            R0!,{R4-R11}
-   34 0000002A C83C            LDMFD            R0!,{R2-R5}
-   35 0000002C F850 CB04       LDMFD            R0!,{R12}
-   36 00000030 F850 EB04       LDMFD            R0!,{LR}
-   37 00000034 C804            LDMFD            R0!,{R2}
-   38 00000036 C804            LDMFD            R0!,{R2}
-   39 00000038 6008            STR              R0,[R1]
-   40 0000003A 4770            BX               LR
-   41 0000003C                 ENDP
-   42 0000003C         
-   43 0000003C         jd_asm_pendsv_putup
+    6 00000000         
+    7 00000000         jd_asm_task_first_switch
+                               PROC                         ;进入main
+    8 00000000                 EXPORT           jd_asm_task_first_switch
+    9 00000000         ;设置PendSV的优先级为最低优先级
+   10 00000000 4911            LDR              R1,=JD_PRI_14
+   11 00000002 F04F 02FF       LDR              R2,=0X000000FF
+   12 00000006 600A            STR              R2,[R1]
+   13 00000008         
+   14 00000008         ;出栈，第一次进入任务，主要目的是恢复L
+                       R，其他数据无用
+   15 00000008 4601            MOV              R1,R0
+   16 0000000A 6800            LDR              R0,[R0]
+   17 0000000C E8B0 0FF0       LDMFD            R0!,{R4-R11}
+   18 00000010 C83C            LDMFD            R0!,{R2-R5}
+   19 00000012 F850 CB04       LDMFD            R0!,{R12}
+   20 00000016 F850 EB04       LDMFD            R0!,{LR}
+   21 0000001A C804            LDMFD            R0!,{R2}
+   22 0000001C C804            LDMFD            R0!,{R2}
+   23 0000001E         ;保存堆栈指针地址
+   24 0000001E 6008            STR              R0,[R1]
+   25 00000020 4770            BX               LR
+   26 00000022                 ENDP
+   27 00000022         
+   28 00000022         jd_asm_pendsv_putup
                                PROC                         ;触发PendSV异常
                                                             
-   44 0000003C                 EXPORT           jd_asm_pendsv_putup
-   45 0000003C 480B            LDR              R0,=JD_ICRS
-   46 0000003E F04F 5180       LDR              R1,=0X10000000
+   29 00000022                 EXPORT           jd_asm_pendsv_putup
+   30 00000022 480A            LDR              R0,=JD_ICRS
+   31 00000024 F04F 5180       LDR              R1,=0X10000000
+   32 00000028 6001            STR              R1,[R0]
+   33 0000002A 4770            BX               LR
+   34 0000002C                 ENDP
+   35 0000002C         
+   36 0000002C         PendSV_Handler
+                               PROC                         ;切换上下文
+   37 0000002C                 EXPORT           PendSV_Handler
+   38 0000002C         
+   39 0000002C 4668            MOV              R0,SP
+   40 0000002E E920 0FF0       STMFD            R0!,{R4-R11}
+   41 00000032         
+   42 00000032         ;保护现场，将堆栈指针传出
+   43 00000032 4907            LDR              R1,=jd_task_stack_sp
+   44 00000034 6809            LDR              R1,[R1]
+   45 00000036         ;LDR R1,[R1]
+   46 00000036         
+   47 00000036 6008            STR              R0,[R1]
+   48 00000038         
 
 
 
 ARM Macro Assembler    Page 2 
 
 
-   47 00000042 6001            STR              R1,[R0]
-   48 00000044 4770            BX               LR
-   49 00000046                 ENDP
-   50 00000046         
-   51 00000046         PendSV_Handler
-                               PROC                         ;切换上下文
-   52 00000046                 EXPORT           PendSV_Handler
-   53 00000046         
-   54 00000046 4668            MOV              R0,SP
-   55 00000048 E920 0FF0       STMFD            R0!,{R4-R11}
-   56 0000004C         
-   57 0000004C         ;保护现场，将堆栈指针传出
-   58 0000004C 4904            LDR              R1,=jd_task_stack_sp
-   59 0000004E 6809            LDR              R1,[R1]
-   60 00000050         ;LDR R1,[R1]
-   61 00000050         
-   62 00000050 6008            STR              R0,[R1]
-   63 00000052         
-   64 00000052         
-   65 00000052         ;取下一个任务的堆栈指针,恢复现场
-   66 00000052 4904            LDR              R1,=jd_task_next_stack_sp
-   67 00000054 6809            LDR              R1,[R1]
-   68 00000056 6808            LDR              R0,[R1]
-   69 00000058 E8B0 0FF0       LDMFD            R0!,{R4-R11}
-   70 0000005C 4685            MOV              SP,R0
-   71 0000005E 4770            BX               LR
-   72 00000060                 ENDP
+   49 00000038         
+   50 00000038         ;取下一个任务的堆栈指针,恢复现场
+   51 00000038 4906            LDR              R1,=jd_task_next_stack_sp
+   52 0000003A 6809            LDR              R1,[R1]
+   53 0000003C 6808            LDR              R0,[R1]
+   54 0000003E E8B0 0FF0       LDMFD            R0!,{R4-R11}
+   55 00000042 4685            MOV              SP,R0
+   56 00000044 4770            BX               LR
+   57 00000046                 ENDP
                        
-              00000000 
-              00000000 
-              E000ED23 
+              00 00 E000ED23 
               E000ED04 
+              00000000 
+              00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
 ork --depend=jdos\jdos_1.d -ojdos\jdos_1.o -I.\RTE\_jdos -ID:\Keil_V5\Packs\ARM
 \CMSIS\5.5.1\CMSIS\Core\Include -ID:\Keil_V5\Packs\Keil\STM32F1xx_DFP\2.3.0\Dev
@@ -121,39 +103,31 @@ Symbol: .text
    Uses
       None
 Comment: .text unused
-PendSV_Handler 00000046
+PendSV_Handler 0000002C
 
 Symbol: PendSV_Handler
    Definitions
-      At line 51 in file ..\jdos.s
+      At line 36 in file ..\jdos.s
    Uses
-      At line 52 in file ..\jdos.s
+      At line 37 in file ..\jdos.s
 Comment: PendSV_Handler used once
-jd_asm_pendsv_putup 0000003C
+jd_asm_pendsv_putup 00000022
 
 Symbol: jd_asm_pendsv_putup
    Definitions
-      At line 43 in file ..\jdos.s
+      At line 28 in file ..\jdos.s
    Uses
-      At line 44 in file ..\jdos.s
+      At line 29 in file ..\jdos.s
 Comment: jd_asm_pendsv_putup used once
-jd_asm_task_first_switch 0000001A
+jd_asm_task_first_switch 00000000
 
 Symbol: jd_asm_task_first_switch
    Definitions
-      At line 23 in file ..\jdos.s
-   Uses
-      At line 24 in file ..\jdos.s
-Comment: jd_asm_task_first_switch used once
-jd_asm_task_switch 00000000
-
-Symbol: jd_asm_task_switch
-   Definitions
-      At line 6 in file ..\jdos.s
-   Uses
       At line 7 in file ..\jdos.s
-Comment: jd_asm_task_switch used once
-5 symbols
+   Uses
+      At line 8 in file ..\jdos.s
+Comment: jd_asm_task_first_switch used once
+4 symbols
 
 
 
@@ -166,7 +140,7 @@ Symbol: JD_ICRS
    Definitions
       At line 1 in file ..\jdos.s
    Uses
-      At line 45 in file ..\jdos.s
+      At line 30 in file ..\jdos.s
 Comment: JD_ICRS used once
 JD_PRI_14 E000ED23
 
@@ -174,7 +148,7 @@ Symbol: JD_PRI_14
    Definitions
       At line 2 in file ..\jdos.s
    Uses
-      At line 26 in file ..\jdos.s
+      At line 10 in file ..\jdos.s
 Comment: JD_PRI_14 used once
 2 symbols
 
@@ -189,17 +163,15 @@ Symbol: jd_task_next_stack_sp
    Definitions
       At line 4 in file ..\jdos.s
    Uses
-      At line 15 in file ..\jdos.s
-      At line 66 in file ..\jdos.s
-
+      At line 51 in file ..\jdos.s
+Comment: jd_task_next_stack_sp used once
 jd_task_stack_sp 00000000
 
 Symbol: jd_task_stack_sp
    Definitions
       At line 3 in file ..\jdos.s
    Uses
-      At line 11 in file ..\jdos.s
-      At line 58 in file ..\jdos.s
-
+      At line 43 in file ..\jdos.s
+Comment: jd_task_stack_sp used once
 2 symbols
-345 symbols in table
+344 symbols in table

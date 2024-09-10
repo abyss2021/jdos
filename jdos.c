@@ -149,7 +149,7 @@ int jd_delete_task(struct jd_task *jd_task)
 	return JD_OK;
 }
 
-extern void jd_asm_task_switch();
+//汇编函数
 extern void jd_asm_task_first_switch();
 extern void jd_asm_pendsv_putup();
 /*当前任务切换为下一个任务*/
@@ -158,7 +158,6 @@ void jd_task_switch()
 	jd_task_stack_sp = &jd_task_sp->stack_sp; //更新当前任务全局堆栈指针变量
 	jd_task_sp = jd_task_sp->next; //移动节点
 	jd_task_next_stack_sp = &jd_task_sp->stack_sp; //更新下一个任务全局堆栈指针变量
-	//jd_asm_task_switch(&jd_task_sp->previous->stack_sp,&jd_task_sp->stack_sp);  //将本次任务和下一个任务节点的堆栈指针传入
 	jd_asm_pendsv_putup();  //挂起PendSV异常
 }
 /*内核第一次运行空闲任务*/
