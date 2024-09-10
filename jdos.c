@@ -149,6 +149,7 @@ int jd_delete_task(struct jd_task *jd_task)
 
 extern void jd_asm_task_switch();
 extern void jd_asm_task_first_switch();
+extern void jd_asm_pendsv_putup();
 /*当前任务切换为下一个任务*/
 void jd_task_switch()
 {
@@ -238,7 +239,7 @@ int jd_main()
     struct jd_task *test_task3 = jd_create_task(task3,512);
     while(1)
 	{
-		jd_task_switch();
+		jd_asm_pendsv_putup();
 	};
 }
 
