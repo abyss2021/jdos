@@ -10,25 +10,36 @@ ARM Macro Assembler    Page 1
                                PROC
     3 00000000                 EXPORT           jd_hw_task_switch
     4 00000000         ;保护现场，将堆栈指针传出
-    5 00000000 F3EF 8209       MRS              R2,PSP
-    6 00000004 E8B2 0FF0       LDMFD            R2!,{R4-R11}
-    7 00000008         ;LDR R0,[R0]
-    8 00000008 6002            STR              R2,[R0]
-    9 0000000A         ;取下一个任务的堆栈指针,恢复现场
-   10 0000000A 6809            LDR              R1,[R1]
-   11 0000000C E921 0FF0       STMFD            R1!,{R4-R11}
-   12 00000010 F381 8809       MSR              PSP,R1
-   13 00000014 4770            BX               LR
-   14 00000016                 ENDP
-   15 00000016         
-   16 00000016         jd_hw_task_first_switch
+    5 00000000 E92D 5FFF       PUSH             {R0-R12,LR}
+    6 00000004 F3EF 8203       MRS              R2,PSR
+    7 00000008 B404            PUSH             {R2}
+    8 0000000A 466A            MOV              R2,SP
+    9 0000000C 6002            STR              R2,[R0]
+   10 0000000E         
+   11 0000000E         ;取下一个任务的堆栈指针,恢复现场
+   12 0000000E 6809            LDR              R1,[R1]
+   13 00000010 468D            MOV              SP,R1
+   14 00000012 BC04            POP              {R2}
+   15 00000014 F382 8803       MSR              PSR,R2
+   16 00000018 E8BD 5FFF       POP              {R0-R12,LR}
+   17 0000001C 4770            BX               LR
+   18 0000001E                 ENDP
+   19 0000001E         
+   20 0000001E         jd_hw_task_first_switch
                                PROC
-   17 00000016                 EXPORT           jd_hw_task_first_switch
-   18 00000016 6800            LDR              R0,[R0]
-   19 00000018 E920 0FF0       STMFD            R0!,{R4-R11}
-   20 0000001C F380 8809       MSR              PSP,R0
-   21 00000020 4770            BX               LR
-   22 00000022                 ENDP
+   21 0000001E                 EXPORT           jd_hw_task_first_switch
+   22 0000001E 4601            MOV              R1,R0       ;保存堆栈指针
+                                                            地址
+   23 00000020 6800            LDR              R0,[R0]
+   24 00000022 E8B0 0FF0       LDMFD            R0!,{R4-R11}
+   25 00000026 C83C            LDMFD            R0!,{R2-R5}
+   26 00000028 F850 CB04       LDMFD            R0!,{R12}
+   27 0000002C F850 EB04       LDMFD            R0!,{LR}
+   28 00000030 C804            LDMFD            R0!,{R2}
+   29 00000032 C804            LDMFD            R0!,{R2}
+   30 00000034 6008            STR              R0,[R1]
+   31 00000036 4770            BX               LR
+   32 00000038                 ENDP
                        
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
 ork --depend=jdos\jdos_1.d -ojdos\jdos_1.o -I.\RTE\_jdos -ID:\Keil_V5\Packs\ARM
@@ -50,13 +61,13 @@ Symbol: .text
    Uses
       None
 Comment: .text unused
-jd_hw_task_first_switch 00000016
+jd_hw_task_first_switch 0000001E
 
 Symbol: jd_hw_task_first_switch
    Definitions
-      At line 16 in file ..\jdos.s
+      At line 20 in file ..\jdos.s
    Uses
-      At line 17 in file ..\jdos.s
+      At line 21 in file ..\jdos.s
 Comment: jd_hw_task_first_switch used once
 jd_hw_task_switch 00000000
 

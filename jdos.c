@@ -59,6 +59,7 @@ struct jd_task{
 };
 struct jd_task *jd_task_sp_frist= NULL;	//创建系统链表指针，用于保存链表第一个任务位置
 struct jd_task *jd_task_sp = NULL;	    //创建一个任务链表指针
+struct all_register *stack_register =  NULL; //创建一个所有寄存器指针
 
 /*申请任务空间
 * jd_task_sp：链表指针
@@ -88,10 +89,13 @@ struct jd_task *jd_create_task(void (*task_entry)(),unsigned int stack_size)
 	struct jd_task *jd_new_task = NULL;	//创建一个任务链表指针
   jd_new_task = jd_request_space(JD_DEFAULT_STACK_SIZE);	
 	if(jd_new_task==JD_NULL)return JD_NULL;	    //申请空间
-	jd_new_task->previous = jd_task_sp;																//当前节点的previous指向上一个节点
-	jd_new_task->next = jd_task_sp->next;															//当前节点的next指向第一个节点
-	jd_task_sp->next = jd_new_task;																	//上一节点的next指向当前节点
-	jd_task_sp->next->previous = jd_new_task;													    //下一节点的previous指向当前节点
+
+
+	jd_new_task->previous = jd_task_sp; //新节点指向当前节点
+	jd_new_task->next = jd_task_sp->next;//新节点指向下一个节点
+	jd_task_sp->next->previous = jd_new_task; //下一个节点指向当前节点
+	jd_task_sp->next = jd_new_task; //当前节点指向新节点
+
 	
 
 	
@@ -99,7 +103,7 @@ struct jd_task *jd_create_task(void (*task_entry)(),unsigned int stack_size)
 	jd_new_task->jd_task_statu = JD_TASK_PAUSE;                          //创建任务，状态为暂停状态，等待启动
 	jd_new_task->stack_size = stack_size;																//记录当前任务堆栈大小
 	
-	jd_new_task->stack_sp = jd_new_task->stack_origin_addr+sizeof(struct all_register);  //腾出寄存器的空间
+	jd_new_task->stack_sp = jd_new_task->stack_origin_addr+JD_DEFAULT_STACK_SIZE-sizeof(struct all_register)-4;  //腾出寄存器的空间
 	struct all_register *stack_register = (struct all_register *)jd_new_task->stack_sp;  //将指针转换成寄存器指针
 
 	//将任务运行数据搬移到内存中
@@ -108,8 +112,8 @@ struct jd_task *jd_create_task(void (*task_entry)(),unsigned int stack_size)
 	stack_register->r2 = 0;
 	stack_register->r3 = 0;
 	stack_register->r12 = 0;
-	stack_register->lr = (unsigned long)jd_task_sp->task_entry;
-	stack_register->pc = (unsigned long)jd_task_sp->task_entry;
+	stack_register->lr = (unsigned long)jd_new_task->task_entry;
+	stack_register->pc = (unsigned long)jd_new_task->task_entry;
 	stack_register->xpsr = 0;
 	
 	//jd_task_sp = jd_new_task;																		//链表指针移动到当前节点
@@ -145,10 +149,12 @@ int jd_delete_task(struct jd_task *jd_task)
 }
 
 extern void jd_hw_task_switch();
+extern void jd_task_first_switch();
 /*当前任务切换为下一个任务*/
 void jd_task_switch()
 {
-	jd_hw_task_switch(&jd_task_sp->stack_sp,&jd_task_sp->next->stack_sp);  //将本次任务和下一个任务节点的堆栈指针传入
+	jd_task_sp = jd_task_sp->next;
+	jd_hw_task_switch(&jd_task_sp->previous->stack_sp,&jd_task_sp->stack_sp);  //将本次任务和下一个任务节点的堆栈指针传入
 }
 /*内核第一次运行空闲任务*/
 void jd_task_first_switch()
@@ -161,7 +167,7 @@ int jd_main();
 int jd_init()
 {				
 	struct jd_task *jd_new_task = NULL;	//创建一个任务链表指针
-  	jd_new_task = jd_request_space(JD_DEFAULT_STACK_SIZE);	
+  jd_new_task = jd_request_space(JD_DEFAULT_STACK_SIZE);	
 	if(jd_new_task==JD_NULL)return JD_NULL;	    //申请空间
 	jd_new_task->previous = jd_new_task;														//第一个任务，指向自己
 	jd_new_task->next = jd_new_task;															//第一个任务，指向自己
@@ -170,8 +176,8 @@ int jd_init()
 	jd_new_task->jd_task_statu = JD_TASK_PAUSE;                          					//创建任务，状态为暂停状态，等待启动
 	jd_new_task->stack_size = JD_DEFAULT_STACK_SIZE;										//记录当前任务堆栈大小
 	
-	jd_new_task->stack_sp = jd_new_task->stack_origin_addr+sizeof(struct all_register);  //腾出寄存器的空间
-	struct all_register *stack_register = (struct all_register *)jd_new_task->stack_sp;  //将指针转换成寄存器指针
+	jd_new_task->stack_sp = jd_new_task->stack_origin_addr+JD_DEFAULT_STACK_SIZE-sizeof(struct all_register)-4;  //腾出寄存器的空间
+	stack_register = (struct all_register *)jd_new_task->stack_sp;  //将指针转换成寄存器指针
 
 	//将任务运行数据搬移到内存中
 	stack_register->r0 = 0;
@@ -179,8 +185,8 @@ int jd_init()
 	stack_register->r2 = 0;
 	stack_register->r3 = 0;
 	stack_register->r12 = 0;
-	stack_register->lr = (unsigned long)jd_task_sp->task_entry;
-	stack_register->pc = (unsigned long)jd_task_sp->task_entry;
+	stack_register->lr = (unsigned long)jd_new_task->task_entry;
+	stack_register->pc = (unsigned long)jd_new_task->task_entry;
 	stack_register->xpsr = 0;
 	
 	jd_task_sp = jd_new_task;																		//链表指针移动到当前节点
