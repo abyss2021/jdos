@@ -148,6 +148,9 @@ Reset_Handler   PROC
                 LDR     R0, =SystemInit
                 BLX     R0               
                 LDR     R0, =__main
+				
+				CPSID i ;
+				
                 BX      R0
                 ENDP
                 
