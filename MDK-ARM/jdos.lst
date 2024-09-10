@@ -6,9 +6,9 @@ ARM Macro Assembler    Page 1
 
     1 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
 3
-    2 00000000         jd_hw_task_switch
+    2 00000000         jd_asm_task_switch
                                PROC
-    3 00000000                 EXPORT           jd_hw_task_switch
+    3 00000000                 EXPORT           jd_asm_task_switch
     4 00000000         ;保护现场，将堆栈指针传出
     5 00000000 E92D 5FFF       PUSH             {R0-R12,LR}
     6 00000004 F3EF 8203       MRS              R2,PSR
@@ -25,9 +25,9 @@ ARM Macro Assembler    Page 1
    17 0000001C 4770            BX               LR
    18 0000001E                 ENDP
    19 0000001E         
-   20 0000001E         jd_hw_task_first_switch
+   20 0000001E         jd_asm_task_first_switch
                                PROC
-   21 0000001E                 EXPORT           jd_hw_task_first_switch
+   21 0000001E                 EXPORT           jd_asm_task_first_switch
    22 0000001E 4601            MOV              R1,R0       ;保存堆栈指针
                                                             地址
    23 00000020 6800            LDR              R0,[R0]
@@ -61,21 +61,21 @@ Symbol: .text
    Uses
       None
 Comment: .text unused
-jd_hw_task_first_switch 0000001E
+jd_asm_task_first_switch 0000001E
 
-Symbol: jd_hw_task_first_switch
+Symbol: jd_asm_task_first_switch
    Definitions
       At line 20 in file ..\jdos.s
    Uses
       At line 21 in file ..\jdos.s
-Comment: jd_hw_task_first_switch used once
-jd_hw_task_switch 00000000
+Comment: jd_asm_task_first_switch used once
+jd_asm_task_switch 00000000
 
-Symbol: jd_hw_task_switch
+Symbol: jd_asm_task_switch
    Definitions
       At line 2 in file ..\jdos.s
    Uses
       At line 3 in file ..\jdos.s
-Comment: jd_hw_task_switch used once
+Comment: jd_asm_task_switch used once
 3 symbols
 337 symbols in table

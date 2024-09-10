@@ -90,7 +90,6 @@ struct jd_task *jd_create_task(void (*task_entry)(),unsigned int stack_size)
   jd_new_task = jd_request_space(JD_DEFAULT_STACK_SIZE);	
 	if(jd_new_task==JD_NULL)return JD_NULL;	    //申请空间
 
-
 	jd_new_task->previous = jd_task_sp; //新节点指向当前节点
 	jd_new_task->next = jd_task_sp->next;//新节点指向下一个节点
 	jd_task_sp->next->previous = jd_new_task; //下一个节点指向当前节点
@@ -99,9 +98,9 @@ struct jd_task *jd_create_task(void (*task_entry)(),unsigned int stack_size)
 	
 
 	
-	jd_new_task->task_entry = task_entry;																//任务入口
+	jd_new_task->task_entry = task_entry;								//任务入口
 	jd_new_task->jd_task_statu = JD_TASK_PAUSE;                          //创建任务，状态为暂停状态，等待启动
-	jd_new_task->stack_size = stack_size;																//记录当前任务堆栈大小
+	jd_new_task->stack_size = stack_size;								//记录当前任务堆栈大小
 	
 	jd_new_task->stack_sp = jd_new_task->stack_origin_addr+JD_DEFAULT_STACK_SIZE-sizeof(struct all_register)-4;  //腾出寄存器的空间
 	struct all_register *stack_register = (struct all_register *)jd_new_task->stack_sp;  //将指针转换成寄存器指针
@@ -148,18 +147,18 @@ int jd_delete_task(struct jd_task *jd_task)
 	return JD_OK;
 }
 
-extern void jd_hw_task_switch();
-extern void jd_task_first_switch();
+extern void jd_asm_task_switch();
+extern void jd_asm_task_first_switch();
 /*当前任务切换为下一个任务*/
 void jd_task_switch()
 {
 	jd_task_sp = jd_task_sp->next;
-	jd_hw_task_switch(&jd_task_sp->previous->stack_sp,&jd_task_sp->stack_sp);  //将本次任务和下一个任务节点的堆栈指针传入
+	jd_asm_task_switch(&jd_task_sp->previous->stack_sp,&jd_task_sp->stack_sp);  //将本次任务和下一个任务节点的堆栈指针传入
 }
 /*内核第一次运行空闲任务*/
 void jd_task_first_switch()
 {
-	jd_hw_task_first_switch(&jd_task_sp->stack_sp);
+	jd_asm_task_first_switch(&jd_task_sp->stack_sp);
 }
 
 int jd_main();
@@ -229,16 +228,6 @@ int jd_init()
     };
  }
 
-
- /*main函数
-int main(void)
-{
-    jd_init();
-    jd_task_sp->task_entry();
-	while(1)
-	{
-	};
-}*/
 
 /*系统main*/
 int jd_main()

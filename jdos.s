@@ -1,6 +1,6 @@
 					AREA |.text|, CODE, READONLY, ALIGN=3
-jd_hw_task_switch   PROC
-					EXPORT  jd_hw_task_switch
+jd_asm_task_switch   PROC
+					EXPORT  jd_asm_task_switch
 					;保护现场，将堆栈指针传出
 					PUSH {R0-R12,LR}
 					MRS R2,PSR
@@ -17,8 +17,8 @@ jd_hw_task_switch   PROC
 					BX LR
 					ENDP
 
-jd_hw_task_first_switch PROC
-						EXPORT  jd_hw_task_first_switch
+jd_asm_task_first_switch PROC
+						EXPORT  jd_asm_task_first_switch
 						MOV R1,R0;保存堆栈指针地址
 						LDR R0,[R0]
 						LDMFD  R0!,{R4-R11}
