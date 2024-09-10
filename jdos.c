@@ -115,7 +115,7 @@ struct jd_task *jd_create_task(void (*task_entry)(),unsigned int stack_size)
 	stack_register->r12 = 0;
 	stack_register->lr = (unsigned long)jd_new_task->task_entry;
 	stack_register->pc = (unsigned long)jd_new_task->task_entry;
-	stack_register->xpsr = 0;
+	stack_register->xpsr = 0x01000000L; //由于Armv7-M只支持执行Thumb指令，因此必须始终将其值保持为1
 	
 	//jd_task_sp = jd_new_task;																		//链表指针移动到当前节点
 	return jd_new_task;																				//返回当前任务节点
@@ -159,7 +159,7 @@ void jd_task_switch()
 	jd_task_sp = jd_task_sp->next; //移动节点
 	jd_task_next_stack_sp = &jd_task_sp->stack_sp; //更新下一个任务全局堆栈指针变量
 	//jd_asm_task_switch(&jd_task_sp->previous->stack_sp,&jd_task_sp->stack_sp);  //将本次任务和下一个任务节点的堆栈指针传入
-	jd_asm_pendsv_putup();
+	jd_asm_pendsv_putup();  //挂起PendSV异常
 }
 /*内核第一次运行空闲任务*/
 void jd_task_first_switch()
@@ -208,9 +208,10 @@ int jd_init()
     //printf("1 hello\r\n");
     while(1)
     {
-			HAL_Delay(300);
+			HAL_Delay(80);
 			HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
 			jd_task_switch();
+			HAL_Delay(20);
     };
  }
  void task2()
@@ -218,9 +219,10 @@ int jd_init()
     //printf("2 hello\r\n");
     while(1)
     {
-			HAL_Delay(500);
+			HAL_Delay(100);
 			HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
 			jd_task_switch();
+			HAL_Delay(20);
     };
  }
  void task3()
@@ -228,9 +230,10 @@ int jd_init()
     //printf("3 hello\r\n");
     while(1)
     {
-			HAL_Delay(800);
+			HAL_Delay(50);
 			HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
 			jd_task_switch();
+			HAL_Delay(50);
     };
  }
 
@@ -245,6 +248,7 @@ int jd_main()
     while(1)
 	{
 		jd_task_switch();
+		HAL_Delay(50);
 	};
 }
 

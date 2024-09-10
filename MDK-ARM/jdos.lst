@@ -22,11 +22,11 @@ ARM Macro Assembler    Page 1
     8 00000000         ;保护现场，将堆栈指针传出
     9 00000000 E92D 0FF0       PUSH             {R4-R11}
    10 00000004 4668            MOV              R0,SP
-   11 00000006 4915            LDR              R1,=jd_task_stack_sp
+   11 00000006 4916            LDR              R1,=jd_task_stack_sp
    12 00000008 6008            STR              R0,[R1]
    13 0000000A         
    14 0000000A         ;取下一个任务的堆栈指针,恢复现场
-   15 0000000A 4915            LDR              R1,=jd_task_next_stack_sp
+   15 0000000A 4916            LDR              R1,=jd_task_next_stack_sp
    16 0000000C 468D            MOV              SP,R1
    17 0000000E BC04            POP              {R2}
    18 00000010 F382 8803       MSR              PSR,R2
@@ -40,7 +40,7 @@ ARM Macro Assembler    Page 1
                                                             
    24 0000001A                 EXPORT           jd_asm_task_first_switch
    25 0000001A         ;设置PendSV的优先级为最低优先级
-   26 0000001A 4912            LDR              R1,=JD_PRI_14
+   26 0000001A 4913            LDR              R1,=JD_PRI_14
    27 0000001C F04F 02FF       LDR              R2,=0X000000FF
    28 00000020 600A            STR              R2,[R1]
    29 00000022         
@@ -61,7 +61,7 @@ ARM Macro Assembler    Page 1
                                PROC                         ;触发PendSV异常
                                                             
    44 0000003C                 EXPORT           jd_asm_pendsv_putup
-   45 0000003C 480A            LDR              R0,=JD_ICRS
+   45 0000003C 480B            LDR              R0,=JD_ICRS
    46 0000003E F04F 5180       LDR              R1,=0X10000000
 
 
@@ -77,21 +77,27 @@ ARM Macro Assembler    Page 2
                                PROC                         ;切换上下文
    52 00000046                 EXPORT           PendSV_Handler
    53 00000046         
-   54 00000046         ;保护现场，将堆栈指针传出
-   55 00000046 E92D 0FF0       PUSH             {R4-R11}
-   56 0000004A 4668            MOV              R0,SP
-   57 0000004C 4903            LDR              R1,=jd_task_stack_sp
-   58 0000004E 6008            STR              R0,[R1]
-   59 00000050         
-   60 00000050         ;取下一个任务的堆栈指针,恢复现场
-   61 00000050 4903            LDR              R1,=jd_task_next_stack_sp
-   62 00000052 6809            LDR              R1,[R1]
-   63 00000054 468D            MOV              SP,R1
-   64 00000056 E8BD 0FF0       POP              {R4-R11}
-   65 0000005A         
-   66 0000005A                 ENDP
+   54 00000046 4668            MOV              R0,SP
+   55 00000048 E920 0FF0       STMFD            R0!,{R4-R11}
+   56 0000004C         
+   57 0000004C         ;保护现场，将堆栈指针传出
+   58 0000004C 4904            LDR              R1,=jd_task_stack_sp
+   59 0000004E 6809            LDR              R1,[R1]
+   60 00000050         ;LDR R1,[R1]
+   61 00000050         
+   62 00000050 6008            STR              R0,[R1]
+   63 00000052         
+   64 00000052         
+   65 00000052         ;取下一个任务的堆栈指针,恢复现场
+   66 00000052 4904            LDR              R1,=jd_task_next_stack_sp
+   67 00000054 6809            LDR              R1,[R1]
+   68 00000056 6808            LDR              R0,[R1]
+   69 00000058 E8B0 0FF0       LDMFD            R0!,{R4-R11}
+   70 0000005C 4685            MOV              SP,R0
+   71 0000005E 4770            BX               LR
+   72 00000060                 ENDP
                        
-              00 00 00000000 
+              00000000 
               00000000 
               E000ED23 
               E000ED04 
@@ -184,7 +190,7 @@ Symbol: jd_task_next_stack_sp
       At line 4 in file ..\jdos.s
    Uses
       At line 15 in file ..\jdos.s
-      At line 61 in file ..\jdos.s
+      At line 66 in file ..\jdos.s
 
 jd_task_stack_sp 00000000
 
@@ -193,7 +199,7 @@ Symbol: jd_task_stack_sp
       At line 3 in file ..\jdos.s
    Uses
       At line 11 in file ..\jdos.s
-      At line 57 in file ..\jdos.s
+      At line 58 in file ..\jdos.s
 
 2 symbols
 345 symbols in table

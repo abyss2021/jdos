@@ -51,16 +51,22 @@ jd_asm_pendsv_putup 	PROC	;触发PendSV异常
 PendSV_Handler   	PROC	;切换上下文
 					EXPORT  PendSV_Handler 
 					
-					;保护现场，将堆栈指针传出
-					PUSH {R4-R11}
 					MOV R0,SP
+					STMFD R0!,{R4-R11}	
+					
+					;保护现场，将堆栈指针传出
 					LDR R1,=jd_task_stack_sp
+					LDR R1,[R1]
+					;LDR R1,[R1]
+				
 					STR R0,[R1]
+					
 
 					;取下一个任务的堆栈指针,恢复现场
 					LDR R1,=jd_task_next_stack_sp
 					LDR R1,[R1]
-					MOV SP,R1
-					POP {R4-R11}
-					
+					LDR R0,[R1]
+					LDMFD R0!,{R4-R11}
+					MOV SP,R0
+					BX LR
 					ENDP
