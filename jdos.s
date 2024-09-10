@@ -44,8 +44,10 @@ jd_asm_pendsv_putup 	PROC	;触发PendSV异常
 						LDR R0,=JD_ICRS
 						LDR R1,=0X10000000
 						STR R1,[R0]
+						BX LR
 						ENDP
 
-;Reset_Handler   PROC	;切换上下文
- ;               EXPORT  Reset_Handler 
-	;			ENDP
+PendSV_Handler   	PROC	;切换上下文
+					EXPORT  PendSV_Handler 
+					MOV R0,#01
+					ENDP

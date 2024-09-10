@@ -39,7 +39,7 @@ ARM Macro Assembler    Page 1
                                                             
    23 0000001E                 EXPORT           jd_asm_task_first_switch
    24 0000001E         ;设置PendSV的优先级为最低优先级
-   25 0000001E 490A            LDR              R1,=JD_PRI_14
+   25 0000001E 490C            LDR              R1,=JD_PRI_14
    26 00000020 F04F 02FF       LDR              R2,=0X000000FF
    27 00000024 600A            STR              R2,[R1]
    28 00000026         
@@ -60,7 +60,7 @@ ARM Macro Assembler    Page 1
                                PROC                         ;触发PendSV异常
                                                             
    43 00000040                 EXPORT           jd_asm_pendsv_putup
-   44 00000040 4802            LDR              R0,=JD_ICRS
+   44 00000040 4804            LDR              R0,=JD_ICRS
    45 00000042 F04F 5180       LDR              R1,=0X10000000
    46 00000046 6001            STR              R1,[R0]
 
@@ -69,13 +69,16 @@ ARM Macro Assembler    Page 1
 ARM Macro Assembler    Page 2 
 
 
-   47 00000048                 ENDP
-   48 00000048         
-   49 00000048         ;Reset_Handler   PROC ;切换上下文
-   50 00000048         ;               EXPORT  Reset_Handler 
-   51 00000048         ;   ENDP
+   47 00000048 4770            BX               LR
+   48 0000004A                 ENDP
+   49 0000004A         
+   50 0000004A         PendSV_Handler
+                               PROC                         ;切换上下文
+   51 0000004A                 EXPORT           PendSV_Handler
+   52 0000004A F04F 0001       MOV              R0,#01
+   53 0000004E                 ENDP
                        
-              E000ED23 
+              00 00 E000ED23 
               E000ED04 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
 ork --depend=jdos\jdos_1.d -ojdos\jdos_1.o -I.\RTE\_jdos -ID:\Keil_V5\Packs\ARM
@@ -97,6 +100,14 @@ Symbol: .text
    Uses
       None
 Comment: .text unused
+PendSV_Handler 0000004A
+
+Symbol: PendSV_Handler
+   Definitions
+      At line 50 in file ..\jdos.s
+   Uses
+      At line 51 in file ..\jdos.s
+Comment: PendSV_Handler used once
 jd_asm_pendsv_putup 00000040
 
 Symbol: jd_asm_pendsv_putup
@@ -121,7 +132,7 @@ Symbol: jd_asm_task_switch
    Uses
       At line 5 in file ..\jdos.s
 Comment: jd_asm_task_switch used once
-4 symbols
+5 symbols
 
 
 
@@ -145,4 +156,4 @@ Symbol: JD_PRI_14
       At line 25 in file ..\jdos.s
 Comment: JD_PRI_14 used once
 2 symbols
-342 symbols in table
+343 symbols in table

@@ -152,9 +152,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>237</LineNumber>
+          <LineNumber>242</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134220772</Address>
+          <Address>134220804</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -163,7 +163,7 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\jdos.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\jdos\../jdos.c\237</Expression>
+          <Expression>\\jdos\../jdos.c\242</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -178,6 +178,14 @@
           <ItemText>jd_task_sp</ItemText>
         </Ww>
       </WatchWindow1>
+      <MemoryWindow1>
+        <Mm>
+          <WinNumber>1</WinNumber>
+          <SubType>0</SubType>
+          <ItemText>0xE000ED04</ItemText>
+          <AccSizeX>0</AccSizeX>
+        </Mm>
+      </MemoryWindow1>
       <Tracepoint>
         <THDelay>0</THDelay>
       </Tracepoint>
