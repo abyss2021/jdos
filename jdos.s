@@ -1,17 +1,18 @@
 JD_ICRS EQU 0XE000ED04		;中断控制及状态寄存器
 JD_PRI_14 EQU 0XE000ED23	;PendSV的优先级设置寄存器
+	IMPORT jd_task_stack_sp
+	IMPORT jd_task_next_stack_sp
 						AREA |.text|, CODE, READONLY, ALIGN=3
 jd_asm_task_switch   	PROC		;线程切换，早期测试版本
 						EXPORT  jd_asm_task_switch
 						;保护现场，将堆栈指针传出
-						PUSH {R0-R12,LR}
-						MRS R2,PSR
-						PUSH {R2}
-						MOV R2,SP
-						STR R2,[R0]
-						
+						PUSH {R4-R11}
+						MOV R0,SP
+						LDR R1,=jd_task_stack_sp
+						STR R0,[R1]
+
 						;取下一个任务的堆栈指针,恢复现场
-						LDR R1,[R1]
+						LDR R1,=jd_task_next_stack_sp
 						MOV SP,R1
 						POP {R2}
 						MSR PSR,R2
@@ -49,5 +50,17 @@ jd_asm_pendsv_putup 	PROC	;触发PendSV异常
 
 PendSV_Handler   	PROC	;切换上下文
 					EXPORT  PendSV_Handler 
-					MOV R0,#01
+					
+					;保护现场，将堆栈指针传出
+					PUSH {R4-R11}
+					MOV R0,SP
+					LDR R1,=jd_task_stack_sp
+					STR R0,[R1]
+
+					;取下一个任务的堆栈指针,恢复现场
+					LDR R1,=jd_task_next_stack_sp
+					LDR R1,[R1]
+					MOV SP,R1
+					POP {R4-R11}
+					
 					ENDP

@@ -60,6 +60,8 @@ struct jd_task{
 struct jd_task *jd_task_sp_frist= NULL;	//创建系统链表指针，用于保存链表第一个任务位置
 struct jd_task *jd_task_sp = NULL;	    //创建一个任务链表指针
 struct all_register *stack_register =  NULL; //创建一个所有寄存器指针
+unsigned long *jd_task_stack_sp = NULL;	//创建当前任务堆栈指针的地址
+unsigned long *jd_task_next_stack_sp = NULL; //创建下一个任务堆栈指针的地址
 
 /*申请任务空间
 * jd_task_sp：链表指针
@@ -153,8 +155,11 @@ extern void jd_asm_pendsv_putup();
 /*当前任务切换为下一个任务*/
 void jd_task_switch()
 {
-	jd_task_sp = jd_task_sp->next;
-	jd_asm_task_switch(&jd_task_sp->previous->stack_sp,&jd_task_sp->stack_sp);  //将本次任务和下一个任务节点的堆栈指针传入
+	jd_task_stack_sp = &jd_task_sp->stack_sp; //更新当前任务全局堆栈指针变量
+	jd_task_sp = jd_task_sp->next; //移动节点
+	jd_task_next_stack_sp = &jd_task_sp->stack_sp; //更新下一个任务全局堆栈指针变量
+	//jd_asm_task_switch(&jd_task_sp->previous->stack_sp,&jd_task_sp->stack_sp);  //将本次任务和下一个任务节点的堆栈指针传入
+	jd_asm_pendsv_putup();
 }
 /*内核第一次运行空闲任务*/
 void jd_task_first_switch()
@@ -239,7 +244,7 @@ int jd_main()
     struct jd_task *test_task3 = jd_create_task(task3,512);
     while(1)
 	{
-		jd_asm_pendsv_putup();
+		jd_task_switch();
 	};
 }
 
