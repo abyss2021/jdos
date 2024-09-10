@@ -71,10 +71,9 @@ ARM Macro Assembler    Page 2
 
    47 00000048                 ENDP
    48 00000048         
-   49 00000048         Reset_Handler
-                               PROC                         ;切换上下文
-   50 00000048                 EXPORT           Reset_Handler
-   51 00000048                 ENDP
+   49 00000048         ;Reset_Handler   PROC ;切换上下文
+   50 00000048         ;               EXPORT  Reset_Handler 
+   51 00000048         ;   ENDP
                        
               E000ED23 
               E000ED04 
@@ -98,14 +97,6 @@ Symbol: .text
    Uses
       None
 Comment: .text unused
-Reset_Handler 00000048
-
-Symbol: Reset_Handler
-   Definitions
-      At line 49 in file ..\jdos.s
-   Uses
-      At line 50 in file ..\jdos.s
-Comment: Reset_Handler used once
 jd_asm_pendsv_putup 00000040
 
 Symbol: jd_asm_pendsv_putup
@@ -130,7 +121,7 @@ Symbol: jd_asm_task_switch
    Uses
       At line 5 in file ..\jdos.s
 Comment: jd_asm_task_switch used once
-5 symbols
+4 symbols
 
 
 
@@ -154,4 +145,4 @@ Symbol: JD_PRI_14
       At line 25 in file ..\jdos.s
 Comment: JD_PRI_14 used once
 2 symbols
-343 symbols in table
+342 symbols in table

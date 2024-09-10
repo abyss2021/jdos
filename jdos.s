@@ -46,6 +46,6 @@ jd_asm_pendsv_putup 	PROC	;触发PendSV异常
 						STR R1,[R0]
 						ENDP
 
-Reset_Handler   PROC	;切换上下文
-                EXPORT  Reset_Handler 
-				ENDP
+;Reset_Handler   PROC	;切换上下文
+ ;               EXPORT  Reset_Handler 
+	;			ENDP

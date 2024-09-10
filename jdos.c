@@ -239,7 +239,7 @@ int jd_main()
     struct jd_task *test_task3 = jd_create_task(task3,512);
     while(1)
 	{
-		jd_asm_pendsv_putup();
+		//jd_asm_pendsv_putup();
 	};
 }
 
