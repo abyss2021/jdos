@@ -150,7 +150,11 @@ void jd_task_switch()
 {
 	jd_hw_task_switch(&jd_task_sp->stack_sp,&jd_task_sp->next->stack_sp);  //将本次任务和下一个任务节点的堆栈指针传入
 }
-
+/*内核第一次运行空闲任务*/
+void jd_task_first_switch()
+{
+	jd_hw_task_first_switch(&jd_task_sp->stack_sp);
+}
 
 int jd_main();
 /*jd初始化*/
@@ -182,7 +186,7 @@ int jd_init()
 	jd_task_sp = jd_new_task;																		//链表指针移动到当前节点
 	jd_task_sp_frist = jd_task_sp;
 
-	jd_task_switch();
+	jd_task_first_switch();
 	return JD_OK;
 }
 

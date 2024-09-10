@@ -11,7 +11,7 @@ ARM Macro Assembler    Page 1
     3 00000000                 EXPORT           jd_hw_task_switch
     4 00000000         ;保护现场，将堆栈指针传出
     5 00000000 F3EF 8209       MRS              R2,PSP
-    6 00000004 E922 0FF0       STMFD            R2!,{R4-R11}
+    6 00000004 E8B2 0FF0       LDMFD            R2!,{R4-R11}
     7 00000008         ;LDR R0,[R0]
     8 00000008 6002            STR              R2,[R0]
     9 0000000A         ;取下一个任务的堆栈指针,恢复现场
@@ -20,6 +20,15 @@ ARM Macro Assembler    Page 1
    12 00000010 F381 8809       MSR              PSP,R1
    13 00000014 4770            BX               LR
    14 00000016                 ENDP
+   15 00000016         
+   16 00000016         jd_hw_task_first_switch
+                               PROC
+   17 00000016                 EXPORT           jd_hw_task_first_switch
+   18 00000016 6800            LDR              R0,[R0]
+   19 00000018 E920 0FF0       STMFD            R0!,{R4-R11}
+   20 0000001C F380 8809       MSR              PSP,R0
+   21 00000020 4770            BX               LR
+   22 00000022                 ENDP
                        
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
 ork --depend=jdos\jdos_1.d -ojdos\jdos_1.o -I.\RTE\_jdos -ID:\Keil_V5\Packs\ARM
@@ -41,6 +50,14 @@ Symbol: .text
    Uses
       None
 Comment: .text unused
+jd_hw_task_first_switch 00000016
+
+Symbol: jd_hw_task_first_switch
+   Definitions
+      At line 16 in file ..\jdos.s
+   Uses
+      At line 17 in file ..\jdos.s
+Comment: jd_hw_task_first_switch used once
 jd_hw_task_switch 00000000
 
 Symbol: jd_hw_task_switch
@@ -49,5 +66,5 @@ Symbol: jd_hw_task_switch
    Uses
       At line 3 in file ..\jdos.s
 Comment: jd_hw_task_switch used once
-2 symbols
-336 symbols in table
+3 symbols
+337 symbols in table
