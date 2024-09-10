@@ -9,10 +9,17 @@ ARM Macro Assembler    Page 1
     2 00000000         jd_hw_task_switch
                                PROC
     3 00000000                 EXPORT           jd_hw_task_switch
-    4 00000000 F3EF 8209       MRS              R2,PSP
-    5 00000004 E922 0FF0       STMFD            R2!,{R4-R11}
-    6 00000008         
-    7 00000008                 ENDP
+    4 00000000         ;保护现场，将堆栈指针传出
+    5 00000000 F3EF 8209       MRS              R2,PSP
+    6 00000004 E922 0FF0       STMFD            R2!,{R4-R11}
+    7 00000008         ;LDR R0,[R0]
+    8 00000008 6002            STR              R2,[R0]
+    9 0000000A         ;取下一个任务的堆栈指针,恢复现场
+   10 0000000A 6809            LDR              R1,[R1]
+   11 0000000C E921 0FF0       STMFD            R1!,{R4-R11}
+   12 00000010 F381 8809       MSR              PSP,R1
+   13 00000014 4770            BX               LR
+   14 00000016                 ENDP
                        
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
 ork --depend=jdos\jdos_1.d -ojdos\jdos_1.o -I.\RTE\_jdos -ID:\Keil_V5\Packs\ARM
