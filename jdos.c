@@ -113,20 +113,18 @@ void jd_task_switch(void)
 	jd_task_temp = jd_task_sp->next;
 
 	//如果下一个线程timeout不为0，则遍历任务，查找延时完成的任务
-	if(jd_task_temp->timeout!=0)
+
+	//遍历任务，选择timeout=jd_time的任务
+	while (1)
 	{
-		//遍历任务，选择timeout=jd_time的任务
-		while (1)
+		jd_task_temp = jd_task_temp->next;
+		if(jd_task_temp->timeout==jd_time||jd_task_temp->timeout==0)
 		{
-			if(jd_task_temp->timeout==jd_time)
-			{
-				break;
-			}
-			jd_task_temp = jd_task_temp->next;
+			jd_task_temp->timeout = 0;
+			break;
 		}
 	}
-
-
+	
 	
 	jd_task_stack_sp = &jd_task_sp->stack_sp; //更新当前任务全局堆栈指针变量
 	jd_task_sp = jd_task_temp; //移动节点
@@ -153,6 +151,7 @@ void HAL_IncTick(void)
 	uwTick += uwTickFreq;  //系统自带不可删除,否则hal_delay等hal库函数不可用
 	
 	jd_time++; //jd_lck++
+	//扫描所有任务
 	jd_task_switch(); //jd_task_switch
 }
 
