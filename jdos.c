@@ -117,7 +117,7 @@ void PendSV_Handler(void)
 	jd_asm_pendsv_handler(); //切换上下文
 }
 
-/*hal库已自动使能systick，以下为hal库systick中断回调函数*/
+/*hal库已自动使能systick，以下为hal库systick异常回调函数*/
 void HAL_IncTick(void)
 {
 	uwTick += uwTickFreq;  //系统自带不可删除,否则hal_delay等hal库函数不可用
@@ -183,7 +183,7 @@ int jd_init(void)
  }
 
 
-/*系统main*/
+/*系统main,系统第一个任务，不可删除，可添加其他任务初始化代码*/
 __weak void jd_main(void)
 {
     //printf("jd hello\r\n");
