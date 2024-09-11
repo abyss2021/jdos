@@ -124,21 +124,23 @@ void jd_task_switch(void)
 {
 	jd_asm_cps_disable();
 
-	static struct jd_task *jd_task_temp;
+	static struct jd_task *jd_task_temp,*jd_task_temp_t;
 	jd_task_temp = jd_task_sp;
 	//遍历任务，选择就绪的任务
 	while (1)
 	{
-		jd_task_temp = jd_task_temp->next;
+		jd_task_temp_t = jd_task_temp->next;
+		jd_task_temp = jd_task_temp_t;
 		if(jd_task_temp->status==JD_TASK_READY)break;
 	}
 
 	jd_task_stack_sp = &jd_task_sp->stack_sp; //更新当前任务全局堆栈指针变量
 	jd_task_sp = jd_task_temp; //移动节点
 	jd_task_next_stack_sp = &jd_task_sp->stack_sp; //更新下一个任务全局堆栈指针变量
-	jd_asm_pendsv_putup(); //挂起PendSV异常
 	
 	jd_asm_cps_enable();
+	jd_asm_pendsv_putup(); //挂起PendSV异常
+
 }
 /*内核第一次运行空闲任务*/
 void jd_task_first_switch(void)
@@ -160,13 +162,17 @@ void HAL_IncTick(void)
 	jd_time++; //jd_lck++
 	//扫描所有任务，将延时完成的任务更改为就绪状态，当前任务改为就绪状态，下次直接执行
 	jd_task_sp->status = JD_TASK_READY;
-	static struct jd_task *jd_task_temp;
+	static struct jd_task *jd_task_temp,*jd_task_temp_t;
 	jd_task_temp = jd_task_sp->next;
 	while(jd_task_sp!=jd_task_temp)
 	{
-		if(jd_task_temp->timeout==jd_time)
-			jd_task_temp->status = JD_TASK_READY;
-		jd_task_temp = jd_task_temp->next;
+		if(jd_task_temp->status==JD_TASK_DELAY&&jd_task_temp->timeout==jd_time)
+		{
+				jd_task_temp->status = JD_TASK_READY;
+				jd_task_temp->timeout = 0;
+		}
+		jd_task_temp_t = jd_task_temp->next;
+		jd_task_temp = jd_task_temp_t;
 	}
 
 	jd_task_switch(); //jd_task_switch
