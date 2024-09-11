@@ -181,7 +181,7 @@ void jd_task_first_switch()
 /*hal库已自动使能systick，以下为hal库systick中断回调函数*/
 void HAL_IncTick(void)
 {
-  uwTick += uwTickFreq;
+  	uwTick += uwTickFreq;
 	
 	jd_lck++; //jd_lck++
 	jd_task_switch(); //jd_task_switch
