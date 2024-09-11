@@ -112,10 +112,10 @@ void jd_task_first_switch(void)
 }
 
 /*PendSV处理上下文切换*/
-void PendSV_Handler(void)
+/*void PendSV_Handler(void)
 {
 	jd_asm_pendsv_handler(); //切换上下文
-}
+}*/
 
 /*hal库已自动使能systick，以下为hal库systick异常回调函数*/
 void HAL_IncTick(void)
