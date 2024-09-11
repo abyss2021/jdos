@@ -2,30 +2,31 @@
 #include <stdlib.h>
 #include "stm32f1xx_hal.h"
 
+/*宏定义函数返回状态*/
+#define JD_NULL 0
+#define JD_OK 1
+#define JD_ERR 2
 /*系统默认堆栈大小*/
 #define JD_DEFAULT_STACK_SIZE 512 
 /*系统时钟，单位ms*/
 unsigned long jd_lck = 0;
 /*第一次进入线程*/
-extern void jd_asm_task_first_switch();
+extern void jd_asm_task_first_switch(unsigned long*,void*);
 /*切换任务节点，悬挂PendSV异常，PendSV中进行上下文切换*/
-extern void jd_asm_pendsv_putup();
+extern void jd_asm_pendsv_putup(void);
+/*PendSV切换上下文*/
+extern void jd_asm_pendsv_handler(void);
 /*systick初始化*/
-extern void jd_asm_systick_init();
+extern void jd_asm_systick_init(void);
 /*除能 NMI 和硬 fault 之外的所有异常*/
-extern void jd_asm_cps_disable();
+extern void jd_asm_cps_disable(void);
 /*使能中断*/
-extern void jd_asm_cps_enable();
+extern void jd_asm_cps_enable(void);
+
 
 /*jdos main*/
-int jd_main();
+void jd_main(void);
 
-/*枚举函数返回状态*/
-enum jd_return_status{
-	JD_NULL=0,    //NULL
-	JD_OK,        //成功
-	JD_ERR,		//失败
-};
 
 /*枚举任务状态*/
 enum jd_task_status{
@@ -184,32 +185,29 @@ void jd_task_first_switch()
 /*PendSV处理上下文切换*/
 void PendSV_Handler(void)
 {
-	jd_asm_cps_disable();
-
 	jd_asm_pendsv_handler(); //切换上下文
-
-	jd_asm_cps_enable();
 }
 
 /*hal库已自动使能systick，以下为hal库systick中断回调函数*/
 void HAL_IncTick(void)
 {
-  	uwTick += uwTickFreq;
+	uwTick += uwTickFreq;  //系统自带不可删除,否则hal_delay等hal库函数不可用
 	
 	jd_lck++; //jd_lck++
 	jd_task_switch(); //jd_task_switch
 }
 
 /*jd初始化*/
-int jd_init()
+int jd_init(void)
 {				
 	struct jd_task *jd_new_task = NULL;	//创建一个任务链表指针
-	jd_asm_cps_disable(); //关闭中断
 	jd_new_task = jd_create_task(jd_main,JD_DEFAULT_STACK_SIZE);
 	while(jd_new_task==NULL); //空闲任务不能创建则死循环
 	
 	jd_new_task->previous = jd_new_task; //第一个任务，指向自己
 	jd_new_task->next = jd_new_task; //第一个任务，指向自己
+	
+	jd_new_task->jd_task_status = JD_TASK_READY; //任务就绪
 
 	jd_new_task->stack_sp = jd_new_task->stack_origin_addr+JD_DEFAULT_STACK_SIZE-4; //栈顶
 	
@@ -257,7 +255,7 @@ int jd_init()
 
 
 /*系统main*/
-int jd_main()
+void jd_main(void)
 {
     //printf("jd hello\r\n");
     struct jd_task *test_task1 = jd_create_task(task1,512);

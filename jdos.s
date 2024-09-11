@@ -10,14 +10,14 @@ JD_SYSTICK_CTRL 	EQU 0xE000E010	;SysTick控制及状态寄存器
 
 jd_asm_task_first_switch 	PROC	;进入main
 							EXPORT  jd_asm_task_first_switch
-								CPSID i ;关中断
 
 								;设置PendSV的优先级为255
 								LDR R3,=JD_PRI_14
-								LDR R3,=0X000000FF
+								LDR R2,=0X000000FF
 								STR R2,[R3]
 
-								;出栈，第一次进入任务，主要目的是定位堆栈，进入程序入口，其他数据无用
+								;第一次进入任务，主要目的是定位堆栈，进入程序入口，其他数据无用
+								LDR R0,[R0]
 								MOV SP,R0
 								MOV LR,R1
 								
@@ -70,6 +70,7 @@ jd_asm_cps_enable			PROC	;使能中断
 							
 jd_asm_pendsv_handler   	PROC	;切换上下文
 							EXPORT  jd_asm_pendsv_handler 
+								CPSID i ;关中断
 								
 								MOV R0,SP
 								STMFD R0!,{R4-R11}	
@@ -86,9 +87,9 @@ jd_asm_pendsv_handler   	PROC	;切换上下文
 								LDMFD R0!,{R4-R11}
 								MOV SP,R0
 								
+								CPSIE i ;开中断
 								BX LR
 							ENDP
-		
-	
-	
-	
+	;防止编译器报警
+	NOP
+	END
