@@ -36,3 +36,5 @@ jdos非常简单，只有3个文件：jdos.c、jdos.h、jdos.s，将这3个文�
 ![输入图片说明](https://foruda.gitee.com/images/1726032143415200813/37cf47df_8205780.png "85b4cd65a085f282b47238f949ab7dc.png")
 
 编译试试吧！
+
+注意：此仓库仅以stm32f103rct6测试通过，工程通过Stm32CubeMX生成，库为hal库，若要移植到标准库，则需要适当修改，若不是Cortex-M3内核，则不适用或者需要大量修改。
