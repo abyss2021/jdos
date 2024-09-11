@@ -6,6 +6,17 @@ struct all_register *stack_register =  NULL;	//创建一个所有寄存器指针
 unsigned long *jd_task_stack_sp = NULL;			//创建当前任务堆栈指针的地址
 unsigned long *jd_task_next_stack_sp = NULL;	//创建下一个任务堆栈指针的地址
 
+/*jdos延时，让出CPU使用权
+* ms:延时时间，单位ms
+*/
+void jd_delay(unsigned long ms)
+{
+	if(ms==0)return;
+	jd_task_sp->timeout = jd_time+ms; //将延时时间写入节点
+	jd_task_switch(); //切换线程，让出CPU，等延时后调度
+}
+
+
 /*申请任务空间
 * jd_task_sp：节点指针
 * stack_size：堆栈大小
@@ -43,7 +54,7 @@ struct jd_task *jd_create_task(void (*task_entry)(),unsigned int stack_size)
 		jd_task_sp->next = jd_new_task; //当前节点指向新节点
 
 	}
-	
+	jd_new_task->timeout = 0; //没有延时时间
 	jd_new_task->task_entry = task_entry; //任务入口
 	jd_new_task->jd_task_status = JD_TASK_PAUSE; //创建任务，状态为暂停状态，等待启动
 	jd_new_task->stack_size = stack_size; //记录当前任务堆栈大小
@@ -97,9 +108,28 @@ int jd_delete_task(struct jd_task *jd_task)
 void jd_task_switch(void)
 {
 	jd_asm_cps_disable();
+
+	static struct jd_task *jd_task_temp;
+	jd_task_temp = jd_task_sp->next;
+
+	//如果下一个线程timeout不为0，则遍历任务，查找延时完成的任务
+	if(jd_task_temp->timeout!=0)
+	{
+		//遍历任务，选择timeout=jd_time的任务
+		while (1)
+		{
+			if(jd_task_temp->timeout==jd_time)
+			{
+				break;
+			}
+			jd_task_temp = jd_task_temp->next;
+		}
+	}
+
+
 	
 	jd_task_stack_sp = &jd_task_sp->stack_sp; //更新当前任务全局堆栈指针变量
-	jd_task_sp = jd_task_sp->next; //移动节点
+	jd_task_sp = jd_task_temp; //移动节点
 	jd_task_next_stack_sp = &jd_task_sp->stack_sp; //更新下一个任务全局堆栈指针变量
 	jd_asm_pendsv_putup(); //挂起PendSV异常
 	
@@ -122,7 +152,7 @@ void HAL_IncTick(void)
 {
 	uwTick += uwTickFreq;  //系统自带不可删除,否则hal_delay等hal库函数不可用
 	
-	jd_lck++; //jd_lck++
+	jd_time++; //jd_lck++
 	jd_task_switch(); //jd_task_switch
 }
 
@@ -156,9 +186,8 @@ int jd_init(void)
     //printf("1 hello\r\n");
     while(1)
     {
-			HAL_Delay(80);
+			jd_delay(100);
 			HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
-			HAL_Delay(20);
     };
  }
  void task2()
@@ -166,9 +195,8 @@ int jd_init(void)
     //printf("2 hello\r\n");
     while(1)
     {
-			HAL_Delay(100);
+			jd_delay(150);
 			HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
-			HAL_Delay(20);
     };
  }
  void task3()
@@ -176,9 +204,8 @@ int jd_init(void)
     //printf("3 hello\r\n");
     while(1)
     {
-			HAL_Delay(50);
+			jd_delay(380);
 			HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
-			HAL_Delay(50);
     };
  }
 
