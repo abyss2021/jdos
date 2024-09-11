@@ -64,17 +64,17 @@ struct all_register
 struct jd_task{
 	struct jd_task *previous;						//指向上一个节点
   	void (*task_entry)();							//指向任务入口函数
-	enum jd_task_status jd_task_status;              //当前任务状态
+	enum jd_task_status jd_task_status;             //当前任务状态
 	unsigned long stack_size;						//堆栈大小
 	unsigned long stack_sp;							//堆栈指针
-  	unsigned long stack_origin_addr;               //堆栈起始地址
-	struct jd_task *next;						//指向下一个节点
+  	unsigned long stack_origin_addr;               	//堆栈起始地址
+	struct jd_task *next;							//指向下一个节点
 };
-struct jd_task *jd_task_sp_frist= NULL;	//创建系统链表指针，用于保存链表第一个任务位置
-struct jd_task *jd_task_sp = NULL;	    //创建一个任务链表指针
-struct all_register *stack_register =  NULL; //创建一个所有寄存器指针
-unsigned long *jd_task_stack_sp = NULL;	//创建当前任务堆栈指针的地址
-unsigned long *jd_task_next_stack_sp = NULL; //创建下一个任务堆栈指针的地址
+struct jd_task *jd_task_sp_frist= NULL;			//创建系统链表指针，用于保存链表第一个任务位置
+struct jd_task *jd_task_sp = NULL;				//创建一个任务链表指针
+struct all_register *stack_register =  NULL;	//创建一个所有寄存器指针
+unsigned long *jd_task_stack_sp = NULL;			//创建当前任务堆栈指针的地址
+unsigned long *jd_task_next_stack_sp = NULL;	//创建下一个任务堆栈指针的地址
 
 /*申请任务空间
 * jd_task_sp：链表指针
@@ -84,12 +84,12 @@ unsigned long *jd_task_next_stack_sp = NULL; //创建下一个任务堆栈指针
 struct jd_task * jd_request_space(unsigned int stack_size)
 {
 	struct jd_task *jd_task;
-	jd_task = (struct jd_task *)malloc(sizeof(struct jd_task)); 	//分配空间
-	if(jd_task==NULL)return JD_NULL;								//判断分配空间是否成功
+	jd_task = (struct jd_task *)malloc(sizeof(struct jd_task)); //分配空间
+	if(jd_task==NULL)return JD_NULL; //判断分配空间是否成功
 	
-	jd_task->stack_sp = (unsigned long)malloc(stack_size);					//申请堆栈空间
-	if(jd_task==NULL)return JD_NULL;							    //判断分配空间是否成功
-	jd_task->stack_origin_addr = jd_task->stack_sp;   //记录栈顶指针 
+	jd_task->stack_sp = (unsigned long)malloc(stack_size); //申请堆栈空间
+	if(jd_task==NULL)return JD_NULL; //判断分配空间是否成功
+	jd_task->stack_origin_addr = jd_task->stack_sp; //记录栈顶指针 
 	return jd_task;
 }
 
@@ -114,12 +114,12 @@ struct jd_task *jd_create_task(void (*task_entry)(),unsigned int stack_size)
 
 	}
 	
-	jd_new_task->task_entry = task_entry;								//任务入口
-	jd_new_task->jd_task_status = JD_TASK_PAUSE;                        //创建任务，状态为暂停状态，等待启动
-	jd_new_task->stack_size = stack_size;								//记录当前任务堆栈大小
+	jd_new_task->task_entry = task_entry; //任务入口
+	jd_new_task->jd_task_status = JD_TASK_PAUSE; //创建任务，状态为暂停状态，等待启动
+	jd_new_task->stack_size = stack_size; //记录当前任务堆栈大小
 	
-	jd_new_task->stack_sp = jd_new_task->stack_origin_addr+JD_DEFAULT_STACK_SIZE-sizeof(struct all_register)-4;  //腾出寄存器的空间
-	struct all_register *stack_register = (struct all_register *)jd_new_task->stack_sp;  //将指针转换成寄存器指针
+	jd_new_task->stack_sp = jd_new_task->stack_origin_addr+JD_DEFAULT_STACK_SIZE-sizeof(struct all_register)-4; //腾出寄存器的空间
+	struct all_register *stack_register = (struct all_register *)jd_new_task->stack_sp; //将指针转换成寄存器指针
 
 	//将任务运行数据搬移到内存中
 	stack_register->r0 = 0;
@@ -140,7 +140,7 @@ struct jd_task *jd_create_task(void (*task_entry)(),unsigned int stack_size)
 */
 int jd_run_task(struct jd_task *jd_task)
 {
-	jd_task->jd_task_status = JD_TASK_READY;														//将任务更改为就绪状态
+	jd_task->jd_task_status = JD_TASK_READY; //将任务更改为就绪状态
 	return JD_OK;
 }
 
@@ -153,12 +153,12 @@ int jd_delete_task(struct jd_task *jd_task)
 	struct jd_task *jd_task_previous = jd_task->previous;
 	struct jd_task *jd_task_next = jd_task->next;
 	
-	if(jd_task==jd_task_sp_frist)return JD_ERR;	    //判断是否为系统第一个节点，系统第一个节点不可删除
+	if(jd_task==jd_task_sp_frist)return JD_ERR; //判断是否为系统第一个节点，系统第一个节点不可删除
 	
-	jd_task_previous->next = jd_task_next;				//上一个节点的next指向下一个节点
-	jd_task_next->previous = jd_task_previous;			//下一个节点的previous指向上一个节点
-	free((unsigned long *)jd_task->stack_sp);								//释放当前节点的堆栈内存
-	free(jd_task);		                                //释放当前节点内存														
+	jd_task_previous->next = jd_task_next; //上一个节点的next指向下一个节点
+	jd_task_next->previous = jd_task_previous; //下一个节点的previous指向上一个节点
+	free((unsigned long *)jd_task->stack_sp); //释放当前节点的堆栈内存
+	free(jd_task); //释放当前节点内存														
 	return JD_OK;
 }
 
@@ -171,7 +171,7 @@ void jd_task_switch()
 	jd_task_stack_sp = &jd_task_sp->stack_sp; //更新当前任务全局堆栈指针变量
 	jd_task_sp = jd_task_sp->next; //移动节点
 	jd_task_next_stack_sp = &jd_task_sp->stack_sp; //更新下一个任务全局堆栈指针变量
-	jd_asm_pendsv_putup();  //挂起PendSV异常
+	jd_asm_pendsv_putup(); //挂起PendSV异常
 	
 	jd_asm_cps_enable();
 }
@@ -208,15 +208,15 @@ int jd_init()
 	jd_new_task = jd_create_task(jd_main,JD_DEFAULT_STACK_SIZE);
 	while(jd_new_task==NULL); //空闲任务不能创建则死循环
 	
-	jd_new_task->previous = jd_new_task;														//第一个任务，指向自己
-	jd_new_task->next = jd_new_task;															//第一个任务，指向自己
+	jd_new_task->previous = jd_new_task; //第一个任务，指向自己
+	jd_new_task->next = jd_new_task; //第一个任务，指向自己
 
-	jd_new_task->stack_sp = jd_new_task->stack_origin_addr+JD_DEFAULT_STACK_SIZE-4;  			//栈顶
+	jd_new_task->stack_sp = jd_new_task->stack_origin_addr+JD_DEFAULT_STACK_SIZE-4; //栈顶
 	
-	jd_task_sp = jd_new_task;		//指针移动到当前节点
-	jd_task_sp_frist = jd_task_sp;	//记录第一个节点
+	jd_task_sp = jd_new_task; //指针移动到当前节点
+	jd_task_sp_frist = jd_task_sp; //记录第一个节点
 	
-	//jd_asm_systick_init();  //启动systick,hal库已自动使能systick
+	//jd_asm_systick_init(); //启动systick,hal库已自动使能systick
 	
 	jd_task_first_switch(); //进入空闲线程
 	return JD_OK;
