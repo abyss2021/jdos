@@ -12,22 +12,14 @@ jd_asm_task_first_switch 	PROC	;进入main
 							EXPORT  jd_asm_task_first_switch
 								CPSID i ;关中断
 
-								;设置PendSV的优先级为14
-								LDR R1,=JD_PRI_14
-								LDR R2,=0X0000000E
-								STR R2,[R1]
+								;设置PendSV的优先级为255
+								LDR R3,=JD_PRI_14
+								LDR R3,=0X000000FF
+								STR R2,[R3]
 
-								;出栈，第一次进入任务，主要目的是恢复LR，其他数据无用
-								MOV R1,R0
-								LDR R0,[R0]
-								LDMFD  R0!,{R4-R11}
-								LDMFD  R0!,{R2-R5}
-								LDMFD  R0!,{R12}
-								LDMFD  R0!,{LR}
-								LDMFD  R0!,{R2}
-								LDMFD  R0!,{R2}
-								;保存堆栈指针地址
-								STR R0,[R1]
+								;出栈，第一次进入任务，主要目的是定位堆栈，进入程序入口，其他数据无用
+								MOV SP,R0
+								MOV LR,R1
 								
 								CPSIE i ;开中断
 								BX LR
@@ -76,9 +68,8 @@ jd_asm_cps_enable			PROC	;使能中断
 							ENDP
 
 							
-PendSV_Handler   			PROC	;切换上下文
-							EXPORT  PendSV_Handler 
-								CPSID i ;关中断
+jd_asm_pendsv_handler   	PROC	;切换上下文
+							EXPORT  jd_asm_pendsv_handler 
 								
 								MOV R0,SP
 								STMFD R0!,{R4-R11}	
@@ -95,7 +86,6 @@ PendSV_Handler   			PROC	;切换上下文
 								LDMFD R0!,{R4-R11}
 								MOV SP,R0
 								
-								CPSIE i ;开中断
 								BX LR
 							ENDP
 		

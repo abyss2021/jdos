@@ -28,134 +28,124 @@ ARM Macro Assembler    Page 1
    12 00000000                 EXPORT           jd_asm_task_first_switch
    13 00000000 B672            CPSID            i           ;关中断
    14 00000002         
-   15 00000002         ;设置PendSV的优先级为14
-   16 00000002 491C            LDR              R1,=JD_PRI_14
-   17 00000004 F04F 020E       LDR              R2,=0X0000000E
-   18 00000008 600A            STR              R2,[R1]
+   15 00000002         ;设置PendSV的优先级为255
+   16 00000002 4B16            LDR              R3,=JD_PRI_14
+   17 00000004 F04F 03FF       LDR              R3,=0X000000FF
+   18 00000008 601A            STR              R2,[R3]
    19 0000000A         
-   20 0000000A         ;出栈，第一次进入任务，主要目的是恢复L
-                       R，其他数据无用
-   21 0000000A 4601            MOV              R1,R0
-   22 0000000C 6800            LDR              R0,[R0]
-   23 0000000E E8B0 0FF0       LDMFD            R0!,{R4-R11}
-   24 00000012 C83C            LDMFD            R0!,{R2-R5}
-   25 00000014 F850 CB04       LDMFD            R0!,{R12}
-   26 00000018 F850 EB04       LDMFD            R0!,{LR}
-   27 0000001C C804            LDMFD            R0!,{R2}
-   28 0000001E C804            LDMFD            R0!,{R2}
-   29 00000020         ;保存堆栈指针地址
-   30 00000020 6008            STR              R0,[R1]
-   31 00000022         
-   32 00000022 B662            CPSIE            i           ;开中断
-   33 00000024 4770            BX               LR
-   34 00000026                 ENDP
-   35 00000026         
-   36 00000026         
-   37 00000026         jd_asm_pendsv_putup
+   20 0000000A         ;出栈，第一次进入任务，主要目的是定位�
+                       ��栈，进入程序入口，其他数据无用
+   21 0000000A 4685            MOV              SP,R0
+   22 0000000C 468E            MOV              LR,R1
+   23 0000000E         
+   24 0000000E B662            CPSIE            i           ;开中断
+   25 00000010 4770            BX               LR
+   26 00000012                 ENDP
+   27 00000012         
+   28 00000012         
+   29 00000012         jd_asm_pendsv_putup
                                PROC                         ;悬挂PendSV异常
                                                             
-   38 00000026                 EXPORT           jd_asm_pendsv_putup
-   39 00000026 4814            LDR              R0,=JD_ICRS
-   40 00000028 F04F 5180       LDR              R1,=0X10000000
-   41 0000002C 6001            STR              R1,[R0]
-   42 0000002E 4770            BX               LR
-   43 00000030                 ENDP
-   44 00000030         
-   45 00000030         
-   46 00000030         
+   30 00000012                 EXPORT           jd_asm_pendsv_putup
+   31 00000012 4813            LDR              R0,=JD_ICRS
+   32 00000014 F04F 5180       LDR              R1,=0X10000000
+   33 00000018 6001            STR              R1,[R0]
+   34 0000001A 4770            BX               LR
+   35 0000001C                 ENDP
+   36 0000001C         
+   37 0000001C         
+   38 0000001C         
+   39 0000001C         jd_asm_systick_init
+                               PROC                         ;systick初始化�
+                                                            �hal库已经初始
+                                                            化，这里不可�
+                                                            ��用
+   40 0000001C                 EXPORT           jd_asm_systick_init
+   41 0000001C B672            CPSID            i           ;关中断
+   42 0000001E         
 
 
 
 ARM Macro Assembler    Page 2 
 
 
-   47 00000030         jd_asm_systick_init
-                               PROC                         ;systick初始化�
-                                                            �hal库已经初始
-                                                            化，这里不可�
-                                                            ��用
-   48 00000030                 EXPORT           jd_asm_systick_init
-   49 00000030 B672            CPSID            i           ;关中断
-   50 00000032         
-   51 00000032 4812            LDR              R0, =JD_SYSTICK_CTRL ; 加载JD
+   43 0000001E 4811            LDR              R0, =JD_SYSTICK_CTRL ; 加载JD
                                                             _SYSTICK_CTRL的地
                                                             址
-   52 00000034 F04F 0100       MOV              R1, #0
-   53 00000038 6001            STR              R1, [R0]    ; 先停止SysTick�
+   44 00000020 F04F 0100       MOV              R1, #0
+   45 00000024 6001            STR              R1, [R0]    ; 先停止SysTick�
                                                             ��以防意外产�
                                                             �异常请求
-   54 0000003A         
-   55 0000003A F240 31FF       LDR              R1, =0x3FF  ; 让SysTick每1024
+   46 00000026         
+   47 00000026 F240 31FF       LDR              R1, =0x3FF  ; 让SysTick每1024
                                                             周期计完一次�
                                                             ��
-   56 0000003E 6041            STR              R1, [R0,#4] ; 写入重装载�
+   48 0000002A 6041            STR              R1, [R0,#4] ; 写入重装载�
                                                             �值
-   57 00000040 6081            STR              R1, [R0,#8] ; 往STCVR中写任
+   49 0000002C 6081            STR              R1, [R0,#8] ; 往STCVR中写任
                                                             意的数，以确�
                                                             ��清除COUNTFLAG�
                                                             �志
-   58 00000042         
-   59 00000042 F04F 0107       MOV              R1, #0x7    ; 选择FCLK作为�
+   50 0000002E         
+   51 0000002E F04F 0107       MOV              R1, #0x7    ; 选择FCLK作为�
                                                             ��钟源，并使�
                                                             �SysTick及其异�
                                                             �请求
-   60 00000046 6001            STR              R1, [R0]    ; 写入数值，�
+   52 00000032 6001            STR              R1, [R0]    ; 写入数值，�
                                                             �启定时器
-   61 00000048         
-   62 00000048 B662            CPSIE            i           ;开中断
-   63 0000004A 4770            BX               LR
-   64 0000004C                 ENDP
-   65 0000004C         
-   66 0000004C         jd_asm_cps_disable
+   53 00000034         
+   54 00000034 B662            CPSIE            i           ;开中断
+   55 00000036 4770            BX               LR
+   56 00000038                 ENDP
+   57 00000038         
+   58 00000038         jd_asm_cps_disable
                                PROC                         ;除能在 NMI 和�
                                                             �� fault 之外的�
                                                             ��有异常
-   67 0000004C                 EXPORT           jd_asm_cps_disable
-   68 0000004C B672            CPSID            i           ;关中断
-   69 0000004E 4770            BX               LR          ;
-   70 00000050                 ENDP
-   71 00000050         
-   72 00000050         jd_asm_cps_enable
+   59 00000038                 EXPORT           jd_asm_cps_disable
+   60 00000038 B672            CPSID            i           ;关中断
+   61 0000003A 4770            BX               LR          ;
+   62 0000003C                 ENDP
+   63 0000003C         
+   64 0000003C         jd_asm_cps_enable
                                PROC                         ;使能中断
-   73 00000050                 EXPORT           jd_asm_cps_enable
-   74 00000050 B662            CPSIE            i           ;开中断
-   75 00000052 4770            BX               LR          ;
-   76 00000054                 ENDP
-   77 00000054         
-   78 00000054         
-   79 00000054         PendSV_Handler
+   65 0000003C                 EXPORT           jd_asm_cps_enable
+   66 0000003C B662            CPSIE            i           ;开中断
+   67 0000003E 4770            BX               LR          ;
+   68 00000040                 ENDP
+   69 00000040         
+   70 00000040         
+   71 00000040         jd_asm_pendsv_handler
                                PROC                         ;切换上下文
-   80 00000054                 EXPORT           PendSV_Handler
-   81 00000054 B672            CPSID            i           ;关中断
-   82 00000056         
+   72 00000040                 EXPORT           jd_asm_pendsv_handler
+   73 00000040         
+   74 00000040 4668            MOV              R0,SP
+   75 00000042 E920 0FF0       STMFD            R0!,{R4-R11}
+   76 00000046         
+   77 00000046         ;保护现场，将堆栈指针传出
+   78 00000046 4908            LDR              R1,=jd_task_stack_sp
+   79 00000048 6809            LDR              R1,[R1]
+   80 0000004A 6008            STR              R0,[R1]
+   81 0000004C         
+   82 0000004C         ;取下一个任务的堆栈指针,恢复现场
 
 
 
 ARM Macro Assembler    Page 3 
 
 
-   83 00000056 4668            MOV              R0,SP
-   84 00000058 E920 0FF0       STMFD            R0!,{R4-R11}
-   85 0000005C         
-   86 0000005C         ;保护现场，将堆栈指针传出
-   87 0000005C 4908            LDR              R1,=jd_task_stack_sp
-   88 0000005E 6809            LDR              R1,[R1]
-   89 00000060 6008            STR              R0,[R1]
-   90 00000062         
-   91 00000062         ;取下一个任务的堆栈指针,恢复现场
-   92 00000062 4908            LDR              R1,=jd_task_next_stack_sp
-   93 00000064 6809            LDR              R1,[R1]
-   94 00000066 6808            LDR              R0,[R1]
-   95 00000068 E8B0 0FF0       LDMFD            R0!,{R4-R11}
-   96 0000006C 4685            MOV              SP,R0
-   97 0000006E         
-   98 0000006E B662            CPSIE            i           ;开中断
-   99 00000070 4770            BX               LR
-  100 00000072                 ENDP
-  101 00000072         
-  102 00000072         
-  103 00000072         
-  104 00000072         
+   83 0000004C 4907            LDR              R1,=jd_task_next_stack_sp
+   84 0000004E 6809            LDR              R1,[R1]
+   85 00000050 6808            LDR              R0,[R1]
+   86 00000052 E8B0 0FF0       LDMFD            R0!,{R4-R11}
+   87 00000056 4685            MOV              SP,R0
+   88 00000058         
+   89 00000058 4770            BX               LR
+   90 0000005A                 ENDP
+   91 0000005A         
+   92 0000005A         
+   93 0000005A         
+   94 0000005A         
                        
               00 00 E000ED23 
               E000ED04 
@@ -182,45 +172,45 @@ Symbol: .text
    Uses
       None
 Comment: .text unused
-PendSV_Handler 00000054
-
-Symbol: PendSV_Handler
-   Definitions
-      At line 79 in file ..\jdos.s
-   Uses
-      At line 80 in file ..\jdos.s
-Comment: PendSV_Handler used once
-jd_asm_cps_disable 0000004C
+jd_asm_cps_disable 00000038
 
 Symbol: jd_asm_cps_disable
    Definitions
-      At line 66 in file ..\jdos.s
+      At line 58 in file ..\jdos.s
    Uses
-      At line 67 in file ..\jdos.s
+      At line 59 in file ..\jdos.s
 Comment: jd_asm_cps_disable used once
-jd_asm_cps_enable 00000050
+jd_asm_cps_enable 0000003C
 
 Symbol: jd_asm_cps_enable
    Definitions
-      At line 72 in file ..\jdos.s
+      At line 64 in file ..\jdos.s
    Uses
-      At line 73 in file ..\jdos.s
+      At line 65 in file ..\jdos.s
 Comment: jd_asm_cps_enable used once
-jd_asm_pendsv_putup 00000026
+jd_asm_pendsv_handler 00000040
+
+Symbol: jd_asm_pendsv_handler
+   Definitions
+      At line 71 in file ..\jdos.s
+   Uses
+      At line 72 in file ..\jdos.s
+Comment: jd_asm_pendsv_handler used once
+jd_asm_pendsv_putup 00000012
 
 Symbol: jd_asm_pendsv_putup
    Definitions
-      At line 37 in file ..\jdos.s
+      At line 29 in file ..\jdos.s
    Uses
-      At line 38 in file ..\jdos.s
+      At line 30 in file ..\jdos.s
 Comment: jd_asm_pendsv_putup used once
-jd_asm_systick_init 00000030
+jd_asm_systick_init 0000001C
 
 Symbol: jd_asm_systick_init
    Definitions
-      At line 47 in file ..\jdos.s
+      At line 39 in file ..\jdos.s
    Uses
-      At line 48 in file ..\jdos.s
+      At line 40 in file ..\jdos.s
 Comment: jd_asm_systick_init used once
 jd_asm_task_first_switch 00000000
 
@@ -243,7 +233,7 @@ Symbol: JD_ICRS
    Definitions
       At line 1 in file ..\jdos.s
    Uses
-      At line 39 in file ..\jdos.s
+      At line 31 in file ..\jdos.s
 Comment: JD_ICRS used once
 JD_PRI_14 E000ED23
 
@@ -259,7 +249,7 @@ Symbol: JD_SYSTICK_CTRL
    Definitions
       At line 3 in file ..\jdos.s
    Uses
-      At line 51 in file ..\jdos.s
+      At line 43 in file ..\jdos.s
 Comment: JD_SYSTICK_CTRL used once
 3 symbols
 
@@ -274,7 +264,7 @@ Symbol: jd_task_next_stack_sp
    Definitions
       At line 6 in file ..\jdos.s
    Uses
-      At line 92 in file ..\jdos.s
+      At line 83 in file ..\jdos.s
 Comment: jd_task_next_stack_sp used once
 jd_task_stack_sp 00000000
 
@@ -282,7 +272,7 @@ Symbol: jd_task_stack_sp
    Definitions
       At line 5 in file ..\jdos.s
    Uses
-      At line 87 in file ..\jdos.s
+      At line 78 in file ..\jdos.s
 Comment: jd_task_stack_sp used once
 2 symbols
 348 symbols in table
