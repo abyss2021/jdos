@@ -20,7 +20,10 @@ jd_asm_task_first_switch 	PROC	;进入main
 								LDR R0,[R0]
 								MOV SP,R0
 								MOV LR,R1
-								
+
+								;MOV R0, #0x3 ; 设置CONTROL寄存器，让用户程序使用PSP，没有内存管理，PSP模式下无法分配系统空间
+								;MSR CONTROL,R0
+								;ORR LR,#0XD ;	切换到用户栈指针
 								CPSIE i ;开中断
 								BX LR
 							ENDP
@@ -87,6 +90,7 @@ jd_asm_pendsv_handler   	PROC	;切换上下文
 								LDMFD R0!,{R4-R11}
 								MOV SP,R0
 								
+								;ORR LR,#0XD ;	切换到用户栈指针
 								CPSIE i ;开中断
 								BX LR
 							ENDP
