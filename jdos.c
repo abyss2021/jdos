@@ -124,13 +124,12 @@ void jd_task_switch(void)
 {
 	jd_asm_cps_disable();
 
-	static struct jd_task *jd_task_temp,*jd_task_temp_t;
+	static struct jd_task *jd_task_temp;
 	jd_task_temp = jd_task_sp;
 	//遍历任务，选择就绪的任务
 	while (1)
 	{
-		jd_task_temp_t = jd_task_temp->next;
-		jd_task_temp = jd_task_temp_t;
+		jd_task_temp = jd_task_temp->next;
 		if(jd_task_temp->status==JD_TASK_READY)break;
 	}
 
@@ -162,7 +161,7 @@ void HAL_IncTick(void)
 	jd_time++; //jd_lck++
 	//扫描所有任务，将延时完成的任务更改为就绪状态，当前任务改为就绪状态，下次直接执行
 	jd_task_sp->status = JD_TASK_READY;
-	static struct jd_task *jd_task_temp,*jd_task_temp_t;
+	static struct jd_task *jd_task_temp;
 	jd_task_temp = jd_task_sp->next;
 	while(jd_task_sp!=jd_task_temp)
 	{
@@ -171,8 +170,7 @@ void HAL_IncTick(void)
 				jd_task_temp->status = JD_TASK_READY;
 				jd_task_temp->timeout = 0;
 		}
-		jd_task_temp_t = jd_task_temp->next;
-		jd_task_temp = jd_task_temp_t;
+		jd_task_temp = jd_task_temp->next;
 	}
 
 	jd_task_switch(); //jd_task_switch
@@ -209,7 +207,7 @@ int jd_init(void)
     while(1)
     {
 			jd_delay(100);
-			HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
+			//HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
     };
  }
  void task2()
@@ -218,7 +216,7 @@ int jd_init(void)
     while(1)
     {
 			jd_delay(150);
-			HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
+			//HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
     };
  }
  void task3()
@@ -226,13 +224,13 @@ int jd_init(void)
     //printf("3 hello\r\n");
     while(1)
     {
-			jd_delay(380);
-			HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
+			jd_delay(80);
+			//HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
     };
  }
 
 
-/*系统main,系统第一个任务，不可删除，可添加其他任务初始化代码*/
+/*系统main,系统第一个任务，不可使用jd_task_delete删除，可添加其他任务初始化代码*/
 __weak void jd_main(void)
 {
     //printf("jd hello\r\n");

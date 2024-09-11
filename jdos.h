@@ -76,14 +76,16 @@ extern void jd_asm_cps_enable(void);
 void jd_main(void);
 /*jdos 系统初始化*/
 int jd_init(void); 
+/*jdos延时，让出CPU使用权*/
+void jd_delay(unsigned long ms);
 /*创建任务*/
 struct jd_task *jd_task_create(void (*task_entry)(),unsigned int stack_size);
 /*更改为就绪状态，等待调度*/
 int jd_task_run(struct jd_task *jd_task); 
 /*删除任务，释放内存*/
 int jd_task_delete(struct jd_task *jd_task); 
+/*暂停任务*/
+int jd_task_pause(struct jd_task *jd_task);
 /*手动进行任务调度*/
 void jd_task_switch(void);
-/*jdos延时，让出CPU使用权*/
-void jd_delay(unsigned long ms);
 #endif
