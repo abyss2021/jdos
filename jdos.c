@@ -122,17 +122,18 @@ int jd_task_pause(struct jd_task *jd_task)
 /*当前任务切换为下一个任务*/
 void jd_task_switch(void)
 {
-	jd_asm_cps_disable();
 
 	static struct jd_task *jd_task_temp;
 	jd_task_temp = jd_task_sp;
-	//遍历任务，选择就绪的任务
+	//遍历任务，选择就绪的任务 注意，如果所有的任务都不在就绪状态，此while将陷入死循环
 	while (1)
 	{
 		jd_task_temp = jd_task_temp->next;
 		if(jd_task_temp->status==JD_TASK_READY)break;
 	}
-
+	
+	jd_asm_cps_disable(); //关闭中断
+	
 	jd_task_stack_sp = &jd_task_sp->stack_sp; //更新当前任务全局堆栈指针变量
 	jd_task_sp = jd_task_temp; //移动节点
 	jd_task_next_stack_sp = &jd_task_sp->stack_sp; //更新下一个任务全局堆栈指针变量
@@ -246,7 +247,10 @@ __weak void jd_main(void)
 	{
 		//jd_task_switch();
 		HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
-		HAL_Delay(500);
+		
+		// 注意此处调用延时切换任务，如果所有任务都不为就绪状态，程序将在jd_task_switch函数中死循环，直到有就绪任务才会切换
+		// 应该在此处休眠或者其他不重要的工作
+		jd_delay(500);
 	};
 }
 
