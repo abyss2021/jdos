@@ -51,8 +51,8 @@ struct all_register
 /*定义任务节点*/
 struct jd_task{
     struct jd_task *previous;						//指向上一个节点
-    void (*task_entry)();							//指向任务入口函数
-    enum jd_task_status jd_task_status;             //当前任务状态
+    void (*entry)();							    //指向任务入口函数
+    enum jd_task_status status;                     //当前任务状态
     unsigned long stack_size;						//堆栈大小
     unsigned long stack_sp;							//堆栈指针
     unsigned long stack_origin_addr;               	//堆栈起始地址
@@ -77,11 +77,11 @@ void jd_main(void);
 /*jdos 系统初始化*/
 int jd_init(void); 
 /*创建任务*/
-struct jd_task *jd_create_task(void (*task_entry)(),unsigned int stack_size);
+struct jd_task *jd_task_create(void (*task_entry)(),unsigned int stack_size);
 /*更改为就绪状态，等待调度*/
-int jd_run_task(struct jd_task *jd_task); 
+int jd_task_run(struct jd_task *jd_task); 
 /*删除任务，释放内存*/
-int jd_delete_task(struct jd_task *jd_task); 
+int jd_task_delete(struct jd_task *jd_task); 
 /*手动进行任务调度*/
 void jd_task_switch(void);
 /*jdos延时，让出CPU使用权*/
