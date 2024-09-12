@@ -5,6 +5,14 @@
 #include <stdlib.h>
 #include "stm32f1xx_hal.h"
 
+
+/*获得结构体(TYPE)的变量成员(MEMBER)在此结构体中的偏移量。*/
+#define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
+/*获得结构体(TYPE)的变量成员(MEMBER)在此结构体地址。*/
+#define container_of(ptr, type, member) ({ \ 
+        const typeof( ((type *)0)->member ) *__mptr = (ptr); \
+        (type *)( (char *)__mptr - offsetof(type,member) );})
+
 /*宏定义函数返回状态*/
 #define JD_NULL 0
 #define JD_OK 1
@@ -17,10 +25,10 @@ unsigned long jd_time = 0;
 
 /*枚举任务状态*/
 enum jd_task_status{
-    JD_TASK_READY=0, 	//任务就绪状态
-    JD_TASK_RUNNING, 	//任务运行状态
-    JD_TASK_DELAY, 	    //任务延时状态
-    JD_TASK_PAUSE, 	    //任务暂停状态
+    READY=0, 	//任务就绪状态
+    RUNNING, 	//任务运行状态
+    DELAY, 	    //任务延时状态
+    PAUSE, 	    //任务暂停状态
 };
 
 /*定义所有寄存器，根据入栈规则有先后顺序*/
@@ -47,17 +55,23 @@ struct all_register
     unsigned long xpsr;
 };
 
+//定义链表
+struct jd_node_list
+{
+    struct jd_node_list *previous; //上一个节点
+    struct jd_node_list *next; //下一个节点
+};
 
-/*定义任务节点*/
+/*定义任务控制块*/
 struct jd_task{
-    struct jd_task *previous;						//指向上一个节点
+    struct jd_node_list *node;                         //链表节点
     void (*entry)();							    //指向任务入口函数
     enum jd_task_status status;                     //当前任务状态
     unsigned long stack_size;						//堆栈大小
     unsigned long stack_sp;							//堆栈指针
     unsigned long stack_origin_addr;               	//堆栈起始地址
     unsigned long timeout;                          //延时溢出时间，单位ms，为0则没有延时
-    struct jd_task *next;							//指向下一个节点
+    char priority;                                  //优先级0-127，负数为系统使用
 };
 
 /*第一次进入任务*/
@@ -79,7 +93,7 @@ int jd_init(void);
 /*jdos延时，让出CPU使用权*/
 void jd_delay(unsigned long ms);
 /*创建任务*/
-struct jd_task *jd_task_create(void (*task_entry)(),unsigned int stack_size);
+struct jd_task *jd_task_create(void (*task_entry)(),unsigned int stack_size,char priority);
 /*更改为就绪状态，等待调度*/
 int jd_task_run(struct jd_task *jd_task); 
 /*删除任务，释放内存*/

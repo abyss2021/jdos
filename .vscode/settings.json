@@ -62,6 +62,8 @@
     "cstdint": "c",
     "main.h": "c",
     "jdos.h": "c",
-    "stdlib.h": "c"
-  }
+    "stdlib.h": "c",
+    "type_traits": "c"
+  },
+  "C_Cpp.errorSquiggles": "enabled"
 }
