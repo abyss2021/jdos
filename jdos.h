@@ -25,10 +25,10 @@ unsigned long jd_time = 0;
 
 /*枚举任务状态*/
 enum jd_task_status{
-    READY=0, 	//任务就绪状态
-    RUNNING, 	//任务运行状态
-    DELAY, 	    //任务延时状态
-    PAUSE, 	    //任务暂停状态
+    JD_READY=0, 	//任务就绪状态
+    JD_RUNNING, 	//任务运行状态
+    JD_DELAY, 	    //任务延时状态
+    JD_PAUSE, 	    //任务暂停状态
 };
 
 /*定义所有寄存器，根据入栈规则有先后顺序*/

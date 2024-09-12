@@ -1,7 +1,7 @@
 #include "jdos.h"
 
-struct jd_node_list *jd_task_readying; // 创建就绪任务链表
-struct jd_node_list *jd_task_delaying; // 创建延时任务链表
+struct jd_node_list *jd_task_list_readying; // 创建就绪任务链表
+struct jd_node_list *jd_task_list_delaying; // 创建延时任务链表
 struct jd_task *jd_task_runing; //创建当前任务指针
 unsigned long *jd_task_stack_sp = NULL;			//创建当前任务堆栈指针的地址
 unsigned long *jd_task_next_stack_sp = NULL;	//创建下一个任务堆栈指针的地址
@@ -15,8 +15,73 @@ void jd_delay(unsigned long ms)
 {
 	if (ms == 0)
 		return;
-	jd_task_sp->status = DELAY;
-	jd_task_sp->timeout = jd_time + ms; // 将延时时间写入节点
+	jd_task_runing->status = JD_DELAY;
+	jd_task_runing->timeout = jd_time + ms; // 将延时时间写入节点
+
+	struct jd_task *jd_task_temp;
+	struct jd_node_list *node_temp;
+
+	node_temp = jd_task_list_delaying;
+	//延时链表没有正在延时的任务
+	if(jd_task_list_delaying->next == JD_NULL && jd_task_list_delaying->previous == JD_NULL)
+	{
+		jd_task_list_delaying = jd_task_runing->node;
+	}
+	// 有延时任务
+	else
+	{
+		while(1)
+		{
+			container_of(jd_task_temp,struct jd_task, node_temp);
+			// 如果延时小或相同 则插入在当前节点前
+			if(jd_task->priority <= jd_task_temp->priority)
+			{
+
+
+
+
+
+
+
+
+				
+				//将当前任务插入表头
+				//jd_task_list_readying = jd_task->node;
+
+				//连接节点
+				jd_task->node->next = node_temp; //新节点next指向下一个节点
+				node_temp->previous =  jd_task->node; //下一个节点previous指向新节点
+				//判断不为表头
+				if(node_temp->previous != JD_NULL)
+				{
+					jd_task->node->previous = node_temp->previous; //新节点的previous指向上一个节点
+					node_temp->previous->next =  jd_task->node; //上一个节点的next指向新节点
+				}
+				//为表头
+				else
+				{
+					jd_task_list_readying = jd_task->node; //切换表头
+				}
+				return JD_OK;
+			}
+			//优先级低
+			else
+			{
+				//判断表尾
+				if(node_temp->next == JD_NULL)
+				{
+					//将任务插入到表尾
+					node_temp->next = jd_task->node;
+					jd_task->node->previous = node_temp;
+					return JD_OK;
+				}
+			}
+			//临时节点切换为下一个节点
+			node_temp = node_temp->next;
+		}
+	}
+
+
 	jd_task_switch();					// 切换线程，让出CPU，等延时后调度
 }
 
@@ -39,7 +104,7 @@ struct jd_task *jd_request_space(unsigned int stack_size)
 
 	jd_task->node = (struct jd_node_list *)malloc(sizeof(struct jd_node_list)); //申请节点空间
 	jd_task->node->next = JD_NULL;  //初始化节点指针
-	jd_task->node->previous - JD_NULL //初始化节点指针
+	jd_task->node->previous - JD_NULL; //初始化节点指针
 
 	return jd_task;
 }
@@ -58,7 +123,7 @@ struct jd_task *jd_task_create(void (*task_entry)(), unsigned int stack_size, ch
 
 	jd_new_task->timeout = 0;			  // 没有延时时间
 	jd_new_task->entry = task_entry;	  // 任务入口
-	jd_new_task->status = PAUSE;  // 创建任务，状态为暂停状态，等待启动
+	jd_new_task->status = JD_PAUSE;  // 创建任务，状态为暂停状态，等待启动
 	jd_new_task->stack_size = stack_size; // 记录当前任务堆栈大小
 
 	jd_new_task->stack_sp = jd_new_task->stack_origin_addr + JD_DEFAULT_STACK_SIZE - sizeof(struct all_register) - 4; // 腾出寄存器的空间
@@ -79,7 +144,7 @@ struct jd_task *jd_task_create(void (*task_entry)(), unsigned int stack_size, ch
 	return jd_new_task; // 返回当前任务节点
 }
 
-/*删除任务
+/*删除任务 暂时未实现
  * jd_task:任务节点指针
  * return：返回JD_OK或JD_ERR
  */
@@ -91,9 +156,9 @@ int jd_task_delete(struct jd_task *jd_task)
 	if (jd_task == jd_task_frist)
 		return JD_ERR; // 判断是否为系统第一个任务，系统第一个任务不可删除
 		
-	free((unsigned long *)jd_task->stack_sp); // 释放任务堆栈内存
-	free(jd_task->node); //释放节点内存
-	free(jd_task);		// 释放任务内存
+	// free((unsigned long *)jd_task->stack_sp); // 释放任务堆栈内存
+	// free(jd_task->node); //释放节点内存
+	// free(jd_task);		// 释放任务内存
 	return JD_OK;
 }
 
@@ -105,12 +170,12 @@ int jd_task_run(struct jd_task *jd_task)
 {
 	if (jd_task == JD_NULL)
 		return JD_ERR;
-	jd_task->status = READY; // 将任务更改为就绪状态
+	jd_task->status = JD_READY; // 将任务更改为就绪状态
 
 	// 根据优先级插入节点位置
 	struct jd_task *jd_task_temp;
 	struct jd_node_list *node_temp;
-	node_temp = jd_task_readying;
+	node_temp = jd_task_list_readying;
 	//遍历就绪链表
 	while(1)
 	{
@@ -119,7 +184,7 @@ int jd_task_run(struct jd_task *jd_task)
 		if(jd_task->priority >= jd_task_temp->priority)
 		{
 			//将当前任务插入表头
-			//jd_task_readying = jd_task->node;
+			//jd_task_list_readying = jd_task->node;
 
 			//连接节点
 			jd_task->node->next = node_temp; //新节点next指向下一个节点
@@ -133,7 +198,7 @@ int jd_task_run(struct jd_task *jd_task)
 			//为表头
 			else
 			{
-				jd_task_readying = jd_task->node; //切换表头
+				jd_task_list_readying = jd_task->node; //切换表头
 			}
 			return JD_OK;
 		}
@@ -170,19 +235,19 @@ int jd_task_pause(struct jd_task *jd_task)
 		return JD_ERR;
 
 	//原本就为暂停状态	
-	if(jd_task->status == PAUSE)
+	if(jd_task->status == JD_PAUSE)
 	{
 		return JD_ERR;	
 	}
 	//在就绪链表正在运行
-	else if(jd_task->status == RUNNING)
+	else if(jd_task->status == JD_RUNNING)
 	{
 		// 移动表头
-		jd_task_readying = jd_task->node->next;
-		jd_task_readying->previous = JD_NULL;
+		jd_task_list_readying = jd_task->node->next;
+		jd_task_list_readying->previous = JD_NULL;
 	}
 	//在就绪链表
-	else if(jd_task->status == READY)
+	else if(jd_task->status == JD_READY)
 	{
 		// 在表尾
 		if(jd_task->node->next == JD_NULL)
@@ -197,7 +262,7 @@ int jd_task_pause(struct jd_task *jd_task)
 		}
 	}
 	//在延时列表时，这里直接改为暂停状态，在systick中延时时间到达后，判断是否为延时状态，不是则不加入就绪状态
-	jd_task->status = PAUSE; // 将任务更改为暂停状态状态,如果任务正在执行，下一次调度才会切换任务
+	jd_task->status = JD_PAUSE; // 将任务更改为暂停状态状态,如果任务正在执行，下一次调度才会切换任务
 	return JD_OK;
 }
 
@@ -207,10 +272,10 @@ void jd_task_switch(void)
 
 	struct jd_task *jd_task;
 
-	container_of(jd_task,struct jd_task, jd_task_readying);
+	container_of(jd_task,struct jd_task, jd_task_list_readying);
 	
 	//就绪任务表头任务就是当前任务且当前任务是运行状态
-	if(jd_task_runing == jd_task&&jd_task_runing->status == RUNNING)
+	if(jd_task_runing == jd_task&&jd_task_runing->status == JD_RUNNING)
 	{
 		//高优先级任务正在执行，低优先级任务不能打断，
 		//RUNGING说明任务没有放弃CPU使用权
@@ -220,8 +285,8 @@ void jd_task_switch(void)
 	//任务暂停或延时状态，或者当前任务优先级低，当前任务放弃CPU使用权
 	jd_asm_cps_disable(); // 关闭中断
 
-	jd_task_runing->status = READY; //将正在运行的任务改回就绪状态
-	jd_task->status = RUNNING; //即将运行的任务改为正在运行状态
+	jd_task_runing->status = JD_READY; //将正在运行的任务改回就绪状态
+	jd_task->status = JD_RUNNING; //即将运行的任务改为正在运行状态
 	jd_task_stack_sp = &jd_task_runing->stack_sp;	// 更新当前任务全局栈指针变量
 	jd_task_runing = jd_task;					   // 更新准备运行的任务数据
 	jd_task_next_stack_sp = &jd_task_runing->stack_sp; // 更新下一个任务全局栈指针变量
@@ -233,7 +298,7 @@ void jd_task_switch(void)
 void jd_task_first_switch(void)
 {
 	struct jd_task *jd_task;
-	container_of(jd_task,struct jd_task, jd_task_readying);
+	container_of(jd_task,struct jd_task, jd_task_list_readying);
 	jd_asm_task_first_switch(&jd_task->stack_sp, jd_main);
 }
 
@@ -250,14 +315,14 @@ void HAL_IncTick(void)
 
 	jd_time++; // jd_lck++
 	// 扫描所有任务，将延时完成的任务更改为就绪状态，当前任务改为就绪状态，下次直接执行
-	jd_task_sp->status = READY;
+	jd_task_sp->status = JD_READY;
 	static struct jd_task *jd_task_temp;
 	// jd_task_temp = jd_task_sp->next;
 	while (jd_task_sp != jd_task_temp)
 	{
-		if (jd_task_temp->status == DELAY && jd_task_temp->timeout == jd_time)
+		if (jd_task_temp->status == JD_DELAY && jd_task_temp->timeout == jd_time)
 		{
-			jd_task_temp->status = READY;
+			jd_task_temp->status = JD_READY;
 			jd_task_temp->timeout = 0;
 		}
 		// jd_task_temp = jd_task_temp->next;
@@ -270,24 +335,24 @@ void HAL_IncTick(void)
 int jd_init(void)
 {
 	// 为第一个节点创建空间
-	jd_task_readying = malloc(sizeof(struct jd_node_list));
-	jd_task_delaying = malloc(sizeof(struct jd_node_list));
+	jd_task_list_readying = malloc(sizeof(struct jd_node_list));
+	jd_task_list_delaying = malloc(sizeof(struct jd_node_list));
 	// 节点指向NULL
-	jd_task_readying->next = JD_NULL;
-	jd_task_readying->previous = JD_NULL;
-	jd_task_delaying->next = JD_NULL;
-	jd_task_delaying->previous = JD_NULL;
+	jd_task_list_readying->next = JD_NULL;
+	jd_task_list_readying->previous = JD_NULL;
+	jd_task_list_delaying->next = JD_NULL;
+	jd_task_list_delaying->previous = JD_NULL;
 
 
 	jd_task_frist = jd_task_create(jd_main, JD_DEFAULT_STACK_SIZE, 127);
 	while (jd_task_frist == NULL)
 		; // 空闲任务不能创建则死循环
 
-	jd_task_frist->status = READY; // 任务就绪
+	jd_task_frist->status = JD_READY; // 任务就绪
 
 	jd_task_frist->stack_sp = jd_task_frist->stack_origin_addr + JD_DEFAULT_STACK_SIZE - 4; // 栈顶
 
-	jd_task_readying = jd_task_frist->node; // 将任务挂在就绪链表上
+	jd_task_list_readying = jd_task_frist->node; // 将任务挂在就绪链表上
 	jd_task_runing = jd_task_frist;	//保存当前任务为正在运行任务
 	// jd_asm_systick_init(); //启动systick,hal库已自动使能systick
 
