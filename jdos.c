@@ -103,9 +103,10 @@ void jd_delay(unsigned long ms)
 		// 遍历链表
 		while (1)
 		{
-			jd_task_temp = container_of(&node_temp, struct jd_task, node);
+				jd_task_temp = node_temp->addr; //获取任务数据
+			
 			// 如果延时小或相同 则插入在当前节点前
-			if (jd_task_runing->priority <= jd_task_temp->priority)
+			if (jd_task_runing->timeout <= jd_task_temp->timeout)
 			{
 				// 判断为表头
 				if (node_temp->previous == JD_NULL)
@@ -227,9 +228,9 @@ int jd_task_run(struct jd_task *jd_task)
 	while (1)
 	{
 		// 获取节点数据域
-		jd_task_temp = container_of(&node_temp, struct jd_task, node);
+		jd_task_temp = node_temp->addr; //获取任务数据
 		// 如果优先级高或相同
-		if (jd_task->priority >= jd_task_temp->priority)
+		if (jd_task->priority <= jd_task_temp->priority)
 		{
 			// 判断不为表头
 			if (node_temp->previous == JD_NULL)
@@ -297,8 +298,8 @@ void jd_task_switch(void)
 	struct jd_node_list *node_temp;
 	node_temp = jd_task_list_readying;
 
-	// 获取数据域
-	jd_task = container_of(&node_temp, struct jd_task, node);
+	// 获取数据域	
+	jd_task = node_temp->addr; //获取任务数据
 
 	// 没有外部条件改变当前任务状态,
 	if (jd_task_runing->status == JD_RUNNING)
@@ -330,7 +331,6 @@ void jd_task_switch(void)
 void jd_task_first_switch(void)
 {
 	struct jd_task *jd_task;
-	//jd_task = container_of(&jd_task_list_readying, struct jd_task, node);
 	jd_task = jd_task_list_readying->addr;
 	jd_asm_task_first_switch(&jd_task->stack_sp, jd_main);
 }
@@ -349,13 +349,15 @@ void HAL_IncTick(void)
 	jd_time++; // jd_lck++
 	// 判断延时表头是否到达时间，若没有到达时间，则切换，若到达时间则将任务加入到就绪任务,在切换任务
 	struct jd_task *jd_task;
-	jd_task = container_of(&jd_task_list_delaying, struct jd_task, node);
+	
+	jd_task = jd_task_list_delaying->addr; //获取任务数据
+	
 	while (jd_task->timeout == jd_time)
 	{
 		jd_node_insert(jd_task->node->previous, JD_NULL, jd_task->node->next); // 删除当前节点
 		jd_task_run(jd_task);												   // 加入就绪链表
 		jd_task_list_delaying = jd_task_list_delaying->next;				   // 切换表头
-		jd_task = container_of(&jd_task_list_delaying, struct jd_task, node);  // 获取数据域
+			jd_task = jd_task_list_delaying->addr; //获取任务数据
 	}
 	jd_task_switch(); // jd_task_switch
 }
@@ -371,7 +373,8 @@ int jd_init(void)
 	jd_task_list_readying->previous = JD_NULL;
 	jd_task_list_delaying->next = JD_NULL;
 	jd_task_list_delaying->previous = JD_NULL;
-
+	
+	//设置优先级为最低
 	jd_task_frist = jd_task_create(jd_main, JD_DEFAULT_STACK_SIZE, 127);
 	while (jd_task_frist == NULL); // 空闲任务不能创建则死循环
 
