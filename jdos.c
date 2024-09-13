@@ -184,6 +184,7 @@ struct jd_task *jd_task_create(void (*task_entry)(), unsigned int stack_size, ch
 	stack_register->xpsr = 0x01000000L; // 由于Armv7-M只支持执行Thumb指令，因此必须始终将其值保持为1，否则任务切换会异常
 
 	jd_new_task->priority = priority; // 设置优先级
+	jd_new_task->node->addr = jd_new_task; //记录节点内存地址，方便通过节点找到任务数据域
 
 	return jd_new_task; // 返回当前任务节点
 }
@@ -329,7 +330,8 @@ void jd_task_switch(void)
 void jd_task_first_switch(void)
 {
 	struct jd_task *jd_task;
-	jd_task = container_of(&jd_task_list_readying, struct jd_task, node);
+	//jd_task = container_of(&jd_task_list_readying, struct jd_task, node);
+	jd_task = jd_task_list_readying->addr;
 	jd_asm_task_first_switch(&jd_task->stack_sp, jd_main);
 }
 
@@ -377,7 +379,7 @@ int jd_init(void)
 
 	jd_task_frist->stack_sp = jd_task_frist->stack_origin_addr + JD_DEFAULT_STACK_SIZE - 4; // 栈顶
 
-	jd_task_frist->node->addr = &jd_task_frist->node; //记录节点内存地址，方便通过节点找到任务数据域
+	jd_task_frist->node->addr = jd_task_frist; //记录节点内存地址，方便通过节点找到任务数据域
 
 	jd_task_list_readying = jd_task_frist->node; // 将任务挂在就绪链表上
 	jd_task_runing = jd_task_frist;				 // 保存当前任务为正在运行任务
