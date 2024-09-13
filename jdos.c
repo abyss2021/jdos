@@ -148,7 +148,7 @@ struct jd_task *jd_request_space(unsigned int stack_size)
 
 	jd_task->node = (struct jd_node_list *)malloc(sizeof(struct jd_node_list)); // 申请节点空间
 	jd_task->node->next = JD_NULL;												// 初始化节点指针
-	jd_task->node->previous - JD_NULL;											// 初始化节点指针
+	jd_task->node->previous = JD_NULL;											// 初始化节点指针
 
 	return jd_task;
 }
@@ -324,6 +324,7 @@ void jd_task_switch(void)
 
 	jd_asm_pendsv_putup(); // 挂起PendSV异常
 }
+
 /*内核第一次运行空闲任务*/
 void jd_task_first_switch(void)
 {
