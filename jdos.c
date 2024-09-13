@@ -3,8 +3,8 @@
 struct jd_node_list *jd_task_list_readying;	 // 创建就绪任务链表
 struct jd_node_list *jd_task_list_delaying;	 // 创建延时任务链表
 struct jd_task *jd_task_runing;				 // 创建当前任务指针
-unsigned long *jd_task_stack_sp = NULL;		 // 创建当前任务堆栈指针的地址
-unsigned long *jd_task_next_stack_sp = NULL; // 创建下一个任务堆栈指针的地址
+void *jd_task_stack_sp = NULL;		 // 创建当前任务堆栈指针的地址
+void *jd_task_next_stack_sp = NULL; // 创建下一个任务堆栈指针的地址
 
 struct jd_task *jd_task_frist = NULL; // 创建一个系统空闲任务
 
