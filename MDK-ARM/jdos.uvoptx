@@ -152,9 +152,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>410</LineNumber>
+          <LineNumber>120</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134221440</Address>
+          <Address>134220726</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -163,39 +163,7 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\jdos.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\jdos\../jdos.c\410</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>401</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134221432</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\jdos.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\jdos\../jdos.c\401</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>419</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134221448</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\jdos.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\jdos\../jdos.c\419</Expression>
+          <Expression>\\jdos\../jdos.c\120</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -227,27 +195,27 @@
         <Ww>
           <count>5</count>
           <WinNumber>1</WinNumber>
-          <ItemText>jd_task_list_delaying</ItemText>
+          <ItemText>jd_task_runing</ItemText>
         </Ww>
         <Ww>
           <count>6</count>
           <WinNumber>1</WinNumber>
-          <ItemText>jd_task_runing</ItemText>
+          <ItemText>jd_task_temp</ItemText>
         </Ww>
         <Ww>
           <count>7</count>
           <WinNumber>1</WinNumber>
-          <ItemText>jd_task_list_readying</ItemText>
+          <ItemText>node_temp</ItemText>
         </Ww>
         <Ww>
           <count>8</count>
           <WinNumber>1</WinNumber>
-          <ItemText>jd_task_temp</ItemText>
+          <ItemText>\\jdos\../jdos.c\jd_task_list_delaying</ItemText>
         </Ww>
         <Ww>
           <count>9</count>
           <WinNumber>1</WinNumber>
-          <ItemText>node_temp</ItemText>
+          <ItemText>\\jdos\../jdos.c\jd_task_list_readying</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>

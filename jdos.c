@@ -65,6 +65,44 @@ int jd_node_insert(struct jd_node_list *node_previous, struct jd_node_list *node
 	return JD_OK;
 }
 
+
+/*删除节点
+* list:需要进行删除的链表
+* node：需要删除的节点
+* return：
+*/
+int jd_node_delete(struct jd_node_list *list,struct jd_node_list *node)
+{
+	if(list == JD_NULL || node == JD_NULL)
+		return JD_NULL;
+	
+	//判断节点是否在表头
+	if(node == list)
+	{
+		//移动表头
+		list = list->next;
+		
+		//清空节点信息
+		node->previous = JD_NULL;
+
+		//如果移动后表头不为空
+		if(list != JD_NULL)
+			list->previous = JD_NULL;
+	}
+	//判断是否在表尾
+	else if(node->next == JD_NULL)
+	{
+		//删除最后一个节点
+		node->previous->next = JD_NULL;
+	}	
+	//在表中
+	else
+	{
+		jd_node_insert(node->previous,JD_NULL,node->next);
+	}
+	return JD_OK;
+}
+
 /*jdos延时，让出CPU使用权
  * ms:延时时间，单位ms
  */
@@ -79,17 +117,7 @@ void jd_delay(unsigned long ms)
 	struct jd_node_list *node_temp;
 
 	// 删除就绪链表中的节点
-	// 判断表头
-	if (jd_task_runing->node == jd_task_list_readying)
-	{
-		jd_task_list_readying = jd_task_list_readying->next; // 表头移动
-		jd_task_list_readying->previous = JD_NULL;
-	}
-	else
-	{
-		// 删除当前节点
-		jd_node_insert(jd_task_runing->node->previous, JD_NULL, jd_task_runing->node->next);
-	}
+	jd_node_delete(jd_task_list_readying,jd_task_runing->node);
 
 	node_temp = jd_task_list_delaying;
 	// 延时链表没有正在延时的任务
@@ -418,7 +446,7 @@ void task3()
 	while (1)
 	{
 		jd_delay(80);
-		// HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
+		HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
 	};
 }
 
@@ -426,7 +454,7 @@ void task3()
 __weak void jd_main(void)
 {
 	// printf("jd hello\r\n");
-	struct jd_task *test_task1 = jd_task_create(task1, 512, 0);
+	struct jd_task *test_task1 = jd_task_create(task1, 512, 3);
 	if (test_task1 != JD_NULL)
 		jd_task_run(test_task1);
 
@@ -444,6 +472,6 @@ __weak void jd_main(void)
 
 		// 注意此处调用延时切换任务，如果所有任务都不为就绪状态，程序将在jd_task_switch函数中死循环，直到有就绪任务才会切换
 		// 应该在此处休眠或者其他不重要的工作
-		jd_delay(500);
+		HAL_Delay(100);
 	};
 }
