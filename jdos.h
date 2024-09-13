@@ -7,12 +7,13 @@
 
 
 /*获得结构体(TYPE)的变量成员(MEMBER)在此结构体中的偏移量。*/
-#define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
+//#define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
 /*获得结构体(TYPE)的变量成员(MEMBER)在此结构体地址。*/
-#define container_of(ptr, type, member) ({ \ 
-        const typeof( ((type *)0)->member ) *__mptr = (ptr); \
-        (type *)( (char *)__mptr - offsetof(type,member) );})
+/* 已知一个结构体里面的成员的地址，反推出该结构体的首地址 */
+#define container_of(ptr, type, member) ((type *)((char *)(ptr) - (unsigned long)(&((type *)0)->member)))
 
+				
+				
 /*宏定义函数返回状态*/
 #define JD_NULL 0
 #define JD_OK 1
