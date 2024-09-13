@@ -103,8 +103,8 @@ void jd_delay(unsigned long ms)
 		// 遍历链表
 		while (1)
 		{
-				jd_task_temp = node_temp->addr; //获取任务数据
-			
+			jd_task_temp = node_temp->addr; // 获取任务数据
+
 			// 如果延时小或相同 则插入在当前节点前
 			if (jd_task_runing->timeout <= jd_task_temp->timeout)
 			{
@@ -184,8 +184,8 @@ struct jd_task *jd_task_create(void (*task_entry)(), unsigned int stack_size, ch
 	stack_register->pc = (unsigned long)jd_new_task->entry;
 	stack_register->xpsr = 0x01000000L; // 由于Armv7-M只支持执行Thumb指令，因此必须始终将其值保持为1，否则任务切换会异常
 
-	jd_new_task->priority = priority; // 设置优先级
-	jd_new_task->node->addr = jd_new_task; //记录节点内存地址，方便通过节点找到任务数据域
+	jd_new_task->priority = priority;	   // 设置优先级
+	jd_new_task->node->addr = jd_new_task; // 记录节点内存地址，方便通过节点找到任务数据域
 
 	return jd_new_task; // 返回当前任务节点
 }
@@ -228,7 +228,7 @@ int jd_task_run(struct jd_task *jd_task)
 	while (1)
 	{
 		// 获取节点数据域
-		jd_task_temp = node_temp->addr; //获取任务数据
+		jd_task_temp = node_temp->addr; // 获取任务数据
 		// 如果优先级高或相同
 		if (jd_task->priority <= jd_task_temp->priority)
 		{
@@ -298,8 +298,8 @@ void jd_task_switch(void)
 	struct jd_node_list *node_temp;
 	node_temp = jd_task_list_readying;
 
-	// 获取数据域	
-	jd_task = node_temp->addr; //获取任务数据
+	// 获取数据域
+	jd_task = node_temp->addr; // 获取任务数据
 
 	// 没有外部条件改变当前任务状态,
 	if (jd_task_runing->status == JD_RUNNING)
@@ -349,15 +349,15 @@ void HAL_IncTick(void)
 	jd_time++; // jd_lck++
 	// 判断延时表头是否到达时间，若没有到达时间，则切换，若到达时间则将任务加入到就绪任务,在切换任务
 	struct jd_task *jd_task;
-	
-	jd_task = jd_task_list_delaying->addr; //获取任务数据
-	
+
+	jd_task = jd_task_list_delaying->addr; // 获取任务数据
+
 	while (jd_task->timeout == jd_time)
 	{
 		jd_node_insert(jd_task->node->previous, JD_NULL, jd_task->node->next); // 删除当前节点
 		jd_task_run(jd_task);												   // 加入就绪链表
 		jd_task_list_delaying = jd_task_list_delaying->next;				   // 切换表头
-			jd_task = jd_task_list_delaying->addr; //获取任务数据
+		jd_task = jd_task_list_delaying->addr;								   // 获取任务数据
 	}
 	jd_task_switch(); // jd_task_switch
 }
@@ -373,16 +373,17 @@ int jd_init(void)
 	jd_task_list_readying->previous = JD_NULL;
 	jd_task_list_delaying->next = JD_NULL;
 	jd_task_list_delaying->previous = JD_NULL;
-	
-	//设置优先级为最低
+
+	// 设置优先级为最低
 	jd_task_frist = jd_task_create(jd_main, JD_DEFAULT_STACK_SIZE, 127);
-	while (jd_task_frist == NULL); // 空闲任务不能创建则死循环
+	while (jd_task_frist == NULL)
+		; // 空闲任务不能创建则死循环
 
 	jd_task_frist->status = JD_READY; // 任务就绪
 
 	jd_task_frist->stack_sp = jd_task_frist->stack_origin_addr + JD_DEFAULT_STACK_SIZE - 4; // 栈顶
 
-	jd_task_frist->node->addr = jd_task_frist; //记录节点内存地址，方便通过节点找到任务数据域
+	jd_task_frist->node->addr = jd_task_frist; // 记录节点内存地址，方便通过节点找到任务数据域
 
 	jd_task_list_readying = jd_task_frist->node; // 将任务挂在就绪链表上
 	jd_task_runing = jd_task_frist;				 // 保存当前任务为正在运行任务
