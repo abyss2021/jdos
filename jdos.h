@@ -57,7 +57,7 @@ struct all_register
 struct jd_node_list
 {
     struct jd_node_list *previous; // 上一个节点
-		unsigned long addr; //当前节点地址
+	void *addr; //当前节点地址
     struct jd_node_list *next;     // 下一个节点
 };
 
