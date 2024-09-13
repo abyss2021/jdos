@@ -371,12 +371,13 @@ int jd_init(void)
 	jd_task_list_delaying->previous = JD_NULL;
 
 	jd_task_frist = jd_task_create(jd_main, JD_DEFAULT_STACK_SIZE, 127);
-	while (jd_task_frist == NULL)
-		; // 空闲任务不能创建则死循环
+	while (jd_task_frist == NULL); // 空闲任务不能创建则死循环
 
 	jd_task_frist->status = JD_READY; // 任务就绪
 
 	jd_task_frist->stack_sp = jd_task_frist->stack_origin_addr + JD_DEFAULT_STACK_SIZE - 4; // 栈顶
+
+	jd_task_frist->node->addr = &jd_task_frist->node; //记录节点内存地址，方便通过节点找到任务数据域
 
 	jd_task_list_readying = jd_task_frist->node; // 将任务挂在就绪链表上
 	jd_task_runing = jd_task_frist;				 // 保存当前任务为正在运行任务
