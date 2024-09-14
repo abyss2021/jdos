@@ -71,7 +71,7 @@ int jd_node_insert(struct jd_node_list *node_previous, struct jd_node_list *node
 * node：需要删除的节点
 * return：
 */
-int jd_node_delete(struct jd_node_list *list,struct jd_node_list *node)
+struct jd_node_list *jd_node_delete(struct jd_node_list *list,struct jd_node_list *node)
 {
 	if(list == JD_NULL || node == JD_NULL)
 		return JD_NULL;
@@ -81,10 +81,6 @@ int jd_node_delete(struct jd_node_list *list,struct jd_node_list *node)
 	{
 		//移动表头
 		list = list->next;
-		
-		//清空节点信息
-		node->previous = JD_NULL;
-
 		//如果移动后表头不为空
 		if(list != JD_NULL)
 			list->previous = JD_NULL;
@@ -100,7 +96,119 @@ int jd_node_delete(struct jd_node_list *list,struct jd_node_list *node)
 	{
 		jd_node_insert(node->previous,JD_NULL,node->next);
 	}
-	return JD_OK;
+	//清空节点信息
+	node->previous = JD_NULL;
+	node->next = JD_NULL;
+	return list;
+}
+
+/*将节点插入就绪链表
+* list:要插入的链表
+* node:要插入的节点
+* return：链表地址
+*/
+struct jd_node_list *jd_node_in_readying(struct jd_node_list *list,struct jd_node_list *node)
+{
+	struct jd_task *jd_task_temp,*jd_task_in_temp;
+	struct jd_node_list *node_temp;
+
+	// 延时链表没有正在延时的任务
+	if (list == JD_NULL)
+	{
+		list = node;
+		list->next = JD_NULL;
+		list->previous = JD_NULL;
+	}
+	// 有延时任务
+	else
+	{
+		// 临时节点，用于遍历链表
+		node_temp = list;
+		// 插入节点的任务数据
+		jd_task_in_temp = node->addr;
+		// 遍历链表
+		while (1)
+		{
+			jd_task_temp = node_temp->addr; // 获取任务数据
+
+			// 如果数字越小，优先级越高
+			if (jd_task_in_temp->priority <= jd_task_temp->priority)
+			{
+				// 判断为表头
+				if (node_temp->previous == JD_NULL)
+				{
+					list = node; // 切换表头
+				}
+				jd_node_insert(JD_NULL, list, node_temp);
+				break;
+			}
+			// 判断表尾
+			if (node_temp->next == JD_NULL)
+			{
+				// 将任务插入到表尾
+				jd_node_insert(node_temp, jd_task_temp->node,JD_NULL);
+				break;
+			}
+			// 临时节点切换为下一个节点
+			node_temp = node_temp->next;
+		}
+	}
+	return list;
+	
+}
+
+/*将节点插入延时链表
+* list:要插入的链表
+* node:要插入的节点
+* return：链表地址
+*/
+struct jd_node_list *jd_node_in_delaying(struct jd_node_list *list,struct jd_node_list *node)
+{
+	struct jd_task *jd_task_temp,*jd_task_in_temp;
+	struct jd_node_list *node_temp;
+
+	// 延时链表没有正在延时的任务
+	if (list == JD_NULL)
+	{
+		list = node;
+		list->next = JD_NULL;
+		list->previous = JD_NULL;
+	}
+	// 有延时任务
+	else
+	{
+		// 临时节点，用于遍历链表
+		node_temp = list;
+		// 插入节点的任务数据
+		jd_task_in_temp = node->addr;
+		// 遍历链表
+		while (1)
+		{
+			jd_task_temp = node_temp->addr; // 获取任务数据
+
+			// 如果延时小或相同 则插入在当前节点前
+			if (jd_task_in_temp->timeout <= jd_task_temp->timeout)
+			{
+				// 判断为表头
+				if (node_temp->previous == JD_NULL)
+				{
+					list = node; // 切换表头
+				}
+				jd_node_insert(JD_NULL, list, node_temp);
+				break;
+			}
+			// 判断表尾
+			if (node_temp->next == JD_NULL)
+			{
+				// 将任务插入到表尾
+				jd_node_insert(node_temp, jd_task_temp->node,JD_NULL);
+				break;
+			}
+			// 临时节点切换为下一个节点
+			node_temp = node_temp->next;
+		}
+	}
+	return list;
 }
 
 /*jdos延时，让出CPU使用权
@@ -112,49 +220,12 @@ void jd_delay(unsigned long ms)
 		return;
 	jd_task_runing->status = JD_DELAY;
 	jd_task_runing->timeout = jd_time + ms; // 将延时时间写入节点
-
-	struct jd_task *jd_task_temp;
-	struct jd_node_list *node_temp;
-
 	// 删除就绪链表中的节点
-	jd_node_delete(jd_task_list_readying,jd_task_runing->node);
+	jd_task_list_readying = jd_node_delete(jd_task_list_readying,jd_task_runing->node);
 
-	node_temp = jd_task_list_delaying;
-	// 延时链表没有正在延时的任务
-	if (jd_task_list_delaying->next == JD_NULL && jd_task_list_delaying->previous == JD_NULL)
-	{
-		jd_task_list_delaying = jd_task_runing->node;
-	}
-	// 有延时任务
-	else
-	{
-		// 遍历链表
-		while (1)
-		{
-			jd_task_temp = node_temp->addr; // 获取任务数据
+	//将节点加入延时链表
+	jd_task_list_delaying =  jd_node_in_delaying(jd_task_list_delaying,jd_task_runing->node);
 
-			// 如果延时小或相同 则插入在当前节点前
-			if (jd_task_runing->timeout <= jd_task_temp->timeout)
-			{
-				// 判断为表头
-				if (node_temp->previous == JD_NULL)
-				{
-					jd_task_list_readying = jd_task_runing->node; // 切换表头
-				}
-				jd_node_insert(node_temp->previous, jd_task_temp->node, node_temp);
-				break;
-			}
-			// 判断表尾
-			if (node_temp->next == JD_NULL)
-			{
-				// 将任务插入到表尾
-				jd_node_insert(node_temp, jd_task_temp->node, node_temp->next);
-				break;
-			}
-			// 临时节点切换为下一个节点
-			node_temp = node_temp->next;
-		}
-	}
 	jd_task_switch(); // 切换线程，让出CPU，等延时后调度
 }
 
@@ -248,35 +319,9 @@ int jd_task_run(struct jd_task *jd_task)
 		return JD_ERR;
 	jd_task->status = JD_READY; // 将任务更改为就绪状态
 
-	// 根据优先级插入节点位置
-	struct jd_task *jd_task_temp;
-	struct jd_node_list *node_temp;
-	node_temp = jd_task_list_readying;
-	// 遍历就绪链表
-	while (1)
-	{
-		// 获取节点数据域
-		jd_task_temp = node_temp->addr; // 获取任务数据
-		// 如果优先级高或相同
-		if (jd_task->priority <= jd_task_temp->priority)
-		{
-			// 判断不为表头
-			if (node_temp->previous == JD_NULL)
-			{
-				jd_task_list_readying = jd_task->node; // 切换表头
-			}
-			jd_node_insert(node_temp->previous, jd_task->node, node_temp);
-			break;
-		}
-		// 如果已经到达表尾
-		if (node_temp->next == JD_NULL)
-		{
-			jd_node_insert(node_temp, jd_task->node, JD_NULL);
-			break;
-		}
-		// 临时节点切换为下一个节点
-		node_temp = node_temp->next;
-	}
+	//加入就绪链表
+	jd_task_list_readying = jd_node_in_readying(jd_task_list_readying,jd_task->node);
+
 	// 插入节点
 	return JD_OK;
 }
@@ -298,9 +343,6 @@ int jd_task_pause(struct jd_task *jd_task)
 	if (jd_task->status == JD_PAUSE)
 		return JD_OK;
 
-	// 在延时列表或就绪列表时，直接删除节点
-	jd_node_insert(jd_task->node->previous, JD_NULL, jd_task->node->next);
-
 	// 在就绪链表表头
 	if (jd_task_list_readying == jd_task->node)
 	{
@@ -309,13 +351,22 @@ int jd_task_pause(struct jd_task *jd_task)
 		jd_task_list_readying->previous = JD_NULL;
 	}
 	// 在延时链表表头
-	if (jd_task_list_delaying == jd_task->node)
+	else if (jd_task_list_delaying == jd_task->node)
 	{
 		// 移动表头，同时将表头中指向的上一个节点信息删除
 		jd_task_list_delaying = jd_task->node->next;
 		jd_task_list_delaying->previous = JD_NULL;
 	}
+	else
+	{
+		// 直接删除节点
+		jd_node_insert(jd_task->node->previous, JD_NULL, jd_task->node->next);
+
+	}
 	jd_task->status = JD_PAUSE; // 将任务更改为暂停状态状态
+	//清楚任务节点信息
+	jd_task->node->next = JD_NULL;
+	jd_task->node->previous = JD_NULL;
 	return JD_OK;
 }
 
