@@ -1,11 +1,11 @@
 #include "jdos.h"
 
-struct jd_node_list *jd_task_list_readying; // 创建就绪任务链表
-struct jd_node_list *jd_task_list_delaying; // 创建延时任务链表
-struct jd_task *jd_task_runing;				// 创建当前任务指针
+jd_node_list_t *jd_task_list_readying; // 创建就绪任务链表
+jd_node_list_t *jd_task_list_delaying; // 创建延时任务链表
+jd_task_t *jd_task_runing;				// 创建当前任务指针
 void *jd_task_stack_sp = NULL;				// 创建当前任务堆栈指针的地址
 void *jd_task_next_stack_sp = NULL;			// 创建下一个任务堆栈指针的地址
-struct jd_task *jd_task_frist = NULL;		// 创建一个系统空闲任务
+jd_task_t *jd_task_frist = NULL;		// 创建一个系统空闲任务
 
 
 
@@ -14,7 +14,7 @@ struct jd_task *jd_task_frist = NULL;		// 创建一个系统空闲任务
  * node:想要插入的节点,为JD_NULL表示连接前后两个节点
  * node_next：想要插入的链表节点处的下一个节点
  */
-int jd_node_insert(struct jd_node_list *node_previous, struct jd_node_list *node, struct jd_node_list *node_next)
+jd_int32_t jd_node_insert(jd_node_list_t *node_previous, jd_node_list_t *node, jd_node_list_t *node_next)
 {
 	// 传入节点无效，无法插入
 	if (node_previous == JD_NULL && node_next == JD_NULL)
@@ -69,9 +69,9 @@ int jd_node_insert(struct jd_node_list *node_previous, struct jd_node_list *node
 /*删除节点
  * list:需要进行删除的链表
  * node：需要删除的节点
- * return：
+ * return：链表地址
  */
-struct jd_node_list *jd_node_delete(struct jd_node_list *list, struct jd_node_list *node)
+jd_node_list_t *jd_node_delete(jd_node_list_t *list, jd_node_list_t *node)
 {
 	if (list == JD_NULL || node == JD_NULL)
 		return JD_NULL;
@@ -103,11 +103,11 @@ struct jd_node_list *jd_node_delete(struct jd_node_list *list, struct jd_node_li
 }
 
 /*比较函数，用于jd_node_in_rd中使用*/
-long compare_priority(struct jd_task *task1, struct jd_task *task2) 
+long compare_priority(jd_task_t *task1, jd_task_t *task2) 
 {
     return task1->priority - task2->priority;
 }
-long compare_timeout(struct jd_task *task1, struct jd_task *task2) 
+long compare_timeout(jd_task_t *task1, jd_task_t *task2) 
 {
     return task1->timeout - task2->timeout;
 }
@@ -116,10 +116,10 @@ long compare_timeout(struct jd_task *task1, struct jd_task *task2)
  * node:要插入的节点
  * return：链表地址
  */
-struct jd_node_list *jd_node_in_rd(struct jd_node_list *list, struct jd_node_list *node)
+jd_node_list_t *jd_node_in_rd(jd_node_list_t *list, jd_node_list_t *node)
 {
-	struct jd_task *jd_task_temp, *jd_task_in_temp;
-	struct jd_node_list *node_temp;
+	jd_task_t *jd_task_temp, *jd_task_in_temp;
+	jd_node_list_t *node_temp;
 
 	// 链表没有正在延时的任务
 	if (list == JD_NULL)
@@ -132,7 +132,7 @@ struct jd_node_list *jd_node_in_rd(struct jd_node_list *list, struct jd_node_lis
 	else
 	{
 		//比较函数选择
-		long (*compare)(struct jd_task *task1, struct jd_task *task2);
+		long (*compare)(jd_task_t *task1, jd_task_t *task2);
 		if(list==jd_task_list_readying)
 		{
 			compare = compare_priority;
@@ -183,7 +183,7 @@ struct jd_node_list *jd_node_in_rd(struct jd_node_list *list, struct jd_node_lis
 /*jdos延时，让出CPU使用权
  * ms:延时时间，单位ms
  */
-void jd_delay(unsigned long ms)
+void jd_delay(jd_uint32_t ms)
 {
 	if (ms == 0)
 		return;
@@ -203,19 +203,19 @@ void jd_delay(unsigned long ms)
  * stack_size：堆栈大小
  * return：JD_OK或JD_ERR
  */
-struct jd_task *jd_request_space(unsigned int stack_size)
+jd_task_t *jd_request_space(jd_uint32_t stack_size)
 {
-	struct jd_task *jd_task;
-	jd_task = (struct jd_task *)malloc(sizeof(struct jd_task)); // 分配空间
+	jd_task_t *jd_task;
+	jd_task = (jd_task_t *)malloc(sizeof(jd_task_t)); // 分配空间
 	if (jd_task == NULL)
 		return JD_NULL; // 判断分配空间是否成功
 
-	jd_task->stack_sp = (unsigned long)malloc(stack_size); // 申请堆栈空间
+	jd_task->stack_sp = (jd_uint32_t)malloc(stack_size); // 申请堆栈空间
 	if (jd_task == NULL)
 		return JD_NULL;								// 判断分配空间是否成功
 	jd_task->stack_origin_addr = jd_task->stack_sp; // 记录栈顶指针
 
-	jd_task->node = (struct jd_node_list *)malloc(sizeof(struct jd_node_list)); // 申请节点空间
+	jd_task->node = (jd_node_list_t *)malloc(sizeof(jd_node_list_t)); // 申请节点空间
 	jd_task->node->next = JD_NULL;												// 初始化节点指针
 	jd_task->node->previous = JD_NULL;											// 初始化节点指针
 
@@ -227,9 +227,9 @@ struct jd_task *jd_request_space(unsigned int stack_size)
  * stack_size：任务栈大小
  * return：返回当前任务节点指针
  */
-struct jd_task *jd_task_create(void (*task_entry)(), unsigned int stack_size, char priority)
+jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_t priority)
 {
-	struct jd_task *jd_new_task = NULL; // 创建一个任务节点指针
+	jd_task_t *jd_new_task = NULL; // 创建一个任务节点指针
 	jd_new_task = jd_request_space(JD_DEFAULT_STACK_SIZE);
 	if (jd_new_task == JD_NULL)
 		return JD_NULL; // 申请空间
@@ -240,7 +240,7 @@ struct jd_task *jd_task_create(void (*task_entry)(), unsigned int stack_size, ch
 	jd_new_task->stack_size = stack_size; // 记录当前任务堆栈大小
 
 	jd_new_task->stack_sp = jd_new_task->stack_origin_addr + JD_DEFAULT_STACK_SIZE - sizeof(struct all_register) - 4; // 腾出寄存器的空间
-	struct all_register *stack_register = (struct all_register *)jd_new_task->stack_sp;								  // 将指针转换成寄存器指针
+	all_register_t *stack_register = (struct all_register *)jd_new_task->stack_sp;								  // 将指针转换成寄存器指针
 
 	// 将任务运行数据搬移到内存中
 	stack_register->r0 = 0;
@@ -248,8 +248,8 @@ struct jd_task *jd_task_create(void (*task_entry)(), unsigned int stack_size, ch
 	stack_register->r2 = 0;
 	stack_register->r3 = 0;
 	stack_register->r12 = 0;
-	stack_register->lr = (unsigned long)jd_new_task->entry;
-	stack_register->pc = (unsigned long)jd_new_task->entry;
+	stack_register->lr = (jd_uint32_t)jd_new_task->entry;
+	stack_register->pc = (jd_uint32_t)jd_new_task->entry;
 	stack_register->xpsr = 0x01000000L; // 由于Armv7-M只支持执行Thumb指令，因此必须始终将其值保持为1，否则任务切换会异常
 
 	jd_new_task->priority = priority;	   // 设置优先级
@@ -262,7 +262,7 @@ struct jd_task *jd_task_create(void (*task_entry)(), unsigned int stack_size, ch
  * jd_task:任务节点指针
  * return：返回JD_OK或JD_ERR
  */
-int jd_task_delete(struct jd_task *jd_task)
+jd_int32_t jd_task_delete(jd_task_t *jd_task)
 {
 	if (jd_task == JD_NULL)
 		return JD_ERR;
@@ -272,7 +272,7 @@ int jd_task_delete(struct jd_task *jd_task)
 
 	jd_task_pause(jd_task); // 将任务修改为暂停状态，目的是从就绪或延时链表中删除节点
 
-	free((unsigned long *)jd_task->stack_sp); // 释放任务堆栈内存
+	free((jd_uint32_t *)jd_task->stack_sp); // 释放任务堆栈内存
 	free(jd_task->node);					  // 释放节点内存
 	free(jd_task);							  // 释放任务内存
 	return JD_OK;
@@ -282,7 +282,7 @@ int jd_task_delete(struct jd_task *jd_task)
  * jd_task:任务节点指针
  * return：返回JD_OK或JD_ERR
  */
-int jd_task_run(struct jd_task *jd_task)
+jd_int32_t jd_task_run(jd_task_t *jd_task)
 {
 	if (jd_task == JD_NULL)
 		return JD_ERR;
@@ -299,7 +299,7 @@ int jd_task_run(struct jd_task *jd_task)
  *	jd_task:任务节点指针
  * return：返回JD_OK或JD_ERR
  */
-int jd_task_pause(struct jd_task *jd_task)
+jd_int32_t jd_task_pause(jd_task_t *jd_task)
 {
 	if (jd_task == JD_NULL)
 		return JD_ERR;
@@ -341,8 +341,8 @@ int jd_task_pause(struct jd_task *jd_task)
 /*任务切换*/
 void jd_task_switch(void)
 {
-	struct jd_task *jd_task;
-	struct jd_node_list *node_temp;
+	jd_task_t *jd_task;
+	jd_node_list_t *node_temp;
 	node_temp = jd_task_list_readying;
 
 	// 获取数据域
@@ -377,7 +377,7 @@ void jd_task_switch(void)
 /*内核第一次运行空闲任务*/
 void jd_task_first_switch(void)
 {
-	struct jd_task *jd_task;
+	jd_task_t *jd_task;
 	jd_task = jd_task_list_readying->addr;
 	jd_asm_task_first_switch(&jd_task->stack_sp, jd_main);
 }
@@ -389,7 +389,7 @@ void HAL_IncTick(void)
 
 	jd_time++; // jd_lck++
 	// 判断延时表头是否到达时间，若没有到达时间，则切换，若到达时间则将任务加入到就绪任务,在切换任务
-	struct jd_task *jd_task;
+	jd_task_t *jd_task;
 	jd_task = jd_task_list_delaying->addr; // 获取任务数据
 	while (jd_task->timeout == jd_time)
 	{
@@ -401,7 +401,7 @@ void HAL_IncTick(void)
 }
 
 /*jd初始化*/
-int jd_init(void)
+jd_int32_t jd_init(void)
 {
 	// 初始化链表
 	jd_task_list_readying = JD_NULL;
@@ -454,7 +454,7 @@ void task3()
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 	};
 }
-struct jd_task *test_task1, *test_task2, *test_task3;
+jd_task_t *test_task1, *test_task2, *test_task3;
 /*系统main,系统第一个任务，不可使用jd_task_delete删除，可添加其他任务初始化代码*/
 __weak void jd_main(void)
 {
