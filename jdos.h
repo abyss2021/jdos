@@ -65,7 +65,7 @@ struct jd_task
     unsigned long stack_sp;          // 堆栈指针
     unsigned long stack_origin_addr; // 堆栈起始地址
     unsigned long timeout;           // 延时溢出时间，单位ms，为0则没有延时
-    char priority;                   // 优先级0-127,越低优先级越高
+    char priority;                   // 优先级-128 - 127,越低优先级越高,一般从0开始用
 };
 
 /*第一次进入任务*/
