@@ -138,15 +138,19 @@ struct jd_node_list *jd_node_in_readying(struct jd_node_list *list,struct jd_nod
 				if (node_temp->previous == JD_NULL)
 				{
 					list = node; // 切换表头
+					jd_node_insert(JD_NULL, list, node_temp);
 				}
-				jd_node_insert(JD_NULL, list, node_temp);
+				else
+				{
+					jd_node_insert(node_temp->previous,node,node_temp);
+				}
 				break;
 			}
 			// 判断表尾
 			if (node_temp->next == JD_NULL)
 			{
 				// 将任务插入到表尾
-				jd_node_insert(node_temp, jd_task_temp->node,JD_NULL);
+				jd_node_insert(node_temp,node,JD_NULL);
 				break;
 			}
 			// 临时节点切换为下一个节点
@@ -186,22 +190,26 @@ struct jd_node_list *jd_node_in_delaying(struct jd_node_list *list,struct jd_nod
 		{
 			jd_task_temp = node_temp->addr; // 获取任务数据
 
-			// 如果延时小或相同 则插入在当前节点前
+			// 如果数字越小，优先级越高
 			if (jd_task_in_temp->timeout <= jd_task_temp->timeout)
 			{
 				// 判断为表头
 				if (node_temp->previous == JD_NULL)
 				{
 					list = node; // 切换表头
+					jd_node_insert(JD_NULL, list, node_temp);
 				}
-				jd_node_insert(JD_NULL, list, node_temp);
+				else
+				{
+					jd_node_insert(node_temp->previous,node,node_temp);
+				}
 				break;
 			}
 			// 判断表尾
 			if (node_temp->next == JD_NULL)
 			{
 				// 将任务插入到表尾
-				jd_node_insert(node_temp, jd_task_temp->node,JD_NULL);
+				jd_node_insert(node_temp,node,JD_NULL);
 				break;
 			}
 			// 临时节点切换为下一个节点
