@@ -100,13 +100,13 @@ jd_int32_t jd_init(void);
 /*jdos延时，让出CPU使用权*/
 void jd_delay(jd_uint32_t ms);
 /*创建任务*/
-struct jd_task *jd_task_create(void (*task_entry)(),jd_uint32_t stack_size, jd_int8_t priority);
+jd_task_t *jd_task_create(void (*task_entry)(),jd_uint32_t stack_size, jd_int8_t priority);
 /*更改为就绪状态，等待调度*/
 jd_int32_t jd_task_run(jd_task_t *jd_task);
 /*删除任务，释放内存*/
 jd_int32_t jd_task_delete(jd_task_t *jd_task);
 /*暂停任务*/
 jd_int32_t jd_task_pause(jd_task_t *jd_task);
-/*手动进行任务调度*/
+/*任务切换*/
 void jd_task_switch(void);
 #endif
