@@ -444,14 +444,9 @@ void HAL_IncTick(void)
 /*jd初始化*/
 int jd_init(void)
 {
-	// 为第一个节点创建空间
-	jd_task_list_readying = malloc(sizeof(struct jd_node_list));
-	jd_task_list_delaying = malloc(sizeof(struct jd_node_list));
-	// 节点指向NULL
-	jd_task_list_readying->next = JD_NULL;
-	jd_task_list_readying->previous = JD_NULL;
-	jd_task_list_delaying->next = JD_NULL;
-	jd_task_list_delaying->previous = JD_NULL;
+	// 初始化链表
+	jd_task_list_readying = JD_NULL;
+	jd_task_list_delaying = JD_NULL;
 
 	// 设置优先级为最低
 	jd_task_frist = jd_task_create(jd_main, JD_DEFAULT_STACK_SIZE, 127);
@@ -500,20 +495,20 @@ void task3()
 		HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
 	};
 }
-
+	struct jd_task *test_task1,*test_task2,*test_task3;
 /*系统main,系统第一个任务，不可使用jd_task_delete删除，可添加其他任务初始化代码*/
 __weak void jd_main(void)
 {
 	// printf("jd hello\r\n");
-	struct jd_task *test_task1 = jd_task_create(task1, 512, 3);
+	test_task1 = jd_task_create(task1, 512, 3);
 	if (test_task1 != JD_NULL)
 		jd_task_run(test_task1);
 
-	struct jd_task *test_task2 = jd_task_create(task2, 512, 1);
+	test_task2 = jd_task_create(task2, 512, 1);
 	if (test_task1 != JD_NULL)
 		jd_task_run(test_task2);
 
-	struct jd_task *test_task3 = jd_task_create(task3, 512, 2);
+	test_task3 = jd_task_create(task3, 512, 2);
 	if (test_task1 != JD_NULL)
 		jd_task_run(test_task3);
 	while (1)
