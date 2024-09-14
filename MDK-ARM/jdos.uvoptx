@@ -152,9 +152,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>508</LineNumber>
+          <LineNumber>484</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134220852</Address>
+          <Address>134221540</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -163,14 +163,14 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\jdos.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\jdos\../jdos.c\508</Expression>
+          <Expression>\\jdos\../jdos.c\484</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>499</LineNumber>
+          <LineNumber>493</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134221570</Address>
+          <Address>134221548</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -179,14 +179,14 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\jdos.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\jdos\../jdos.c\499</Expression>
+          <Expression>\\jdos\../jdos.c\493</Expression>
         </Bp>
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>490</LineNumber>
+          <LineNumber>502</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134221560</Address>
+          <Address>134221558</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -195,14 +195,14 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\jdos.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\jdos\../jdos.c\490</Expression>
+          <Expression>\\jdos\../jdos.c\502</Expression>
         </Bp>
         <Bp>
           <Number>3</Number>
           <Type>0</Type>
-          <LineNumber>481</LineNumber>
+          <LineNumber>529</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134221552</Address>
+          <Address>134220902</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -211,14 +211,14 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\jdos.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\jdos\../jdos.c\481</Expression>
+          <Expression>\\jdos\../jdos.c\529</Expression>
         </Bp>
         <Bp>
           <Number>4</Number>
           <Type>0</Type>
-          <LineNumber>448</LineNumber>
+          <LineNumber>444</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134220766</Address>
+          <Address>134218894</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -227,74 +227,74 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\jdos.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\jdos\../jdos.c\448</Expression>
+          <Expression>\\jdos\../jdos.c\444</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>jd_task_frist</ItemText>
+          <ItemText>jd_task</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>jd_task</ItemText>
+          <ItemText>jd_task_stack_sp</ItemText>
         </Ww>
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>jd_task_stack_sp</ItemText>
+          <ItemText>jd_task_next_stack_sp</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>jd_task_next_stack_sp</ItemText>
+          <ItemText>jd_time</ItemText>
         </Ww>
         <Ww>
           <count>4</count>
           <WinNumber>1</WinNumber>
-          <ItemText>jd_time</ItemText>
+          <ItemText>jd_task_runing</ItemText>
         </Ww>
         <Ww>
           <count>5</count>
           <WinNumber>1</WinNumber>
-          <ItemText>jd_task_runing</ItemText>
+          <ItemText>jd_task_temp</ItemText>
         </Ww>
         <Ww>
           <count>6</count>
           <WinNumber>1</WinNumber>
-          <ItemText>jd_task_temp</ItemText>
+          <ItemText>node_temp</ItemText>
         </Ww>
         <Ww>
           <count>7</count>
           <WinNumber>1</WinNumber>
-          <ItemText>node_temp</ItemText>
+          <ItemText>\\jdos\../jdos.c\jd_task_list_delaying</ItemText>
         </Ww>
         <Ww>
           <count>8</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\jdos\../jdos.c\jd_task_list_delaying</ItemText>
+          <ItemText>\\jdos\../jdos.c\jd_task_list_readying</ItemText>
         </Ww>
         <Ww>
           <count>9</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\jdos\../jdos.c\jd_task_list_readying</ItemText>
+          <ItemText>test_task1</ItemText>
         </Ww>
         <Ww>
           <count>10</count>
           <WinNumber>1</WinNumber>
-          <ItemText>test_task1</ItemText>
+          <ItemText>test_task2</ItemText>
         </Ww>
         <Ww>
           <count>11</count>
           <WinNumber>1</WinNumber>
-          <ItemText>test_task2</ItemText>
+          <ItemText>test_task3</ItemText>
         </Ww>
         <Ww>
           <count>12</count>
           <WinNumber>1</WinNumber>
-          <ItemText>test_task3</ItemText>
+          <ItemText>\\jdos\../jdos.c\jd_task_frist</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
