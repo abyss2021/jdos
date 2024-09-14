@@ -103,11 +103,11 @@ jd_node_list_t *jd_node_delete(jd_node_list_t *list, jd_node_list_t *node)
 }
 
 /*比较函数，用于jd_node_in_rd中使用*/
-long compare_priority(jd_task_t *task1, jd_task_t *task2) 
+jd_int64_t compare_priority(jd_task_t *task1, jd_task_t *task2) 
 {
     return task1->priority - task2->priority;
 }
-long compare_timeout(jd_task_t *task1, jd_task_t *task2) 
+jd_int64_t compare_timeout(jd_task_t *task1, jd_task_t *task2) 
 {
     return task1->timeout - task2->timeout;
 }
@@ -132,7 +132,7 @@ jd_node_list_t *jd_node_in_rd(jd_node_list_t *list, jd_node_list_t *node)
 	else
 	{
 		//比较函数选择
-		long (*compare)(jd_task_t *task1, jd_task_t *task2);
+		jd_int64_t (*compare)(jd_task_t *task1, jd_task_t *task2);
 		if(list==jd_task_list_readying)
 		{
 			compare = compare_priority;
@@ -472,7 +472,6 @@ __weak void jd_main(void)
 		jd_task_run(test_task3);
 	while (1)
 	{
-		// jd_task_switch();
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 
 		// 注意此处调用延时切换任务，如果所有任务都不为就绪状态，程序将死循环，直到有就绪任务才会切换

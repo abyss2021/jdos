@@ -20,10 +20,8 @@ typedef unsigned short jd_uint16_t;
 typedef signed short jd_int16_t;
 typedef unsigned int jd_uint32_t;
 typedef signed int jd_int32_t;
-typedef unsigned long long jd_uint64_t;
-typedef signed long long jd_int64_t;
-typedef float jd_float32_t;
-typedef double jd_float64_t;
+typedef unsigned long jd_uint64_t;
+typedef signed long jd_int64_t;
 typedef jd_uint32_t jd_time_t;
 
 /*系统时钟，单位ms*/
