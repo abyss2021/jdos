@@ -5,12 +5,6 @@
 #include <stdlib.h>
 #include "stm32f1xx_hal.h"
 
-/*获得结构体(TYPE)的变量成员(MEMBER)在此结构体中的偏移量。*/
-// #define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
-/*获得结构体(TYPE)的变量成员(MEMBER)在此结构体地址。*/
-/* 已知一个结构体里面的成员的地址，反推出该结构体的首地址 */
-#define container_of(ptr, type, member) ((type *)((char *)(ptr) - (unsigned long)(&((type *)0)->member)))
-
 /*宏定义函数返回状态*/
 #define JD_NULL 0
 #define JD_OK 1
@@ -57,7 +51,7 @@ struct all_register
 struct jd_node_list
 {
     struct jd_node_list *previous; // 上一个节点
-	void *addr; //当前节点地址
+    void *addr;                    // 当前节点地址
     struct jd_node_list *next;     // 下一个节点
 };
 
@@ -71,7 +65,7 @@ struct jd_task
     unsigned long stack_sp;          // 堆栈指针
     unsigned long stack_origin_addr; // 堆栈起始地址
     unsigned long timeout;           // 延时溢出时间，单位ms，为0则没有延时
-    char priority;                   // 优先级0-127,越低优先级越高
+    char priority;                   // 优先级-128 - 127,越低优先级越高,一般从0开始用
 };
 
 /*第一次进入任务*/
