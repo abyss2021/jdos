@@ -436,14 +436,12 @@ void HAL_IncTick(void)
 	jd_time++; // jd_lck++
 	// 判断延时表头是否到达时间，若没有到达时间，则切换，若到达时间则将任务加入到就绪任务,在切换任务
 	struct jd_task *jd_task;
-
 	jd_task = jd_task_list_delaying->addr; // 获取任务数据
-
 	while (jd_task->timeout == jd_time)
 	{
+		jd_task = jd_task_list_delaying->addr; // 获取任务数据
 		jd_task_list_delaying = jd_node_delete(jd_task_list_delaying,jd_task_list_delaying); //删除延时完成的节点
 		jd_task_run(jd_task);												   // 加入就绪链表
-		jd_task = jd_task_list_delaying->addr;								   // 获取任务数据
 	}
 	jd_task_switch(); // jd_task_switch
 }

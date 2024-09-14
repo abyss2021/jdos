@@ -152,9 +152,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>484</LineNumber>
+          <LineNumber>522</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134221540</Address>
+          <Address>134220888</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -163,71 +163,7 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>..\jdos.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\jdos\../jdos.c\484</Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>493</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134221548</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\jdos.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\jdos\../jdos.c\493</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>502</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134221558</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\jdos.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\jdos\../jdos.c\502</Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>529</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134220902</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\jdos.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\jdos\../jdos.c\529</Expression>
-        </Bp>
-        <Bp>
-          <Number>4</Number>
-          <Type>0</Type>
-          <LineNumber>444</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134218894</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\jdos.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\jdos\../jdos.c\444</Expression>
+          <Expression>\\jdos\../jdos.c\522</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -249,7 +185,7 @@
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>jd_time</ItemText>
+          <ItemText>jd_time,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>4</count>
