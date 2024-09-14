@@ -441,9 +441,8 @@ void HAL_IncTick(void)
 
 	while (jd_task->timeout == jd_time)
 	{
-		jd_node_insert(jd_task->node->previous, JD_NULL, jd_task->node->next); // 删除当前节点
+		jd_task_list_delaying = jd_node_delete(jd_task_list_delaying,jd_task_list_delaying); //删除延时完成的节点
 		jd_task_run(jd_task);												   // 加入就绪链表
-		jd_task_list_delaying = jd_task_list_delaying->next;				   // 切换表头
 		jd_task = jd_task_list_delaying->addr;								   // 获取任务数据
 	}
 	jd_task_switch(); // jd_task_switch
