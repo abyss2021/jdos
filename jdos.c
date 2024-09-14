@@ -111,7 +111,7 @@ long compare_timeout(struct jd_task *task1, struct jd_task *task2)
 {
     return task1->timeout - task2->timeout;
 }
-/*将节点插入就绪链表
+/*将节点插入就绪或者延时链表
  * list:要插入的链表
  * node:要插入的节点
  * return：链表地址
@@ -121,17 +121,17 @@ struct jd_node_list *jd_node_in_rd(struct jd_node_list *list, struct jd_node_lis
 	struct jd_task *jd_task_temp, *jd_task_in_temp;
 	struct jd_node_list *node_temp;
 
-	// 延时链表没有正在延时的任务
+	// 链表没有正在延时的任务
 	if (list == JD_NULL)
 	{
 		list = node;
 		list->next = JD_NULL;
 		list->previous = JD_NULL;
 	}
-	// 有延时任务
+	// 链表中有任务
 	else
 	{
-		//定义函数选择
+		//比较函数选择
 		long (*compare)(struct jd_task *task1, struct jd_task *task2);
 		if(list==jd_task_list_readying)
 		{
@@ -142,7 +142,6 @@ struct jd_node_list *jd_node_in_rd(struct jd_node_list *list, struct jd_node_lis
 			compare = compare_timeout;
 		}
 
-
 		// 临时节点，用于遍历链表
 		node_temp = list;
 		// 插入节点的任务数据
@@ -152,7 +151,7 @@ struct jd_node_list *jd_node_in_rd(struct jd_node_list *list, struct jd_node_lis
 		{
 			jd_task_temp = node_temp->addr; // 获取任务数据
 
-			// 如果数字越小，优先级越高
+			// 如果数字越小，优先级越高，或者延时时间越短
 			if ( compare(jd_task_in_temp, jd_task_temp) <= 0 )  
 			{
 				// 判断为表头
@@ -333,7 +332,7 @@ int jd_task_pause(struct jd_task *jd_task)
 		jd_node_insert(jd_task->node->previous, JD_NULL, jd_task->node->next);
 	}
 	jd_task->status = JD_PAUSE; // 将任务更改为暂停状态状态
-	// 清楚任务节点信息
+	// 清除任务节点信息
 	jd_task->node->next = JD_NULL;
 	jd_task->node->previous = JD_NULL;
 	return JD_OK;
