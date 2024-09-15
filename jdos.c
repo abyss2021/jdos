@@ -1,14 +1,5 @@
 #include "jdos.h"
 
-jd_node_list_t *jd_task_list_readying; // 创建就绪任务链表
-jd_node_list_t *jd_task_list_delaying; // 创建延时任务链表
-jd_task_t *jd_task_runing;				// 创建当前任务指针
-void *jd_task_stack_sp = NULL;				// 创建当前任务堆栈指针的地址
-void *jd_task_next_stack_sp = NULL;			// 创建下一个任务堆栈指针的地址
-jd_task_t *jd_task_frist = NULL;		// 创建一个系统空闲任务
-
-
-
 /*新节点插入链表中
  * node_previous:想要插入的链表节点处的上一个节点
  * node:想要插入的节点,为JD_NULL表示连接前后两个节点
@@ -103,13 +94,13 @@ jd_node_list_t *jd_node_delete(jd_node_list_t *list, jd_node_list_t *node)
 }
 
 /*比较函数，用于jd_node_in_rd中使用*/
-jd_int64_t compare_priority(jd_task_t *task1, jd_task_t *task2) 
+jd_int64_t compare_priority(jd_task_t *task1, jd_task_t *task2)
 {
-    return task1->priority - task2->priority;
+	return task1->priority - task2->priority;
 }
-jd_int64_t compare_timeout(jd_task_t *task1, jd_task_t *task2) 
+jd_int64_t compare_timeout(jd_task_t *task1, jd_task_t *task2)
 {
-    return task1->timeout - task2->timeout;
+	return task1->timeout - task2->timeout;
 }
 /*将节点插入就绪或者延时链表
  * list:要插入的链表
@@ -131,9 +122,9 @@ jd_node_list_t *jd_node_in_rd(jd_node_list_t *list, jd_node_list_t *node)
 	// 链表中有任务
 	else
 	{
-		//比较函数选择
+		// 比较函数选择
 		jd_int64_t (*compare)(jd_task_t *task1, jd_task_t *task2);
-		if(list==jd_task_list_readying)
+		if (list == jd_task_list_readying)
 		{
 			compare = compare_priority;
 		}
@@ -152,7 +143,7 @@ jd_node_list_t *jd_node_in_rd(jd_node_list_t *list, jd_node_list_t *node)
 			jd_task_temp = node_temp->addr; // 获取任务数据
 
 			// 如果数字越小，优先级越高，或者延时时间越短
-			if ( compare(jd_task_in_temp, jd_task_temp) <= 0 )  
+			if (compare(jd_task_in_temp, jd_task_temp) <= 0)
 			{
 				// 判断为表头
 				if (node_temp->previous == JD_NULL)
@@ -216,10 +207,42 @@ jd_task_t *jd_request_space(jd_uint32_t stack_size)
 	jd_task->stack_origin_addr = jd_task->stack_sp; // 记录栈顶指针
 
 	jd_task->node = (jd_node_list_t *)malloc(sizeof(jd_node_list_t)); // 申请节点空间
-	jd_task->node->next = JD_NULL;												// 初始化节点指针
-	jd_task->node->previous = JD_NULL;											// 初始化节点指针
+	jd_task->node->next = JD_NULL;									  // 初始化节点指针
+	jd_task->node->previous = JD_NULL;								  // 初始化节点指针
 
 	return jd_task;
+}
+
+/*任务退出函数,用户任务处理完后自动处理,系统自动调用*/
+void jd_task_exit()
+{
+	jd_task_t *jd_task = jd_task_runing;
+	
+	jd_task_pause(jd_task);
+
+	jd_task->stack_sp = jd_task->stack_origin_addr + jd_task->stack_size - sizeof(struct all_register) - 4; // 初始栈指针
+	all_register_t *stack_register = (struct all_register *)jd_task->stack_sp;							// 将指针转换成寄存器指针
+	jd_task->stack_sp += sizeof(struct all_register)/2;
+
+	// 将任务运行数据搬移到内存中
+	stack_register->r0 = 0;
+	stack_register->r1 = 0;
+	stack_register->r2 = 0;
+	stack_register->r3 = 0;
+	stack_register->r12 = 0;
+	stack_register->lr = (jd_uint32_t)jd_task_exit;
+	stack_register->pc = (jd_uint32_t)jd_task->entry;
+	stack_register->xpsr = 0x01000000L; // 由于Armv7-M只支持执行Thumb指令，因此必须始终将其值保持为1，否则任务切换会异常
+	
+	
+	//当前任务放弃CPU使用权
+	jd_task_runing = jd_task_list_readying->addr; // 获取任务数据			// 更改当前为运行的任务
+	jd_task_runing->status = JD_RUNNING;					   // 即将运行的任务改为正在运行状态
+	jd_task_next_stack_sp = &jd_task_runing->stack_sp; // 更新下一个任务全局栈指针变量
+	
+	
+	//这里不是悬挂PendSV异常，所以直接跳转会出发异常，寄存器数据不会自动出栈，应该使用SVC呼叫异常
+	jd_asm_task_exit_switch();
 }
 
 /*创建任务
@@ -230,7 +253,7 @@ jd_task_t *jd_request_space(jd_uint32_t stack_size)
 jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_t priority)
 {
 	jd_task_t *jd_new_task = NULL; // 创建一个任务节点指针
-	jd_new_task = jd_request_space(JD_DEFAULT_STACK_SIZE);
+	jd_new_task = jd_request_space(stack_size);
 	if (jd_new_task == JD_NULL)
 		return JD_NULL; // 申请空间
 
@@ -239,8 +262,8 @@ jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_
 	jd_new_task->status = JD_PAUSE;		  // 创建任务，状态为暂停状态，等待启动
 	jd_new_task->stack_size = stack_size; // 记录当前任务堆栈大小
 
-	jd_new_task->stack_sp = jd_new_task->stack_origin_addr + JD_DEFAULT_STACK_SIZE - sizeof(struct all_register) - 4; // 腾出寄存器的空间
-	all_register_t *stack_register = (struct all_register *)jd_new_task->stack_sp;								  // 将指针转换成寄存器指针
+	jd_new_task->stack_sp = jd_new_task->stack_origin_addr + stack_size - sizeof(struct all_register) - 4; // 腾出寄存器的空间
+	all_register_t *stack_register = (struct all_register *)jd_new_task->stack_sp;									  // 将指针转换成寄存器指针
 
 	// 将任务运行数据搬移到内存中
 	stack_register->r0 = 0;
@@ -248,7 +271,7 @@ jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_
 	stack_register->r2 = 0;
 	stack_register->r3 = 0;
 	stack_register->r12 = 0;
-	stack_register->lr = (jd_uint32_t)jd_new_task->entry;
+	stack_register->lr = (jd_uint32_t)jd_task_exit;
 	stack_register->pc = (jd_uint32_t)jd_new_task->entry;
 	stack_register->xpsr = 0x01000000L; // 由于Armv7-M只支持执行Thumb指令，因此必须始终将其值保持为1，否则任务切换会异常
 
@@ -273,8 +296,8 @@ jd_int32_t jd_task_delete(jd_task_t *jd_task)
 	jd_task_pause(jd_task); // 将任务修改为暂停状态，目的是从就绪或延时链表中删除节点
 
 	free((jd_uint32_t *)jd_task->stack_sp); // 释放任务堆栈内存
-	free(jd_task->node);					  // 释放节点内存
-	free(jd_task);							  // 释放任务内存
+	free(jd_task->node);					// 释放节点内存
+	free(jd_task);							// 释放任务内存
 	return JD_OK;
 }
 
@@ -344,7 +367,11 @@ void jd_task_switch(void)
 	jd_task_t *jd_task;
 	jd_node_list_t *node_temp;
 	node_temp = jd_task_list_readying;
-
+	
+	//就绪链表只有一个任务
+	if(node_temp->addr == JD_NULL)
+		return;
+	
 	// 获取数据域
 	jd_task = node_temp->addr; // 获取任务数据
 
@@ -426,22 +453,25 @@ jd_int32_t jd_init(void)
 	return JD_OK;
 }
 
+
+jd_task_t *test_task1, *test_task2, *test_task3;
 // 测试任务
 void task1()
 {
 	// printf("1 hello\r\n");
-	while (1)
-	{
-		jd_delay(100);
-		// HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
-	};
+	// while (1)
+	//{
+	//jd_delay(100);
+	 HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
+	//	};
 }
 void task2()
 {
 	// printf("2 hello\r\n");
 	while (1)
 	{
-		jd_delay(150);
+		jd_delay(500);
+		jd_task_run(test_task1);
 		// HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
 	};
 }
@@ -450,11 +480,11 @@ void task3()
 	// printf("3 hello\r\n");
 	while (1)
 	{
-		jd_delay(80);
-		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
+		jd_delay(500);
+		//HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 	};
 }
-jd_task_t *test_task1, *test_task2, *test_task3;
+
 /*系统main,系统第一个任务，不可使用jd_task_delete删除，可添加其他任务初始化代码*/
 __weak void jd_main(void)
 {
@@ -472,7 +502,7 @@ __weak void jd_main(void)
 		jd_task_run(test_task3);
 	while (1)
 	{
-		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
+		//HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 
 		// 注意此处调用延时切换任务，如果所有任务都不为就绪状态，程序将死循环，直到有就绪任务才会切换
 		// 应该在此处休眠或者其他不重要的工作

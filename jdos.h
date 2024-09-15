@@ -71,14 +71,14 @@ typedef struct jd_node_list
 /*定义任务控制块*/
 typedef struct jd_task
 {
-    jd_node_list_t *node;            // 链表节点
-    void (*entry)();                 // 指向任务入口函数
-    jd_task_status_t status;         // 当前任务状态
+    jd_node_list_t *node;          // 链表节点
+    void (*entry)();               // 指向任务入口函数
+    jd_task_status_t status;       // 当前任务状态
     jd_uint32_t stack_size;        // 堆栈大小
     jd_uint32_t stack_sp;          // 堆栈指针
     jd_uint32_t stack_origin_addr; // 堆栈起始地址
     jd_uint32_t timeout;           // 延时溢出时间，单位ms，为0则没有延时
-    char priority;                   // 优先级-128 - 127,越低优先级越高,一般从0开始用
+    char priority;                 // 优先级-128 - 127,越低优先级越高,一般从0开始用
 } jd_task_t;
 
 /*第一次进入任务*/
@@ -93,20 +93,46 @@ extern void jd_asm_systick_init(void);
 extern void jd_asm_cps_disable(void);
 /*使能中断*/
 extern void jd_asm_cps_enable(void);
-/*jdos main*/
-void jd_main(void);
-/*jdos 系统初始化*/
-jd_int32_t jd_init(void);
-/*jdos延时，让出CPU使用权*/
+
+jd_node_list_t *jd_task_list_readying = NULL; // 创建就绪任务链表
+jd_node_list_t *jd_task_list_delaying = NULL; // 创建延时任务链表
+jd_task_t *jd_task_runing = NULL;             // 创建当前任务指针
+void *jd_task_stack_sp = NULL;                // 创建当前任务堆栈指针的地址
+void *jd_task_next_stack_sp = NULL;           // 创建下一个任务堆栈指针的地址
+jd_task_t *jd_task_frist = NULL;              // 创建一个系统空闲任务
+
+/*新节点插入链表中 */
+jd_int32_t jd_node_insert(jd_node_list_t *node_previous, jd_node_list_t *node, jd_node_list_t *node_next);
+/*删除节点*/
+jd_node_list_t *jd_node_delete(jd_node_list_t *list, jd_node_list_t *node);
+/*比较函数，用于jd_node_in_rd中使用*/
+jd_int64_t compare_priority(jd_task_t *task1, jd_task_t *task2);
+/*将节点插入就绪或者延时链表*/
+jd_node_list_t *jd_node_in_rd(jd_node_list_t *list, jd_node_list_t *node);
+
+
+
+
+
+/*jdos延时，让出CPU使用权 */
 void jd_delay(jd_uint32_t ms);
+/*申请任务空间 */
+jd_task_t *jd_request_space(jd_uint32_t stack_size);
 /*创建任务*/
-jd_task_t *jd_task_create(void (*task_entry)(),jd_uint32_t stack_size, jd_int8_t priority);
-/*更改为就绪状态，等待调度*/
-jd_int32_t jd_task_run(jd_task_t *jd_task);
-/*删除任务，释放内存*/
+jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_t priority);
+/*删除任务 */
 jd_int32_t jd_task_delete(jd_task_t *jd_task);
-/*暂停任务*/
+/*将任务加入就绪链表 */
+jd_int32_t jd_task_run(jd_task_t *jd_task);
+/*任务暂停*/
 jd_int32_t jd_task_pause(jd_task_t *jd_task);
 /*任务切换*/
 void jd_task_switch(void);
+/*内核第一次运行空闲任务*/
+void jd_task_first_switch(void);
+/*jd初始化*/
+jd_int32_t jd_init(void);
+/*jd main*/
+void jd_main(void);
+
 #endif

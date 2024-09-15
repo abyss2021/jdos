@@ -28,6 +28,24 @@ jd_asm_task_first_switch 	PROC	;进入main
 								BX LR
 							ENDP
 								
+jd_asm_task_exit_switch 	PROC	;任务结束运行（没有while），切换下一个任务
+							EXPORT  jd_asm_task_exit_switch
+								CPSID i ;关中断
+								
+								;取下一个任务的堆栈指针,恢复现场
+								LDR R1,=jd_task_next_stack_sp
+								LDR R1,[R1]
+								LDR R0,[R1]
+								LDMFD R0!,{R4-R11}
+								MOV SP,R0
+
+								;MOV R0, #0x3 ; 设置CONTROL寄存器，让用户程序使用PSP，没有内存管理，PSP模式下无法分配系统空间
+								;MSR CONTROL,R0
+								;ORR LR,#0XD ;	切换到用户栈指针
+								CPSIE i ;开中断
+								BX LR
+							ENDP								
+								
 
 jd_asm_pendsv_putup 		PROC	;悬挂PendSV异常
 							EXPORT jd_asm_pendsv_putup
