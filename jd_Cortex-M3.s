@@ -49,26 +49,7 @@ jd_asm_task_exit_switch 	PROC	;任务结束运行（没有while），切换下�
 
 jd_asm_svc_handler			PROC	;SVC处理
 							EXPORT  jd_asm_svc_handler		
-								CPSID i ;关中断
-								
-								MOV R0,SP
-								STMFD R0!,{R4-R11}	
-								
-								;保护现场，将堆栈指针传出
-								LDR R1,=jd_task_stack_sp
-								LDR R1,[R1]
-								STR R0,[R1]
-								
-								;取下一个任务的堆栈指针,恢复现场
-								LDR R1,=jd_task_next_stack_sp
-								LDR R1,[R1]
-								LDR R0,[R1]
-								LDMFD R0!,{R4-R11}
-								MOV SP,R0
-								
-								;ORR LR,#0XD ;	切换到用户栈指针
-								CPSIE i ;开中断
-								BX LR
+								B jd_asm_pendsv_putup
 							ENDP		
 
 jd_asm_svc_call		PROC	;SVC call
