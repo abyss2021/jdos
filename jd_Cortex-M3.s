@@ -54,7 +54,7 @@ jd_asm_svc_handler			PROC	;SVC处理
 								ITE EQ ; 如果为0,
 								MRSEQ R0, MSP ; 则使用的是主堆栈，故把MSP的值取出
 								MRSNE R0, PSP ; 否则, 使用的是进程堆栈，故把MSP的值取出
-								B jd_asm_task_exit_switch
+								B jd_asm_pendsv_handler
 							ENDP		
 
 jd_asm_svc_call		PROC	;SVC call
