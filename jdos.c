@@ -222,7 +222,6 @@ void jd_task_exit()
 
 	jd_task->stack_sp = jd_task->stack_origin_addr + jd_task->stack_size - sizeof(struct all_register) - 4; // 初始栈指针
 	all_register_t *stack_register = (struct all_register *)jd_task->stack_sp;							// 将指针转换成寄存器指针
-	jd_task->stack_sp += sizeof(struct all_register)/2;
 
 	// 将任务运行数据搬移到内存中
 	stack_register->r0 = 0;
@@ -241,8 +240,8 @@ void jd_task_exit()
 	jd_task_next_stack_sp = &jd_task_runing->stack_sp; // 更新下一个任务全局栈指针变量
 	
 	
-	//这里不是悬挂PendSV异常，所以直接跳转会出发异常，寄存器数据不会自动出栈，应该使用SVC呼叫异常
-	jd_asm_task_exit_switch();
+	//这里不是悬挂PendSV异常，所以直接跳转会出发异常，寄存器数据不会自动出栈，应该使用SVC呼叫异常	
+	jd_asm_svc_call();
 }
 
 /*创建任务
@@ -401,14 +400,6 @@ void jd_task_switch(void)
 	jd_asm_pendsv_putup(); // 挂起PendSV异常
 }
 
-/*内核第一次运行空闲任务*/
-void jd_task_first_switch(void)
-{
-	jd_task_t *jd_task;
-	jd_task = jd_task_list_readying->addr;
-	jd_asm_task_first_switch(&jd_task->stack_sp, jd_main);
-}
-
 /*hal库已自动使能systick，以下为hal库systick异常回调函数*/
 void HAL_IncTick(void)
 {
@@ -423,6 +414,9 @@ void HAL_IncTick(void)
 		jd_task = jd_task_list_delaying->addr;												  // 获取任务数据
 		jd_task_list_delaying = jd_node_delete(jd_task_list_delaying, jd_task_list_delaying); // 删除延时完成的节点
 		jd_task_run(jd_task);																  // 加入就绪链表
+		
+		if(jd_task_list_delaying == JD_NULL)
+			break;
 	}
 	jd_task_switch(); // jd_task_switch
 }
@@ -449,7 +443,8 @@ jd_int32_t jd_init(void)
 	jd_task_runing = jd_task_frist;				 // 保存当前任务为正在运行任务
 	// jd_asm_systick_init(); //启动systick,hal库已自动使能systick
 
-	jd_task_first_switch(); // 进入空闲任务
+	//进入空闲任务
+	jd_asm_task_first_switch(&jd_task_frist->stack_sp, jd_main);
 	return JD_OK;
 }
 

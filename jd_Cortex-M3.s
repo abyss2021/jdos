@@ -44,7 +44,23 @@ jd_asm_task_exit_switch 	PROC	;任务结束运行（没有while），切换下�
 								;ORR LR,#0XD ;	切换到用户栈指针
 								CPSIE i ;开中断
 								BX LR
-							ENDP								
+							ENDP	
+
+
+jd_asm_svc_handler			PROC	;SVC处理
+							EXPORT  jd_asm_svc_handler		
+								;开始读取参数
+								TST LR, #0x4 ; 测试EXC_RETURN的比特2
+								ITE EQ ; 如果为0,
+								MRSEQ R0, MSP ; 则使用的是主堆栈，故把MSP的值取出
+								MRSNE R0, PSP ; 否则, 使用的是进程堆栈，故把MSP的值取出
+								B jd_asm_task_exit_switch
+							ENDP		
+
+jd_asm_svc_call		PROC	;SVC call
+					EXPORT  jd_asm_svc_call
+						SVC 0
+					ENDP															
 								
 
 jd_asm_pendsv_putup 		PROC	;悬挂PendSV异常

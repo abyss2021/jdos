@@ -413,14 +413,14 @@
               <FilePath>..\jdos.c</FilePath>
             </File>
             <File>
-              <FileName>jdos.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\jdos.s</FilePath>
-            </File>
-            <File>
               <FileName>jdos.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\jdos.h</FilePath>
+            </File>
+            <File>
+              <FileName>jd_Cortex-M3.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\jd_Cortex-M3.s</FilePath>
             </File>
           </Files>
         </Group>
