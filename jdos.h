@@ -24,8 +24,6 @@ typedef unsigned long jd_uint64_t;
 typedef signed long jd_int64_t;
 typedef jd_uint32_t jd_time_t;
 
-/*系统时钟，单位ms*/
-jd_time_t jd_time = 0;
 
 /*枚举任务状态*/
 typedef enum jd_task_status
@@ -94,12 +92,15 @@ extern void jd_asm_cps_disable(void);
 /*使能中断*/
 extern void jd_asm_cps_enable(void);
 
-jd_node_list_t *jd_task_list_readying = NULL; // 创建就绪任务链表
-jd_node_list_t *jd_task_list_delaying = NULL; // 创建延时任务链表
-jd_task_t *jd_task_runing = NULL;             // 创建当前任务指针
-void *jd_task_stack_sp = NULL;                // 创建当前任务堆栈指针的地址
-void *jd_task_next_stack_sp = NULL;           // 创建下一个任务堆栈指针的地址
-jd_task_t *jd_task_frist = NULL;              // 创建一个系统空闲任务
+extern jd_node_list_t *jd_task_list_readying; // 创建就绪任务链表
+extern jd_node_list_t *jd_task_list_delaying ; // 创建延时任务链表
+extern jd_task_t *jd_task_runing;             // 创建当前任务指针
+extern void *jd_task_stack_sp;                // 创建当前任务堆栈指针的地址
+extern void *jd_task_next_stack_sp;           // 创建下一个任务堆栈指针的地址
+extern jd_task_t *jd_task_frist;              // 创建一个系统空闲任务
+
+/*系统时钟，单位ms*/
+extern jd_time_t jd_time;
 
 /*新节点插入链表中 */
 jd_int32_t jd_node_insert(jd_node_list_t *node_previous, jd_node_list_t *node, jd_node_list_t *node_next);

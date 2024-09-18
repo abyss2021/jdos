@@ -408,11 +408,6 @@
               <FilePath>../Core/Src/stm32f1xx_hal_msp.c</FilePath>
             </File>
             <File>
-              <FileName>jdos.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\jdos.c</FilePath>
-            </File>
-            <File>
               <FileName>jdos.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\jdos.h</FilePath>
@@ -421,6 +416,26 @@
               <FileName>jd_Cortex-M3.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\jd_Cortex-M3.s</FilePath>
+            </File>
+            <File>
+              <FileName>jd_it.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\jd_it.c</FilePath>
+            </File>
+            <File>
+              <FileName>jd_main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\jd_main.c</FilePath>
+            </File>
+            <File>
+              <FileName>jd_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\jd_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>jd_timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\jd_timer.c</FilePath>
             </File>
           </Files>
         </Group>

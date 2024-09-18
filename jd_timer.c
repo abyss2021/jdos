@@ -1,6 +1,9 @@
 #include "jdos.h"
 
 
+/*系统时钟，单位ms*/
+jd_time_t jd_time = 0;
+
 /*jdos延时，让出CPU使用权
  * ms:延时时间，单位ms
  */
