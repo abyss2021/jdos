@@ -207,30 +207,17 @@ void jd_task_exit()
 {
 	jd_task_t *jd_task = jd_task_runing;
 	
-	jd_task_pause(jd_task);
-
-	jd_task->stack_sp = jd_task->stack_origin_addr + jd_task->stack_size - sizeof(struct all_register) - 4; // 初始栈指针
-	all_register_t *stack_register = (struct all_register *)jd_task->stack_sp;							// 将指针转换成寄存器指针
-
-	// 将任务运行数据搬移到内存中
-	stack_register->r0 = 0;
-	stack_register->r1 = 0;
-	stack_register->r2 = 0;
-	stack_register->r3 = 0;
-	stack_register->r12 = 0;
-	stack_register->lr = (jd_uint32_t)jd_task_exit;
-	stack_register->pc = (jd_uint32_t)jd_task->entry;
-	stack_register->xpsr = 0x01000000L; // 由于Armv7-M只支持执行Thumb指令，因此必须始终将其值保持为1，否则任务切换会异常
+	jd_task_delete(jd_task);
 	
-	
-	//当前任务放弃CPU使用权
-	jd_task_runing = jd_task_list_readying->addr; // 获取任务数据			// 更改当前为运行的任务
-	jd_task_runing->status = JD_RUNNING;					   // 即将运行的任务改为正在运行状态
+	// 获取数据域
+	jd_task = jd_task_list_readying->addr; // 获取任务数据
+	// 任务暂停或延时状态，或者当前任务优先级低，当前任务放弃CPU使用权
+	jd_task->status = JD_RUNNING;					   // 即将运行的任务改为正在运行状态
+	jd_task_runing = jd_task;						   // 更改当前为运行的任务
 	jd_task_next_stack_sp = &jd_task_runing->stack_sp; // 更新下一个任务全局栈指针变量
 	
-	
 	//这里不是悬挂PendSV异常，所以直接跳转会出发异常，寄存器数据不会自动出栈，应该使用SVC呼叫异常	
-	jd_asm_svc_call();
+	jd_asm_svc_task_exit();
 }
 
 /*创建任务
@@ -283,7 +270,7 @@ jd_int32_t jd_task_delete(jd_task_t *jd_task)
 
 	jd_task_pause(jd_task); // 将任务修改为暂停状态，目的是从就绪或延时链表中删除节点
 
-	free((jd_uint32_t *)jd_task->stack_sp); // 释放任务堆栈内存
+	free((jd_uint32_t *)jd_task->stack_sp); // 释放任务栈内存
 	free(jd_task->node);					// 释放节点内存
 	free(jd_task);							// 释放任务内存
 	return JD_OK;
@@ -347,12 +334,6 @@ jd_int32_t jd_task_pause(jd_task_t *jd_task)
 	jd_task->node->next = JD_NULL;
 	jd_task->node->previous = JD_NULL;
 	return JD_OK;
-}
-
-/*任务切换*/
-void jd_task_switch(void)
-{
-	jd_asm_pendsv_putup(); // 挂起PendSV异常
 }
 
 /*jd初始化*/

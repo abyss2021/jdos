@@ -127,8 +127,6 @@ jd_int32_t jd_task_delete(jd_task_t *jd_task);
 jd_int32_t jd_task_run(jd_task_t *jd_task);
 /*任务暂停*/
 jd_int32_t jd_task_pause(jd_task_t *jd_task);
-/*任务切换*/
-void jd_task_switch(void);
 /*内核第一次运行空闲任务*/
 void jd_task_first_switch(void);
 /*jd初始化*/

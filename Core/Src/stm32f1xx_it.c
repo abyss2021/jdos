@@ -145,7 +145,7 @@ void SVC_Handler(void)
 {
   /* USER CODE BEGIN SVCall_IRQn 0 */
 	
-	jd_asm_svc_handler();
+	jd_svc_handler();
 
   /* USER CODE END SVCall_IRQn 0 */
   /* USER CODE BEGIN SVCall_IRQn 1 */

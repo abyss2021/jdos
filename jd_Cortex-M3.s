@@ -10,6 +10,7 @@ JD_SYSTICK_CTRL 	EQU 0xE000E010	;SysTick控制及状态寄存器
 
 jd_asm_task_first_switch 	PROC	;进入main
 							EXPORT  jd_asm_task_first_switch
+								CPSID i ;关中断
 
 								;设置PendSV的优先级为255
 								LDR R3,=JD_PRI_14
@@ -49,24 +50,48 @@ jd_asm_task_exit_switch 	PROC	;任务结束运行（没有while），切换下�
 
 jd_asm_svc_handler			PROC	;SVC处理
 							EXPORT  jd_asm_svc_handler		
-								B jd_asm_pendsv_putup
+
+								TST LR, #0x4 ; 测试EXC_RETURN的比特2
+								ITE EQ ; 如果为0,
+								MRSEQ R0, MSP ; 则使用的是主堆栈，故把MSP的值取出
+								MRSNE R0, PSP ; 否则, 使用的是进程堆栈，故把MSP的值取出
+								;  获取返回地址 (原理是与发生异常时硬件压栈的顺序相关)
+								;  这里获得返回地址的原因是为了定位产生异常前执行的最后一条指令，也就是SVC指令
+								LDR R1, [R0, #24] 
+								
+								; 获取SVC指令的低8位，也就是系统调用号，返回地址的上一条就是SVC指令，获取的是机器码
+								LDRB R1, [R1, #-2] 
+								
+								;svc_0服务，任务自动切换下一个任务
+								CMP R1, 0
+								BEQ svc_handler_0
+								
+								;svc_1服务，任务中没有while循环，执行完成后退出，需要系统对任务进行操作
+								CMP R1, 1
+								BEQ svc_handler_1
+								BX LR
+svc_handler_0
+								B jd_asm_pendsv_handler ;正常切换
+								BX LR
+svc_handler_1					
+								B jd_asm_task_exit_switch
+								BX LR
 							ENDP		
 
-jd_asm_svc_call		PROC	;SVC call
-					EXPORT  jd_asm_svc_call
+jd_asm_svc_task_switch	PROC	;SVC call
+						EXPORT  jd_asm_svc_task_switch
+						CPSIE i ;开中断
 						SVC 0
-					ENDP															
-								
+						BX LR
+						ENDP
 
-jd_asm_pendsv_putup 		PROC	;悬挂PendSV异常
-							EXPORT jd_asm_pendsv_putup
-								LDR R0,=JD_ICRS
-								LDR R1,=0X10000000
-								STR R1,[R0]
-								BX LR
-							ENDP
-									
-									
+jd_asm_svc_task_exit	PROC	;SVC call
+						EXPORT  jd_asm_svc_task_exit
+						CPSIE i ;开中断
+						SVC 1
+						BX LR
+						ENDP
+
 
 jd_asm_systick_init			PROC	;systick初始化，hal库已经初始化，这里不可调用
 							EXPORT jd_asm_systick_init
@@ -99,6 +124,17 @@ jd_asm_cps_enable			PROC	;使能中断
 								BX LR;
 							ENDP
 
+jd_asm_pendsv_putup 		PROC	;悬挂PendSV异常
+							EXPORT jd_asm_pendsv_putup
+								CPSID i ;关中断
+
+								LDR R0,=JD_ICRS
+								LDR R1,=0X10000000
+								STR R1,[R0]
+
+								CPSIE i ;开中断
+								BX LR
+							ENDP
 							
 jd_asm_pendsv_handler   	PROC	;切换上下文
 							EXPORT  jd_asm_pendsv_handler 
