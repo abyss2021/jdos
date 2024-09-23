@@ -42,7 +42,7 @@ void HAL_IncTick(void)
 }
  
  /*SVC处理函数*/
-void jd_svc_handler(void)
+void jd_SVC_handler(void)
 {
 	jd_asm_svc_handler();
 }
