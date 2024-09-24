@@ -1,9 +1,12 @@
 #ifndef __JDOS_H
 #define __JDOS_H
 
-#include <stdio.h>
-#include <stdlib.h>
+//#include <stdio.h>
+//#include <stdlib.h>
 #include "stm32f1xx_hal.h"
+
+/*开辟内存大小，注意用于任务创建和分配，实现内存管理*/
+#define MEM_MAX_SIZE 8192
 
 /*宏定义函数返回状态*/
 #define JD_NULL 0

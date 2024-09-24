@@ -27,9 +27,9 @@ void task2()
 		jd_delay(500);
 		
 		
-		test_task1 = jd_task_create(task1, 512, 3);
-		if (test_task1 != JD_NULL)
-			jd_task_run(test_task1);
+		// test_task1 = jd_task_create(task1, 512, 3);
+		// if (test_task1 != JD_NULL)
+		// 	jd_task_run(test_task1);
 	};
 }
 void task3()
@@ -44,6 +44,8 @@ void task3()
 		//HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 	};
 }
+
+//jd_uint8_t mem_set[4096];
 
 /*系统main,系统第一个任务，不可使用jd_task_delete删除，可添加其他任务初始化代码*/
 __weak void jd_main(void)
