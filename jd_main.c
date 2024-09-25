@@ -10,7 +10,7 @@ void task1()
 	int c;
 	// while (1)
 	{
-		jd_delay(100);
+		//jd_delay(100);
 		HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
 	};
 }
@@ -23,13 +23,13 @@ void task2()
 	while (1)
 	{
 
-		HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
+		//HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
 		jd_delay(500);
 		
-		
+		/*
 		 test_task1 = jd_task_create(task1, 512, 3);
 		 if (test_task1 != JD_NULL)
-		 	jd_task_run(test_task1);
+		 	jd_task_run(test_task1);*/
 	};
 }
 void task3()
@@ -53,7 +53,7 @@ __weak void jd_main(void)
 	// printf("jd hello\r\n");
 	test_task1 = jd_task_create(task1, 512, 3);
 	if (test_task1 != JD_NULL)
-		jd_task_run(test_task1);
+		jd_timer_start(test_task1,200,JD_TIMER_LOOP);
 
 	test_task2 = jd_task_create(task2, 512, 1);
 	if (test_task1 != JD_NULL)

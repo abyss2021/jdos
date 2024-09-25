@@ -88,6 +88,8 @@ jd_asm_svc_task_switch	PROC	;SVC call
 jd_asm_svc_task_exit	PROC	;SVC call
 						EXPORT  jd_asm_svc_task_exit
 						CPSIE i ;开中断
+						
+						; 此处应该硬性改变LR的值，将当前任务的载入地址放在此处
 						SVC 1
 						BX LR
 						ENDP

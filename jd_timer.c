@@ -54,6 +54,8 @@ void jd_timer_exit()
 		stack_register->pc = (jd_uint32_t)jd_task->entry;
 		stack_register->xpsr = 0x01000000L; 
 
+		jd_task->status = JD_DELAY;
+
 		// 将节点加入延时链表
 		jd_task_list_delaying = jd_node_in_rd(jd_task_list_delaying, jd_task_runing->node);
 	}
@@ -108,11 +110,11 @@ jd_int32_t jd_timer_start(jd_task_t *jd_task,jd_uint32_t ms,jd_timer_status_t ti
 	if(jd_task->status == JD_RUNNING||jd_task->status == JD_READY)
 	{
 		// 删除就绪链表中的节点
-		jd_task_list_readying = jd_node_delete(jd_task_list_readying, jd_task_runing->node);
+		jd_task_list_readying = jd_node_delete(jd_task_list_readying, jd_task->node);
 	}
 
 	// 将节点加入延时链表
-	jd_task_list_delaying = jd_node_in_rd(jd_task_list_delaying, jd_task_runing->node);
+	jd_task_list_delaying = jd_node_in_rd(jd_task_list_delaying, jd_task->node);
 
 	return JD_OK;
 }

@@ -5,7 +5,7 @@
 <h2>Tool Versions:</h2>
 IDE-Version: ¶ÃVision V5.28.0.0
 Copyright (C) 2019 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: 1 Abyss, 1, LIC=MPPLD-8T1AD-EV21R-KE3FA-7GG94-HG7SW
+License Information: 1 abyss, 1, LIC=YA39H-WEYKV-562Q2-9XRIM-HVEY2-EZ1LW
  
 Tool Versions:
 Toolchain:       MDK-ARM Plus  Version: 5.28.0.0
@@ -21,66 +21,20 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.6.0
 Dialog DLL:      TCM.DLL V1.36.2.0
  
 <h2>Project:</h2>
-C:\Users\Abyss\Desktop\jd_rtos\MDK-ARM\jdos.uvprojx
+C:\Users\abyss\Desktop\m\jdos\MDK-ARM\jdos.uvprojx
 Project File Date:  09/25/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'D:\Keil_V5\ARM\ARMCC\Bin'
 Build target 'jdos'
-compiling jd_main.c...
-..\jdos.h(149): warning:  #1295-D: Deprecated declaration jd_mem_init - give arg types
-  jd_uint32_t jd_mem_init();//memÂàùÂßãÂå?
-..\jd_main.c(8): warning:  #177-D: variable "a"  was declared but never referenced
-  		int a=1;
-..\jd_main.c(9): warning:  #177-D: variable "b"  was declared but never referenced
-  	int b =2;
-..\jd_main.c(10): warning:  #177-D: variable "c"  was declared but never referenced
-  	int c;
-..\jd_main.c(20): warning:  #177-D: variable "a"  was declared but never referenced
-  	int a=1;
-..\jd_main.c(21): warning:  #177-D: variable "b"  was declared but never referenced
-  	int b =2;
-..\jd_main.c(22): warning:  #177-D: variable "c"  was declared but never referenced
-  	int c;
-..\jd_main.c(38): warning:  #177-D: variable "a"  was declared but never referenced
-  		int a=1;
-..\jd_main.c(39): warning:  #177-D: variable "b"  was declared but never referenced
-  	int b =2;
-..\jd_main.c(40): warning:  #177-D: variable "c"  was declared but never referenced
-  	int c;
-..\jd_main.c: 10 warnings, 0 errors
-compiling jd_it.c...
-..\jdos.h(149): warning:  #1295-D: Deprecated declaration jd_mem_init - give arg types
-  jd_uint32_t jd_mem_init();//memÂàùÂßãÂå?
-..\jd_it.c(53): warning:  #223-D: function "jd_asm_svc_handler" declared implicitly
-  	jd_asm_svc_handler();
-..\jd_it.c: 2 warnings, 0 errors
-compiling jd_task.c...
-..\jdos.h(149): warning:  #1295-D: Deprecated declaration jd_mem_init - give arg types
-  jd_uint32_t jd_mem_init();//memÂàùÂßãÂå?
-..\jd_task.c(196): warning:  #223-D: function "jd_asm_svc_task_exit" declared implicitly
-  	jd_asm_svc_task_exit();
-..\jd_task.c: 2 warnings, 0 errors
-compiling jd_memory.c...
-..\jdos.h(149): warning:  #1295-D: Deprecated declaration jd_mem_init - give arg types
-  jd_uint32_t jd_mem_init();//memÂàùÂßãÂå?
-..\jd_memory.c(17): warning:  #940-D: missing return statement at end of non-void function "jd_mem_init" 
-  }
-..\jd_memory.c: 2 warnings, 0 errors
-compiling jd_timer.c...
-..\jdos.h(149): warning:  #1295-D: Deprecated declaration jd_mem_init - give arg types
-  jd_uint32_t jd_mem_init();//memÂàùÂßãÂå?
-..\jd_timer.c(36): warning:  #223-D: function "jd_asm_svc_task_switch" declared implicitly
-  	jd_asm_svc_task_switch();
-..\jd_timer.c(69): warning:  #223-D: function "jd_asm_svc_task_exit" declared implicitly
-  	jd_asm_svc_task_exit();
-..\jd_timer.c(135): warning:  #940-D: missing return statement at end of non-void function "jd_timer_stop" 
-  }
-..\jd_timer.c: 4 warnings, 0 errors
+assembling jd_Cortex-M3.s...
+..\jd_Cortex-M3.s(66): warning: A1865W: '#' not seen before constant expression
+..\jd_Cortex-M3.s(70): warning: A1865W: '#' not seen before constant expression
+..\jd_Cortex-M3.s(166): warning: A1581W: Added 2 bytes of padding at address 0xaa
 linking...
-Program Size: Code=4212 RO-data=372 RW-data=60 ZI-data=13412  
+Program Size: Code=4356 RO-data=372 RW-data=60 ZI-data=13412  
 FromELF: creating hex file...
-"jdos\jdos.axf" - 0 Error(s), 20 Warning(s).
+"jdos\jdos.axf" - 0 Error(s), 3 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -103,7 +57,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.2.0
-Build Time Elapsed:  00:00:08
+Build Time Elapsed:  00:00:00
 </pre>
 </body>
 </html>

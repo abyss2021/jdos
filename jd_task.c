@@ -331,10 +331,14 @@ jd_int32_t jd_init(void)
 	jd_task_frist = jd_task_create(jd_main, JD_DEFAULT_STACK_SIZE, 127);
 	while (jd_task_frist == NULL)
 		; // 空闲任务不能创建则死循环
+	
+	
+	all_register_t *stack_register = (struct all_register *)jd_task_frist->stack_sp;									  // 将指针转换成寄存器指针
+
+	// jd_main任务没有退出的程序，故返回地址指向自己
+	stack_register->lr = (jd_uint32_t)jd_main;
 
 	jd_task_frist->status = JD_READY; // 任务就绪
-
-	jd_task_frist->stack_sp = jd_task_frist->stack_origin_addr + JD_DEFAULT_STACK_SIZE - 4; // 栈顶
 
 	jd_task_frist->node->addr = jd_task_frist; // 记录节点内存地址，方便通过节点找到任务数据域
 

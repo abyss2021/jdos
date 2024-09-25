@@ -90,7 +90,7 @@ typedef struct jd_task
     jd_uint32_t timeout;           // 延时溢出时间，单位ms，为0则没有延时
     jd_int8_t priority;            // 优先级-128 - 127,越低优先级越高,一般从0开始用
     jd_timer_status_t timer_loop;           //是否为定时任务，如果是定时任务是否为循环模式
-    jd_int8_t timer_loop_timeout;   //任务处于循环状态，定时时间
+    jd_uint32_t timer_loop_timeout;   //任务处于循环状态，定时时间
 } jd_task_t;
 
 /*内存使用状态*/
