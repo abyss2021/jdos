@@ -117,9 +117,12 @@ jd_node_list_t *jd_node_in_rd(jd_node_list_t *list, jd_node_list_t *node);
 
 
 
-
+/******************jd_timer************************/
 /*jdos延时，让出CPU使用权 */
 void jd_delay(jd_uint32_t ms);
+
+
+/******************jd_task************************/
 /*申请任务空间 */
 jd_task_t *jd_request_space(jd_uint32_t stack_size);
 /*创建任务*/
@@ -130,11 +133,13 @@ jd_int32_t jd_task_delete(jd_task_t *jd_task);
 jd_int32_t jd_task_run(jd_task_t *jd_task);
 /*任务暂停*/
 jd_int32_t jd_task_pause(jd_task_t *jd_task);
-/*内核第一次运行空闲任务*/
-void jd_task_first_switch(void);
 /*jd初始化*/
 jd_int32_t jd_init(void);
 /*jd main*/
 void jd_main(void);
 
+
+/******************jd_memory************************/
+void *jd_malloc(jd_uint32_t mem_size);
+void jd_free(void *ptr);
 #endif
