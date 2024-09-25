@@ -33,6 +33,7 @@ jd_uint32_t jd_mem_init()
     jd_mem_use->mem_size = MEM_MAX_SIZE; // 初始内存块大小
 }
 
+
 /*分配内存空间
  * mem_size:需要分配的空间
  * return：成功则返回分配的地址，失败则返回JD_NULL
@@ -46,7 +47,7 @@ void *jd_malloc(jd_uint32_t mem_size)
         // 找到足够的空闲空间
         if (jd_mem_temp->used == JD_MEM_FREE && (mem_size <= jd_mem_temp->mem_size + sizeof(jd_mem_t)))
         {
-            jd_mem_new_free = jd_mem_temp + mem_size + sizeof(jd_mem_t);                     // 将剩余的内存添加上内存块信息
+            jd_mem_new_free = (jd_mem_t *)(((jd_uint8_t *)jd_mem_temp) + mem_size + sizeof(jd_mem_t));                     // 将剩余的内存添加上内存块信息
             jd_mem_new_free->mem_size = jd_mem_temp->mem_size - mem_size - sizeof(jd_mem_t); // 剩余内存大小
             jd_mem_new_free->node.addr = jd_mem_new_free;                                    // 保存当前内存的起点地址
             jd_mem_new_free->used = JD_MEM_FREE;                                             // 标记为空闲内存
@@ -77,7 +78,8 @@ void *jd_malloc(jd_uint32_t mem_size)
         }
         jd_mem_temp = jd_mem_temp->node.next->addr;
     }
-    return jd_mem_temp + sizeof(jd_mem_t); // 返回分配的地址
+				
+    return (void *)(((jd_uint8_t *)jd_mem_temp) + sizeof(jd_mem_t)); // 返回分配的地址
 }
 
 /*释放内存空间

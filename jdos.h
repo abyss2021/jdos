@@ -118,6 +118,7 @@ jd_int64_t compare_priority(jd_task_t *task1, jd_task_t *task2);                
 jd_node_list_t *jd_node_in_rd(jd_node_list_t *list, jd_node_list_t *node);                                 // 将节点插入就绪或者延时链表
 
 /******************jd_memory************************/
+jd_uint32_t jd_mem_init();//mem初始化
 void *jd_malloc(jd_uint32_t mem_size); // malloc
 void jd_free(void *ptr);               // free
 #endif

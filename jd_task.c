@@ -191,7 +191,7 @@ jd_task_t *jd_request_space(jd_uint32_t stack_size)
 	if (jd_task == NULL)
 		return JD_NULL; // 判断分配空间是否成功
 
-	jd_task->node = (jd_node_list_t *)jd_task + sizeof(jd_task_t); // 申请节点空间
+	jd_task->node = (jd_node_list_t *)(((jd_uint8_t *)jd_task) + sizeof(jd_task_t)); // 申请节点空间
 	jd_task->node->next = JD_NULL;									  // 初始化节点指针
 	jd_task->node->previous = JD_NULL;								  // 初始化节点指针
 
@@ -252,7 +252,7 @@ jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_
 	jd_new_task->status = JD_PAUSE;		  // 创建任务，状态为暂停状态，等待启动
 	jd_new_task->stack_size = stack_size; // 记录当前任务堆栈大小
 
-	jd_new_task->stack_sp = jd_new_task->stack_origin_addr + stack_size - sizeof(struct all_register) - 4; // 腾出寄存器的空间
+	jd_new_task->stack_sp = (jd_uint32_t)(jd_new_task->stack_origin_addr) + stack_size - sizeof(struct all_register) - 4; // 腾出寄存器的空间
 	all_register_t *stack_register = (struct all_register *)jd_new_task->stack_sp;									  // 将指针转换成寄存器指针
 
 	// 将任务运行数据搬移到内存中
@@ -285,9 +285,7 @@ jd_int32_t jd_task_delete(jd_task_t *jd_task)
 
 	jd_task_pause(jd_task); // 将任务修改为暂停状态，目的是从就绪或延时链表中删除节点
 
-	free((jd_uint32_t *)jd_task->stack_sp); // 释放任务栈内存
-	free(jd_task->node);					// 释放节点内存
-	free(jd_task);							// 释放任务内存
+	jd_free((jd_uint32_t *)jd_task->stack_sp); // 释放任务栈内存
 	return JD_OK;
 }
 
@@ -354,6 +352,8 @@ jd_int32_t jd_task_pause(jd_task_t *jd_task)
 /*jd初始化*/
 jd_int32_t jd_init(void)
 {
+	//初始化内存
+	jd_mem_init();
 	// 初始化链表
 	jd_task_list_readying = JD_NULL;
 	jd_task_list_delaying = JD_NULL;
