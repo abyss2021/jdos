@@ -186,6 +186,19 @@ jd_node_list_t *jd_node_in_rd(jd_node_list_t *list, jd_node_list_t *node)
 jd_task_t *jd_request_space(jd_uint32_t stack_size)
 {
 	jd_task_t *jd_task;
+
+	jd_task = (jd_task_t *)jd_malloc(stack_size); // 分配空间
+	if (jd_task == NULL)
+		return JD_NULL; // 判断分配空间是否成功
+
+	jd_task->node = (jd_node_list_t *)jd_task + sizeof(jd_task_t); // 申请节点空间
+	jd_task->node->next = JD_NULL;									  // 初始化节点指针
+	jd_task->node->previous = JD_NULL;								  // 初始化节点指针
+
+	jd_task->stack_sp = (jd_uint32_t)jd_task; // 栈底指针
+	jd_task->stack_origin_addr = jd_task->stack_sp; // 记录栈底指针
+
+	/*
 	jd_task = (jd_task_t *)malloc(sizeof(jd_task_t)); // 分配空间
 	if (jd_task == NULL)
 		return JD_NULL; // 判断分配空间是否成功
@@ -198,6 +211,8 @@ jd_task_t *jd_request_space(jd_uint32_t stack_size)
 	jd_task->node = (jd_node_list_t *)malloc(sizeof(jd_node_list_t)); // 申请节点空间
 	jd_task->node->next = JD_NULL;									  // 初始化节点指针
 	jd_task->node->previous = JD_NULL;								  // 初始化节点指针
+
+	*/
 
 	return jd_task;
 }

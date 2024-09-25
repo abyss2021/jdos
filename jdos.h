@@ -1,8 +1,6 @@
 #ifndef __JDOS_H
 #define __JDOS_H
 
-// #include <stdio.h>
-// #include <stdlib.h>
 #include "stm32f1xx_hal.h"
 
 /******************宏定义************************/
