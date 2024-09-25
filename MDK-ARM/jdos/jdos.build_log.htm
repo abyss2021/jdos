@@ -27,16 +27,62 @@ Project File Date:  09/25/2024
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'D:\Keil_V5\ARM\ARMCC\Bin'
 Build target 'jdos'
-compiling jd_memory.c...
-..\jdos.h(121): warning:  #1295-D: Deprecated declaration jd_mem_init - give arg types
+compiling jd_main.c...
+..\jdos.h(137): warning:  #1295-D: Deprecated declaration jd_mem_init - give arg types
   jd_uint32_t jd_mem_init();//mem初始�?
-..\jd_memory.c(34): warning:  #940-D: missing return statement at end of non-void function "jd_mem_init" 
+..\jd_main.c(8): warning:  #177-D: variable "a"  was declared but never referenced
+  		int a=1;
+..\jd_main.c(9): warning:  #177-D: variable "b"  was declared but never referenced
+  	int b =2;
+..\jd_main.c(10): warning:  #177-D: variable "c"  was declared but never referenced
+  	int c;
+..\jd_main.c(20): warning:  #177-D: variable "a"  was declared but never referenced
+  	int a=1;
+..\jd_main.c(21): warning:  #177-D: variable "b"  was declared but never referenced
+  	int b =2;
+..\jd_main.c(22): warning:  #177-D: variable "c"  was declared but never referenced
+  	int c;
+..\jd_main.c(38): warning:  #177-D: variable "a"  was declared but never referenced
+  		int a=1;
+..\jd_main.c(39): warning:  #177-D: variable "b"  was declared but never referenced
+  	int b =2;
+..\jd_main.c(40): warning:  #177-D: variable "c"  was declared but never referenced
+  	int c;
+..\jd_main.c: 10 warnings, 0 errors
+compiling jd_it.c...
+..\jdos.h(137): warning:  #1295-D: Deprecated declaration jd_mem_init - give arg types
+  jd_uint32_t jd_mem_init();//mem初始�?
+..\jd_it.c(47): warning:  #223-D: function "jd_asm_svc_handler" declared implicitly
+  	jd_asm_svc_handler();
+..\jd_it.c: 2 warnings, 0 errors
+compiling jd_memory.c...
+..\jdos.h(137): warning:  #1295-D: Deprecated declaration jd_mem_init - give arg types
+  jd_uint32_t jd_mem_init();//mem初始�?
+..\jd_memory.c(17): warning:  #940-D: missing return statement at end of non-void function "jd_mem_init" 
   }
 ..\jd_memory.c: 2 warnings, 0 errors
+compiling jd_task.c...
+..\jdos.h(137): warning:  #1295-D: Deprecated declaration jd_mem_init - give arg types
+  jd_uint32_t jd_mem_init();//mem初始�?
+..\jd_task.c(196): warning:  #223-D: function "jd_asm_svc_task_exit" declared implicitly
+  	jd_asm_svc_task_exit();
+..\jd_task.c: 2 warnings, 0 errors
+compiling jd_timer.c...
+..\jdos.h(137): warning:  #1295-D: Deprecated declaration jd_mem_init - give arg types
+  jd_uint32_t jd_mem_init();//mem初始�?
+..\jd_timer.c(36): warning:  #223-D: function "jd_asm_svc_task_switch" declared implicitly
+  	jd_asm_svc_task_switch();
+..\jd_timer.c(48): warning:  #940-D: missing return statement at end of non-void function "jd_timer_create" 
+  }
+..\jd_timer.c(56): warning:  #1-D: last line of file ends without a newline
+  }
+..\jd_timer.c(56): warning:  #940-D: missing return statement at end of non-void function "jd_timer_delete" 
+  }
+..\jd_timer.c: 5 warnings, 0 errors
 linking...
-Program Size: Code=4216 RO-data=372 RW-data=60 ZI-data=13412  
+Program Size: Code=4196 RO-data=372 RW-data=60 ZI-data=13412  
 FromELF: creating hex file...
-"jdos\jdos.axf" - 0 Error(s), 2 Warning(s).
+"jdos\jdos.axf" - 0 Error(s), 21 Warning(s).
 
 <h2>Software Packages used:</h2>
 
