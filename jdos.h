@@ -78,7 +78,7 @@ typedef struct jd_task
     jd_uint32_t stack_sp;          // 堆栈指针
     jd_uint32_t stack_origin_addr; // 堆栈起始地址
     jd_uint32_t timeout;           // 延时溢出时间，单位ms，为0则没有延时
-    char priority;                 // 优先级-128 - 127,越低优先级越高,一般从0开始用
+    jd_int8_t priority;                 // 优先级-128 - 127,越低优先级越高,一般从0开始用
 } jd_task_t;
 
 /******************全局变量************************/
