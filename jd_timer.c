@@ -39,15 +39,18 @@ void jd_delay(jd_uint32_t ms)
 
 
 /*timer创建*/
-jd_task_t *jd_timer_create(jd_task_t *task)
+jd_int32_t jd_timer_create(jd_task_t *task)
 {
     if(task == JD_NULL)
-	return JD_ERR;
+		return JD_ERR;
+
+		
 }
 
 
 /*timer删除*/
 jd_int32_t jd_timer_delete(jd_task_t *task)
 {
-
+	if(task == JD_NULL)
+		return JD_ERR;
 }

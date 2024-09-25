@@ -1,22 +1,5 @@
 #include "jdos.h"
 
-/*内存使用状态*/
-typedef enum jd_mem_used
-{
-    JD_MEM_USED = 1,
-    JD_MEM_FREE = 2,
-} jd_mem_used_t;
-
-#pragma pack(4) // 4字节对齐
-/*内存控制块*/
-typedef struct jd_mem
-{
-    jd_node_list_t node;  // 链表节点
-    jd_mem_used_t used;   // 当前内存是否被使用
-    jd_uint32_t mem_size; // 当前整体内存块大小
-} jd_mem_t;
-#pragma pack() // 取消结构体对齐
-
 jd_mem_t *jd_mem_use = JD_NULL;
 jd_uint8_t jd_mem_space[MEM_MAX_SIZE];
 

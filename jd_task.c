@@ -178,28 +178,6 @@ jd_node_list_t *jd_node_in_rd(jd_node_list_t *list, jd_node_list_t *node)
 	return list;
 }
 
-/*申请任务空间
- * jd_task_sp：节点指针
- * stack_size：堆栈大小
- * return：JD_OK或JD_ERR
- */
-jd_task_t *jd_request_space(jd_uint32_t stack_size)
-{
-	jd_task_t *jd_task;
-
-	jd_task = (jd_task_t *)jd_malloc(stack_size); // 分配空间
-	if (jd_task == NULL)
-		return JD_NULL; // 判断分配空间是否成功
-
-	jd_task->node = (jd_node_list_t *)(((jd_uint8_t *)jd_task) + sizeof(jd_task_t)); // 申请节点空间
-	jd_task->node->next = JD_NULL;									  // 初始化节点指针
-	jd_task->node->previous = JD_NULL;								  // 初始化节点指针
-
-	jd_task->stack_origin_addr = (jd_uint32_t)jd_task; // 记录栈底指针
-	
-	return jd_task;
-}
-
 /*任务退出函数,用户任务处理完后自动处理,系统自动调用*/
 void jd_task_exit()
 {
@@ -226,9 +204,15 @@ void jd_task_exit()
 jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_t priority)
 {
 	jd_task_t *jd_new_task = NULL; // 创建一个任务节点指针
-	jd_new_task = jd_request_space(stack_size);
-	if (jd_new_task == JD_NULL)
-		return JD_NULL; // 申请空间
+
+	jd_new_task = (jd_task_t *)jd_malloc(stack_size); // 分配空间
+	if (jd_new_task == NULL)
+		return JD_NULL; // 判断分配空间是否成功
+
+	jd_new_task->node = (jd_node_list_t *)(((jd_uint8_t *)jd_new_task) + sizeof(jd_task_t)); // 申请节点空间
+	jd_new_task->node->next = JD_NULL;									  // 初始化节点指针
+	jd_new_task->node->previous = JD_NULL;								  // 初始化节点指针
+	jd_new_task->stack_origin_addr = (jd_uint32_t)jd_new_task; // 记录栈底指针
 
 	jd_new_task->timeout = 0;			  // 没有延时时间
 	jd_new_task->entry = task_entry;	  // 任务入口

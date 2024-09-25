@@ -81,6 +81,23 @@ typedef struct jd_task
     jd_int8_t priority;                 // 优先级-128 - 127,越低优先级越高,一般从0开始用
 } jd_task_t;
 
+/*内存使用状态*/
+typedef enum jd_mem_used
+{
+    JD_MEM_USED = 1,
+    JD_MEM_FREE = 2,
+} jd_mem_used_t;
+
+#pragma pack(4) // 4字节对齐
+/*内存控制块*/
+typedef struct jd_mem
+{
+    jd_node_list_t node;  // 链表节点
+    jd_mem_used_t used;   // 当前内存是否被使用
+    jd_uint32_t mem_size; // 当前整体内存块大小
+} jd_mem_t;
+#pragma pack() // 取消结构体对齐
+
 /******************全局变量************************/
 extern jd_node_list_t *jd_task_list_readying; // 创建就绪任务链表
 extern jd_node_list_t *jd_task_list_delaying; // 创建延时任务链表
@@ -104,7 +121,6 @@ jd_task_t *jd_timer_create(jd_task_t *task); // timer创建
 jd_int32_t jd_timer_delete(jd_task_t *task); // timer删除
 
 /******************jd_task************************/
-jd_task_t *jd_request_space(jd_uint32_t stack_size);                                         // 申请任务空间
 jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_t priority); // 创建任务
 jd_int32_t jd_task_delete(jd_task_t *jd_task);                                               // 删除任务
 jd_int32_t jd_task_run(jd_task_t *jd_task);                                                  // 将任务加入就绪链表
