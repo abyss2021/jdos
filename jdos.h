@@ -99,7 +99,9 @@ extern void jd_asm_cps_disable(void);                        // 除能 NMI 和�
 extern void jd_asm_cps_enable(void);                         // 使能中断
 
 /******************jd_timer************************/
-void jd_delay(jd_uint32_t ms); // jdos延时，让出CPU使用权
+void jd_delay(jd_uint32_t ms);               // jdos延时，让出CPU使用权
+jd_task_t *jd_timer_create(jd_task_t *task); // timer创建
+jd_int32_t jd_timer_delete(jd_task_t *task); // timer删除
 
 /******************jd_task************************/
 jd_task_t *jd_request_space(jd_uint32_t stack_size);                                         // 申请任务空间
