@@ -36,6 +36,16 @@ typedef enum jd_task_status
     JD_PAUSE,     // 任务暂停状态
 } jd_task_status_t;
 
+
+/*定时任务使用状态*/
+typedef enum jd_timer_status
+{
+    JD_TIMER_NOTIMER = 0,  //不是定时器任务
+    JD_TIMER_NOLOOP, //是定时任务，但不是循环定时任务
+    JD_TIMER_LOOP, //是循环定时任务
+} jd_timer_status_t;
+
+
 /*定义所有寄存器，根据入栈规则有先后顺序*/
 typedef struct all_register
 {
@@ -60,7 +70,7 @@ typedef struct all_register
     jd_uint32_t xpsr;
 } all_register_t;
 
-// 定义链表
+// 定义链表节点
 typedef struct jd_node_list
 {
     struct jd_node_list *previous; // 上一个节点
@@ -78,14 +88,16 @@ typedef struct jd_task
     jd_uint32_t stack_sp;          // 堆栈指针
     jd_uint32_t stack_origin_addr; // 堆栈起始地址
     jd_uint32_t timeout;           // 延时溢出时间，单位ms，为0则没有延时
-    jd_int8_t priority;                 // 优先级-128 - 127,越低优先级越高,一般从0开始用
+    jd_int8_t priority;            // 优先级-128 - 127,越低优先级越高,一般从0开始用
+    jd_timer_status_t timer_loop;           //是否为定时任务，如果是定时任务是否为循环模式
+    jd_int8_t timer_loop_timeout;   //任务处于循环状态，定时时间
 } jd_task_t;
 
 /*内存使用状态*/
 typedef enum jd_mem_used
 {
     JD_MEM_USED = 1,
-    JD_MEM_FREE = 2,
+    JD_MEM_FREE,
 } jd_mem_used_t;
 
 #pragma pack(4) // 4字节对齐
@@ -117,8 +129,8 @@ extern void jd_asm_cps_enable(void);                         // 使能中断
 
 /******************jd_timer************************/
 void jd_delay(jd_uint32_t ms);               // jdos延时，让出CPU使用权
-jd_int32_t jd_timer_create(jd_task_t *task); // timer创建
-jd_int32_t jd_timer_delete(jd_task_t *task); // timer删除
+jd_int32_t jd_timer_start(jd_task_t *task); // 定时器任务创建
+jd_int32_t jd_timer_stop(jd_task_t *task); // 定时器任务删除
 
 /******************jd_task************************/
 jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_t priority); // 创建任务

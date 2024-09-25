@@ -6,11 +6,17 @@ void HAL_IncTick(void)
 	uwTick += uwTickFreq; // 系统自带不可删除,否则hal_delay等hal库函数不可用
 
 	jd_time++; // jd_lck++
-	// 判断延时表头是否到达时间，若没有到达时间，则切换，若到达时间则将任务加入到就绪任务,在切换任务
+	// 判断延时表头是否到达时间，若没有到达时间，则切换，若到达时间则将任务加入到就绪任务,再切换任务
 	jd_task_t *jd_task;
 	jd_task = jd_task_list_delaying->addr; // 获取任务数据
+	
 	while (jd_task->timeout == jd_time)
 	{
+		//如果循环定时器任务，将下一次定时时间写入任务信息
+		if(jd_task->timer_loop == JD_TIMER_LOOP)
+		{
+			jd_task->timeout = jd_time + jd_task->timer_loop_timeout;
+		}
 
 		jd_task_list_delaying = jd_node_delete(jd_task_list_delaying, jd_task_list_delaying); // 删除延时完成的节点
 		jd_task_run(jd_task);																  // 加入就绪链表

@@ -119,7 +119,7 @@ jd_node_list_t *jd_node_in_rd(jd_node_list_t *list, jd_node_list_t *node)
 	jd_task_t *jd_task_temp, *jd_task_in_temp;
 	jd_node_list_t *node_temp;
 
-	// 链表没有正在延时的任务
+	// 链表没有任务
 	if (list == JD_NULL)
 	{
 		list = node;
@@ -219,7 +219,7 @@ jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_
 	jd_new_task->status = JD_PAUSE;		  // 创建任务，状态为暂停状态，等待启动
 	jd_new_task->stack_size = stack_size; // 记录当前任务堆栈大小
 
-	jd_new_task->stack_sp = (jd_uint32_t)(jd_new_task->stack_origin_addr) + stack_size - sizeof(struct all_register) - 4; // 腾出寄存器的空间
+	jd_new_task->stack_sp = (jd_uint32_t)(jd_new_task->stack_origin_addr) + jd_new_task->stack_size - sizeof(struct all_register) - 4; // 腾出寄存器的空间
 	all_register_t *stack_register = (struct all_register *)jd_new_task->stack_sp;									  // 将指针转换成寄存器指针
 
 	// 将任务运行数据搬移到内存中
@@ -234,6 +234,8 @@ jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_
 
 	jd_new_task->priority = priority;	   // 设置优先级
 	jd_new_task->node->addr = jd_new_task; // 记录节点内存地址，方便通过节点找到任务数据域
+
+	jd_new_task->timer_loop = JD_TIMER_NOTIMER; //不是定时任务
 
 	return jd_new_task; // 返回当前任务节点
 }
