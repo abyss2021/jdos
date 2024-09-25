@@ -1,11 +1,12 @@
 #ifndef __JDOS_H
 #define __JDOS_H
 
-//#include <stdio.h>
-//#include <stdlib.h>
+// #include <stdio.h>
+// #include <stdlib.h>
 #include "stm32f1xx_hal.h"
 
-/*开辟内存大小，注意用于任务创建和分配，实现内存管理*/
+/******************宏定义************************/
+/*开辟内存大小*/
 #define MEM_MAX_SIZE 8192
 
 /*宏定义函数返回状态*/
@@ -27,7 +28,7 @@ typedef unsigned long jd_uint64_t;
 typedef signed long jd_int64_t;
 typedef jd_uint32_t jd_time_t;
 
-
+/******************结构体定义************************/
 /*枚举任务状态*/
 typedef enum jd_task_status
 {
@@ -82,64 +83,41 @@ typedef struct jd_task
     char priority;                 // 优先级-128 - 127,越低优先级越高,一般从0开始用
 } jd_task_t;
 
-/*第一次进入任务*/
-extern void jd_asm_task_first_switch(jd_uint32_t *, void *);
-/*切换任务节点，悬挂PendSV异常，PendSV中进行上下文切换*/
-extern void jd_asm_pendsv_putup(void);
-/*PendSV切换上下文*/
-extern void jd_asm_pendsv_handler(void);
-/*systick初始化*/
-extern void jd_asm_systick_init(void);
-/*除能 NMI 和硬 fault 之外的所有异常*/
-extern void jd_asm_cps_disable(void);
-/*使能中断*/
-extern void jd_asm_cps_enable(void);
-
+/******************全局变量************************/
 extern jd_node_list_t *jd_task_list_readying; // 创建就绪任务链表
-extern jd_node_list_t *jd_task_list_delaying ; // 创建延时任务链表
+extern jd_node_list_t *jd_task_list_delaying; // 创建延时任务链表
 extern jd_task_t *jd_task_runing;             // 创建当前任务指针
 extern void *jd_task_stack_sp;                // 创建当前任务堆栈指针的地址
 extern void *jd_task_next_stack_sp;           // 创建下一个任务堆栈指针的地址
 extern jd_task_t *jd_task_frist;              // 创建一个系统空闲任务
+extern jd_time_t jd_time;                     // 系统时钟，单位ms
 
-/*系统时钟，单位ms*/
-extern jd_time_t jd_time;
-
-/*新节点插入链表中 */
-jd_int32_t jd_node_insert(jd_node_list_t *node_previous, jd_node_list_t *node, jd_node_list_t *node_next);
-/*删除节点*/
-jd_node_list_t *jd_node_delete(jd_node_list_t *list, jd_node_list_t *node);
-/*比较函数，用于jd_node_in_rd中使用*/
-jd_int64_t compare_priority(jd_task_t *task1, jd_task_t *task2);
-/*将节点插入就绪或者延时链表*/
-jd_node_list_t *jd_node_in_rd(jd_node_list_t *list, jd_node_list_t *node);
-
-
-
+/******************汇编函数************************/
+extern void jd_asm_task_first_switch(jd_uint32_t *, void *); // 第一次进入任务
+extern void jd_asm_pendsv_putup(void);                       // 切换任务节点，悬挂PendSV异常，PendSV中进行上下文切换
+extern void jd_asm_pendsv_handler(void);                     // PendSV切换上下文
+extern void jd_asm_systick_init(void);                       // systick初始化
+extern void jd_asm_cps_disable(void);                        // 除能 NMI 和硬 fault 之外的所有异常
+extern void jd_asm_cps_enable(void);                         // 使能中断
 
 /******************jd_timer************************/
-/*jdos延时，让出CPU使用权 */
-void jd_delay(jd_uint32_t ms);
-
+void jd_delay(jd_uint32_t ms); // jdos延时，让出CPU使用权
 
 /******************jd_task************************/
-/*申请任务空间 */
-jd_task_t *jd_request_space(jd_uint32_t stack_size);
-/*创建任务*/
-jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_t priority);
-/*删除任务 */
-jd_int32_t jd_task_delete(jd_task_t *jd_task);
-/*将任务加入就绪链表 */
-jd_int32_t jd_task_run(jd_task_t *jd_task);
-/*任务暂停*/
-jd_int32_t jd_task_pause(jd_task_t *jd_task);
-/*jd初始化*/
-jd_int32_t jd_init(void);
-/*jd main*/
-void jd_main(void);
+jd_task_t *jd_request_space(jd_uint32_t stack_size);                                         // 申请任务空间
+jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_t priority); // 创建任务
+jd_int32_t jd_task_delete(jd_task_t *jd_task);                                               // 删除任务
+jd_int32_t jd_task_run(jd_task_t *jd_task);                                                  // 将任务加入就绪链表
+jd_int32_t jd_task_pause(jd_task_t *jd_task);                                                // 任务暂停
+jd_int32_t jd_init(void);                                                                    // jd初始化
+void jd_main(void);                                                                          // jd main
 
+jd_int32_t jd_node_insert(jd_node_list_t *node_previous, jd_node_list_t *node, jd_node_list_t *node_next); // 节点连接函数
+jd_node_list_t *jd_node_delete(jd_node_list_t *list, jd_node_list_t *node);                                // 删除节点
+jd_int64_t compare_priority(jd_task_t *task1, jd_task_t *task2);                                           // 比较函数，用于jd_node_in_rd中使用
+jd_node_list_t *jd_node_in_rd(jd_node_list_t *list, jd_node_list_t *node);                                 // 将节点插入就绪或者延时链表
 
 /******************jd_memory************************/
-void *jd_malloc(jd_uint32_t mem_size);
-void jd_free(void *ptr);
+void *jd_malloc(jd_uint32_t mem_size); // malloc
+void jd_free(void *ptr);               // free
 #endif
