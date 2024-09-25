@@ -195,25 +195,8 @@ jd_task_t *jd_request_space(jd_uint32_t stack_size)
 	jd_task->node->next = JD_NULL;									  // 初始化节点指针
 	jd_task->node->previous = JD_NULL;								  // 初始化节点指针
 
-	jd_task->stack_sp = (jd_uint32_t)jd_task; // 栈底指针
-	jd_task->stack_origin_addr = jd_task->stack_sp; // 记录栈底指针
-
-	/*
-	jd_task = (jd_task_t *)malloc(sizeof(jd_task_t)); // 分配空间
-	if (jd_task == NULL)
-		return JD_NULL; // 判断分配空间是否成功
-
-	jd_task->stack_sp = (jd_uint32_t)malloc(stack_size); // 申请堆栈空间
-	if (jd_task == NULL)
-		return JD_NULL;								// 判断分配空间是否成功
-	jd_task->stack_origin_addr = jd_task->stack_sp; // 记录栈顶指针
-
-	jd_task->node = (jd_node_list_t *)malloc(sizeof(jd_node_list_t)); // 申请节点空间
-	jd_task->node->next = JD_NULL;									  // 初始化节点指针
-	jd_task->node->previous = JD_NULL;								  // 初始化节点指针
-
-	*/
-
+	jd_task->stack_origin_addr = (jd_uint32_t)jd_task; // 记录栈底指针
+	
 	return jd_task;
 }
 
@@ -285,7 +268,7 @@ jd_int32_t jd_task_delete(jd_task_t *jd_task)
 
 	jd_task_pause(jd_task); // 将任务修改为暂停状态，目的是从就绪或延时链表中删除节点
 
-	jd_free((jd_uint32_t *)jd_task->stack_sp); // 释放任务栈内存
+	jd_free((jd_uint32_t *)jd_task); // 释放任务栈内存
 	return JD_OK;
 }
 

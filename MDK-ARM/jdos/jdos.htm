@@ -3,7 +3,7 @@
 <title>Static Call Graph - [jdos\jdos.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image jdos\jdos.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed Sep 25 11:47:10 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed Sep 25 13:50:03 2024
 <BR><P>
 <H3>Maximum Stack Usage =        136 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -107,6 +107,7 @@ Function Pointers
  <LI><a href="#[4b]">jd_main</a> from jd_main.o(i.jd_main) referenced from jd_task.o(i.jd_init)
  <LI><a href="#[51]">jd_task_exit</a> from jd_task.o(i.jd_task_exit) referenced from jd_task.o(i.jd_task_create)
  <LI><a href="#[4c]">task1</a> from jd_main.o(i.task1) referenced from jd_main.o(i.jd_main)
+ <LI><a href="#[4c]">task1</a> from jd_main.o(i.task1) referenced from jd_main.o(i.task2)
  <LI><a href="#[4d]">task2</a> from jd_main.o(i.task2) referenced from jd_main.o(i.jd_main)
  <LI><a href="#[4e]">task3</a> from jd_main.o(i.task3) referenced from jd_main.o(i.jd_main)
 </UL>
@@ -739,7 +740,7 @@ Global Symbols
 <LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;task1
 </UL>
 
-<P><STRONG><a name="[83]"></a>jd_free</STRONG> (Thumb, 88 bytes, Stack size 16 bytes, jd_memory.o(i.jd_free))
+<P><STRONG><a name="[83]"></a>jd_free</STRONG> (Thumb, 92 bytes, Stack size 16 bytes, jd_memory.o(i.jd_free))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = jd_free
 </UL>
 <BR>[Calls]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_node_insert
@@ -804,7 +805,7 @@ Global Symbols
 <LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_node_delete
 </UL>
 
-<P><STRONG><a name="[8a]"></a>jd_request_space</STRONG> (Thumb, 28 bytes, Stack size 8 bytes, jd_task.o(i.jd_request_space))
+<P><STRONG><a name="[8a]"></a>jd_request_space</STRONG> (Thumb, 30 bytes, Stack size 8 bytes, jd_task.o(i.jd_request_space))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = jd_request_space &rArr; jd_malloc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_malloc
@@ -818,6 +819,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_request_space
 </UL>
 <BR>[Called By]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_main
+<LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;task2
 <LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_init
 </UL>
 
@@ -852,6 +854,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_node_in_rd
 </UL>
 <BR>[Called By]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_main
+<LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;task2
 <LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_IncTick
 </UL>
 
@@ -872,13 +875,16 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_delay
 <LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_TogglePin
 </UL>
-<BR>[Address Reference Count : 1]<UL><LI> jd_main.o(i.jd_main)
+<BR>[Address Reference Count : 2]<UL><LI> jd_main.o(i.jd_main)
+<LI> jd_main.o(i.task2)
 </UL>
-<P><STRONG><a name="[4d]"></a>task2</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, jd_main.o(i.task2))
+<P><STRONG><a name="[4d]"></a>task2</STRONG> (Thumb, 46 bytes, Stack size 0 bytes, jd_main.o(i.task2))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = task2 &rArr; jd_delay &rArr; jd_node_in_rd
 </UL>
-<BR>[Calls]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_delay
+<BR>[Calls]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_task_create
+<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_delay
 <LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_TogglePin
+<LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_task_run
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> jd_main.o(i.jd_main)
 </UL>

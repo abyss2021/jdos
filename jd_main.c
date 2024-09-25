@@ -27,9 +27,9 @@ void task2()
 		jd_delay(500);
 		
 		
-		// test_task1 = jd_task_create(task1, 512, 3);
-		// if (test_task1 != JD_NULL)
-		// 	jd_task_run(test_task1);
+		 test_task1 = jd_task_create(task1, 512, 3);
+		 if (test_task1 != JD_NULL)
+		 	jd_task_run(test_task1);
 	};
 }
 void task3()

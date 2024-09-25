@@ -45,7 +45,7 @@ void *jd_malloc(jd_uint32_t mem_size)
     while (1)
     {
         // 找到足够的空闲空间
-        if (jd_mem_temp->used == JD_MEM_FREE && (mem_size <= jd_mem_temp->mem_size + sizeof(jd_mem_t)))
+        if (jd_mem_temp->used == JD_MEM_FREE && (mem_size + sizeof(jd_mem_t) <= jd_mem_temp->mem_size))
         {
             jd_mem_new_free = (jd_mem_t *)(((jd_uint8_t *)jd_mem_temp) + mem_size + sizeof(jd_mem_t));                     // 将剩余的内存添加上内存块信息
             jd_mem_new_free->mem_size = jd_mem_temp->mem_size - mem_size - sizeof(jd_mem_t); // 剩余内存大小
@@ -88,7 +88,7 @@ void *jd_malloc(jd_uint32_t mem_size)
 void jd_free(void *ptr)
 {
     jd_mem_t *jd_mem_old, *jd_mem_previous, *jd_mem_next, *jd_mem_next_next;
-    jd_mem_old = (jd_mem_t *)ptr - sizeof(jd_mem_t); // 获取控制块信息
+    jd_mem_old = (jd_mem_t *)((jd_uint8_t *)ptr - sizeof(jd_mem_t)); // 获取控制块信息
 
     jd_mem_old->used = JD_MEM_FREE;
     // 下一个控制块存在
@@ -99,7 +99,7 @@ void jd_free(void *ptr)
         if (jd_mem_next->used == JD_MEM_FREE)
         {
             // 合并内存块
-            jd_mem_old->mem_size = jd_mem_next->mem_size;
+            jd_mem_old->mem_size += jd_mem_next->mem_size;
 
             // 判断下一个控制块 的下一个存在
             if (jd_mem_next->node.next != JD_NULL)
@@ -139,3 +139,4 @@ void jd_free(void *ptr)
         }
     }
 }
+
