@@ -5,7 +5,7 @@
 
 /******************宏定义************************/
 /*开辟内存大小*/
-#define MEM_MAX_SIZE 8192
+#define MEM_MAX_SIZE (1024 * 8)
 
 /*宏定义函数返回状态*/
 #define JD_NULL 0
@@ -129,7 +129,7 @@ extern void jd_asm_cps_enable(void);                         // 使能中断
 
 /******************jd_timer************************/
 void jd_delay(jd_uint32_t ms);               // jdos延时，让出CPU使用权
-jd_int32_t jd_timer_start(jd_task_t *task); // 定时器任务创建
+jd_int32_t jd_timer_start(jd_task_t *jd_task,jd_uint32_t ms,jd_timer_status_t timer_status); // 定时器任务创建
 jd_int32_t jd_timer_stop(jd_task_t *task); // 定时器任务删除
 
 /******************jd_task************************/
