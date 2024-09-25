@@ -95,7 +95,7 @@ void jd_free(void *ptr)
     if (jd_mem_old->node.next != JD_NULL)
     {
         jd_mem_next = (jd_mem_t *)jd_mem_old->node.next->addr;
-        // 判断上一个内存块是free
+        // 判断下一个内存块是free
         if (jd_mem_next->used == JD_MEM_FREE)
         {
             // 合并内存块
