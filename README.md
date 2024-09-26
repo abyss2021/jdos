@@ -2,22 +2,22 @@
 #### 介绍
 jdos-简单OS！
 
-jdos是一个简单的操作系统，支持任务的创建、删除、运行、暂停和切换。通过对Systick中断和链表管理，实现了任务的优先级调度和时间片轮转。
+jdos是一个简单的操作系统，实现了内存管理、任务管理、定时管理和异常管理。
 
-jdos通过简单的任务管理、优先级调度和时间片轮转机制，为嵌入式系统提供了一个轻量级的实时操作系统解决方案。
+jdos通过简单的设计，为嵌入式系统提供了一个轻量级的实时操作系统解决方案。
 
 #### 软件架构
 
-![输入图片说明](https://foruda.gitee.com/images/1726026645705536659/dbdd12c6_8205780.png "9ce12694a0930e38b169a15c6dec2b8.png")
+![输入图片说明](fb9d455cd7910ba708f439944b8a527.png)
 
 
 #### 使用说明
 目前只有KEIL下的工程，KEIL工程通过Stm32CubeMX生成的最小工程，没用添加其他功能，使用的单片机为stm32f103rct6，移植仅仅只需要修改几行代码，说明如下：
 
 1.jdos文件
-jdos非常简单，只有3个文件：jdos.c、jdos.h、jdos.s，将这3个文件加入到自己的工程当中。
+jdos非常简单，只有7个文件，将这7个文件加入到自己的工程当中。
 
-![输入图片说明](https://foruda.gitee.com/images/1726031536940488956/2dcfcdb6_8205780.png "在这里输入图片标题")
+![输入图片说明](fb9d455cd7910ba708f439944b8a527.png)
 
 2.修改启动文件，修改堆大小，按需修改。
 
@@ -31,13 +31,15 @@ jdos非常简单，只有3个文件：jdos.c、jdos.h、jdos.s，将这3个文�
 
 ![输入图片说明](https://foruda.gitee.com/images/1726031780589223911/564e10b4_8205780.png "cd3938d782d761bcab55d0108aa0698.png")
 
-4.修改异常处理函数，在stm32f1xx_it.c中修改PendSV异常处理函数，在其中添加代码`jd_asm_pendsv_handler(); //切换上下文`
+4.修改异常处理函数，在stm32f1xx_it.c中修改PendSV和SVC异常处理函数。
 
-![输入图片说明](https://foruda.gitee.com/images/1726032055320490792/47010d47_8205780.png "58876165b1d34bb4f58c9cab86a6a2a.png")
+![输入图片说明](2a0c09f3b00dfb5f96635b8390068b6.png)
 
 5.设置keil，勾选Use MicroLIB。
 
 ![输入图片说明](https://foruda.gitee.com/images/1726032143415200813/37cf47df_8205780.png "85b4cd65a085f282b47238f949ab7dc.png")
+
+![输入图片说明](9e3b49c003d7c62ab9f23fe9d1084f2.png)
 
 编译试试吧！
 
