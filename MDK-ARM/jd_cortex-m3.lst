@@ -18,252 +18,271 @@ ARM Macro Assembler    Page 1
     4 00000000         
     5 00000000                 IMPORT           jd_task_stack_sp
     6 00000000                 IMPORT           jd_task_next_stack_sp
-    7 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+    7 00000000                 IMPORT           jd_task_entry
+    8 00000000                 IMPORT           jd_task_exit_entry
+    9 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
 3
-    8 00000000         
-    9 00000000         
    10 00000000         
-   11 00000000         jd_asm_task_first_switch
+   11 00000000         
+   12 00000000         
+   13 00000000         jd_asm_task_first_switch
                                PROC                         ;进入main
-   12 00000000                 EXPORT           jd_asm_task_first_switch
-   13 00000000 B672            CPSID            i           ;关中断
-   14 00000002         
-   15 00000002         ;设置PendSV的优先级为255
-   16 00000002 4B2A            LDR              R3,=JD_PRI_14
-   17 00000004 F04F 02FF       LDR              R2,=0X000000FF
-   18 00000008 601A            STR              R2,[R3]
-   19 0000000A         
-   20 0000000A         ;第一次进入任务，主要目的是定位堆栈，�
+   14 00000000                 EXPORT           jd_asm_task_first_switch
+   15 00000000 B672            CPSID            i           ;关中断
+   16 00000002         
+   17 00000002         ;设置PendSV的优先级为255
+   18 00000002 4B2E            LDR              R3,=JD_PRI_14
+   19 00000004 F04F 02FF       LDR              R2,=0X000000FF
+   20 00000008 601A            STR              R2,[R3]
+   21 0000000A         
+   22 0000000A         ;第一次进入任务，主要目的是定位堆栈，�
                        ��入程序入口，其他数据无用
-   21 0000000A 6800            LDR              R0,[R0]
-   22 0000000C 4685            MOV              SP,R0
-   23 0000000E 468E            MOV              LR,R1
-   24 00000010         
-   25 00000010         ;MOV R0, #0x3 ; 设置CONTROL寄存器，让用户程序
+   23 0000000A 6800            LDR              R0,[R0]
+   24 0000000C 4685            MOV              SP,R0
+   25 0000000E 468E            MOV              LR,R1
+   26 00000010         
+   27 00000010         ;MOV R0, #0x3 ; 设置CONTROL寄存器，让用户程序
                        使用PSP，没有内存管理，PSP模式下无法分�
                        �系统空间
-   26 00000010         ;MSR CONTROL,R0
-   27 00000010         ;ORR LR,#0XD ; 切换到用户栈指针
-   28 00000010 B662            CPSIE            i           ;开中断
-   29 00000012 4770            BX               LR
-   30 00000014                 ENDP
-   31 00000014         
-   32 00000014         jd_asm_task_exit_switch
+   28 00000010         ;MSR CONTROL,R0
+   29 00000010         ;ORR LR,#0XD ; 切换到用户栈指针
+   30 00000010 B662            CPSIE            i           ;开中断
+   31 00000012 4770            BX               LR
+   32 00000014                 ENDP
+   33 00000014         
+   34 00000014         jd_asm_task_exit_switch
                                PROC                         ;任务结束运行
                                                             （没有while）�
                                                             �切换下一个任
                                                             务
-   33 00000014                 EXPORT           jd_asm_task_exit_switch
-   34 00000014 B672            CPSID            i           ;关中断
-   35 00000016         
-   36 00000016         ;取下一个任务的堆栈指针,恢复现场
-   37 00000016 4926            LDR              R1,=jd_task_next_stack_sp
-   38 00000018 6809            LDR              R1,[R1]
-   39 0000001A 6808            LDR              R0,[R1]
-   40 0000001C E8B0 0FF0       LDMFD            R0!,{R4-R11}
-   41 00000020 4685            MOV              SP,R0
-   42 00000022         
+   35 00000014                 EXPORT           jd_asm_task_exit_switch
+   36 00000014 B672            CPSID            i           ;关中断
+   37 00000016         
+   38 00000016         ; 此处应该硬性改变堆栈中LR与PC的，相当�
+                       �回复第一次执行的程序入口数据
+   39 00000016 492A            LDR              R1,=jd_task_entry ;此次程序
+                                                            的入口地址
+   40 00000018 6809            LDR              R1,[R1]
 
 
 
 ARM Macro Assembler    Page 2 
 
 
-   43 00000022         ;MOV R0, #0x3 ; 设置CONTROL寄存器，让用户程序
+   41 0000001A         
+   42 0000001A 4A2A            LDR              R2,=jd_task_exit_entry ;此次�
+                                                            ��序的exit的入�
+                                                            ��地址
+   43 0000001C 6812            LDR              R2,[R2]
+   44 0000001E         
+   45 0000001E 482A            LDR              R0,=jd_task_stack_sp ;此次任
+                                                            务的栈指针
+   46 00000020 6800            LDR              R0,[R0]
+   47 00000022 6800            LDR              R0,[R0]
+   48 00000024 6381            STR              R1,[R0,#56]
+   49 00000026 6342            STR              R2,[R0,#52]
+   50 00000028         
+   51 00000028         ;取下一个任务的堆栈指针,恢复现场
+   52 00000028 4928            LDR              R1,=jd_task_next_stack_sp
+   53 0000002A 6809            LDR              R1,[R1]
+   54 0000002C 6808            LDR              R0,[R1]
+   55 0000002E E8B0 0FF0       LDMFD            R0!,{R4-R11}
+   56 00000032 4685            MOV              SP,R0
+   57 00000034         
+   58 00000034         ;MOV R0, #0x3 ; 设置CONTROL寄存器，让用户程序
                        使用PSP，没有内存管理，PSP模式下无法分�
                        �系统空间
-   44 00000022         ;MSR CONTROL,R0
-   45 00000022         ;ORR LR,#0XD ; 切换到用户栈指针
-   46 00000022 B662            CPSIE            i           ;开中断
-   47 00000024 4770            BX               LR
-   48 00000026                 ENDP
-   49 00000026         
-   50 00000026         
-   51 00000026         jd_asm_svc_handler
+   59 00000034         ;MSR CONTROL,R0
+   60 00000034         ;ORR LR,#0XD ; 切换到用户栈指针
+   61 00000034 B662            CPSIE            i           ;开中断
+   62 00000036 4770            BX               LR
+   63 00000038                 ENDP
+   64 00000038         
+   65 00000038         
+   66 00000038         jd_asm_svc_handler
                                PROC                         ;SVC处理
-   52 00000026                 EXPORT           jd_asm_svc_handler
-   53 00000026         
-   54 00000026 F01E 0F04       TST              LR, #0x4    ; 测试EXC_RETURN�
+   67 00000038                 EXPORT           jd_asm_svc_handler
+   68 00000038         
+   69 00000038 F01E 0F04       TST              LR, #0x4    ; 测试EXC_RETURN�
                                                             ��比特2
-   55 0000002A BF0C            ITE              EQ          ; 如果为0,
-   56 0000002C F3EF 8008       MRSEQ            R0, MSP     ; 则使用的是�
+   70 0000003C BF0C            ITE              EQ          ; 如果为0,
+   71 0000003E F3EF 8008       MRSEQ            R0, MSP     ; 则使用的是�
                                                             �堆栈，故把MSP
                                                             的值取出
-   57 00000030 F3EF 8009       MRSNE            R0, PSP     ; 否则, 使用的
+   72 00000042 F3EF 8009       MRSNE            R0, PSP     ; 否则, 使用的
                                                             是进程堆栈，�
                                                             ��把MSP的值取�
                                                             �
-   58 00000034         ;  获取返回地址 (原理是与发生异常时硬件
+   73 00000046         ;  获取返回地址 (原理是与发生异常时硬件
                        压栈的顺序相关)
-   59 00000034         ;  这里获得返回地址的原因是为了定位产�
+   74 00000046         ;  这里获得返回地址的原因是为了定位产�
                        �异常前执行的最后一条指令，也就是SVC指�
                        ��
-   60 00000034 6981            LDR              R1, [R0, #24]
-   61 00000036         
-   62 00000036         ; 获取SVC指令的低8位，也就是系统调用号�
+   75 00000046 6981            LDR              R1, [R0, #24]
+   76 00000048         
+   77 00000048         ; 获取SVC指令的低8位，也就是系统调用号�
                        �返回地址的上一条就是SVC指令，获取的是�
                        ��器码
-   63 00000036 F811 1C02       LDRB             R1, [R1, #-2]
-   64 0000003A         
-   65 0000003A         ;svc_0服务，任务自动切换下一个任务
-   66 0000003A 2900            CMP              R1, 0
-   67 0000003C D002            BEQ              svc_handler_0
-   68 0000003E         
-   69 0000003E         ;svc_1服务，任务中没有while循环，执行完成
-                       后退出，需要系统对任务进行操作
-   70 0000003E 2901            CMP              R1, 1
-   71 00000040 D002            BEQ              svc_handler_1
-   72 00000042 4770            BX               LR
-   73 00000044         svc_handler_0
-   74 00000044 E7FE            B                jd_asm_pendsv_handler 
-                                                            ;正常切换
-   75 00000046 4770            BX               LR
-   76 00000048         svc_handler_1
-   77 00000048 E7FE            B                jd_asm_task_exit_switch
-   78 0000004A 4770            BX               LR
-   79 0000004C                 ENDP
-   80 0000004C         
-   81 0000004C         jd_asm_svc_task_switch
-                               PROC                         ;SVC call
-   82 0000004C                 EXPORT           jd_asm_svc_task_switch
-   83 0000004C B662            CPSIE            i           ;开中断
-   84 0000004E DF00            SVC              0
+   78 00000048 F811 1C02       LDRB             R1, [R1, #-2]
+   79 0000004C         
+   80 0000004C         ;svc_0服务，任务自动切换下一个任务
+   81 0000004C 2900            CMP              R1, 0
+   82 0000004E D002            BEQ              svc_handler_0
 
 
 
 ARM Macro Assembler    Page 3 
 
 
-   85 00000050 4770            BX               LR
-   86 00000052                 ENDP
-   87 00000052         
-   88 00000052         jd_asm_svc_task_exit
+   83 00000050         
+   84 00000050         ;svc_1服务，任务中没有while循环，执行完成
+                       后退出，需要系统对任务进行操作
+   85 00000050 2901            CMP              R1, 1
+   86 00000052 D002            BEQ              svc_handler_1
+   87 00000054 4770            BX               LR
+   88 00000056         svc_handler_0
+   89 00000056 E7FE            B                jd_asm_pendsv_handler 
+                                                            ;正常切换
+   90 00000058 4770            BX               LR
+   91 0000005A         svc_handler_1
+   92 0000005A E7FE            B                jd_asm_task_exit_switch
+   93 0000005C 4770            BX               LR
+   94 0000005E                 ENDP
+   95 0000005E         
+   96 0000005E         jd_asm_svc_task_switch
                                PROC                         ;SVC call
-   89 00000052                 EXPORT           jd_asm_svc_task_exit
-   90 00000052 B662            CPSIE            i           ;开中断
-   91 00000054         
-   92 00000054         ; 此处应该硬性改变LR的值，将当前任务的�
-                       ��入地址放在此处
-   93 00000054 DF01            SVC              1
-   94 00000056 4770            BX               LR
-   95 00000058                 ENDP
-   96 00000058         
-   97 00000058         
-   98 00000058         jd_asm_systick_init
+   97 0000005E                 EXPORT           jd_asm_svc_task_switch
+   98 0000005E B662            CPSIE            i           ;开中断
+   99 00000060 DF00            SVC              0
+  100 00000062 4770            BX               LR
+  101 00000064                 ENDP
+  102 00000064         
+  103 00000064         jd_asm_svc_task_exit
+                               PROC                         ;SVC call
+  104 00000064                 EXPORT           jd_asm_svc_task_exit
+  105 00000064 B662            CPSIE            i           ;开中断
+  106 00000066 DF01            SVC              1
+  107 00000068 4770            BX               LR
+  108 0000006A                 ENDP
+  109 0000006A         
+  110 0000006A         
+  111 0000006A         jd_asm_systick_init
                                PROC                         ;systick初始化�
                                                             �hal库已经初始
                                                             化，这里不可�
                                                             ��用
-   99 00000058                 EXPORT           jd_asm_systick_init
-  100 00000058 B672            CPSID            i           ;关中断
-  101 0000005A         
-  102 0000005A 4816            LDR              R0, =JD_SYSTICK_CTRL ; 加载JD
+  112 0000006A                 EXPORT           jd_asm_systick_init
+  113 0000006A B672            CPSID            i           ;关中断
+  114 0000006C         
+  115 0000006C 4818            LDR              R0, =JD_SYSTICK_CTRL ; 加载JD
                                                             _SYSTICK_CTRL的地
                                                             址
-  103 0000005C F04F 0100       MOV              R1, #0
-  104 00000060 6001            STR              R1, [R0]    ; 先停止SysTick�
+  116 0000006E F04F 0100       MOV              R1, #0
+  117 00000072 6001            STR              R1, [R0]    ; 先停止SysTick�
                                                             ��以防意外产�
                                                             �异常请求
-  105 00000062         
-  106 00000062 F240 31FF       LDR              R1, =0x3FF  ; 让SysTick每1024
+  118 00000074         
+  119 00000074 F240 31FF       LDR              R1, =0x3FF  ; 让SysTick每1024
                                                             周期计完一次�
                                                             ��
-  107 00000066 6041            STR              R1, [R0,#4] ; 写入重装载�
+  120 00000078 6041            STR              R1, [R0,#4] ; 写入重装载�
                                                             �值
-  108 00000068 6081            STR              R1, [R0,#8] ; 往STCVR中写任
+  121 0000007A 6081            STR              R1, [R0,#8] ; 往STCVR中写任
                                                             意的数，以确�
                                                             ��清除COUNTFLAG�
                                                             �志
-  109 0000006A         
-  110 0000006A F04F 0107       MOV              R1, #0x7    ; 选择FCLK作为�
-                                                            ��钟源，并使�
-                                                            �SysTick及其异�
-                                                            �请求
-  111 0000006E 6001            STR              R1, [R0]    ; 写入数值，�
-                                                            �启定时器
-  112 00000070         
-  113 00000070 B662            CPSIE            i           ;开中断
-  114 00000072 4770            BX               LR
-  115 00000074                 ENDP
-  116 00000074         
-  117 00000074         jd_asm_cps_disable
-                               PROC                         ;除能在 NMI 和�
-                                                            �� fault 之外的�
-                                                            ��有异常
-  118 00000074                 EXPORT           jd_asm_cps_disable
-  119 00000074 B672            CPSID            i           ;关中断
-  120 00000076 4770            BX               LR          ;
+  122 0000007C         
+  123 0000007C F04F 0107       MOV              R1, #0x7    ; 选择FCLK作为�
 
 
 
 ARM Macro Assembler    Page 4 
 
 
-  121 00000078                 ENDP
-  122 00000078         
-  123 00000078         jd_asm_cps_enable
+                                                            ��钟源，并使�
+                                                            �SysTick及其异�
+                                                            �请求
+  124 00000080 6001            STR              R1, [R0]    ; 写入数值，�
+                                                            �启定时器
+  125 00000082         
+  126 00000082 B662            CPSIE            i           ;开中断
+  127 00000084 4770            BX               LR
+  128 00000086                 ENDP
+  129 00000086         
+  130 00000086         jd_asm_cps_disable
+                               PROC                         ;除能在 NMI 和�
+                                                            �� fault 之外的�
+                                                            ��有异常
+  131 00000086                 EXPORT           jd_asm_cps_disable
+  132 00000086 B672            CPSID            i           ;关中断
+  133 00000088 4770            BX               LR          ;
+  134 0000008A                 ENDP
+  135 0000008A         
+  136 0000008A         jd_asm_cps_enable
                                PROC                         ;使能中断
-  124 00000078                 EXPORT           jd_asm_cps_enable
-  125 00000078 B662            CPSIE            i           ;开中断
-  126 0000007A 4770            BX               LR          ;
-  127 0000007C                 ENDP
-  128 0000007C         
-  129 0000007C         jd_asm_pendsv_putup
+  137 0000008A                 EXPORT           jd_asm_cps_enable
+  138 0000008A B662            CPSIE            i           ;开中断
+  139 0000008C 4770            BX               LR          ;
+  140 0000008E                 ENDP
+  141 0000008E         
+  142 0000008E         jd_asm_pendsv_putup
                                PROC                         ;悬挂PendSV异常
                                                             
-  130 0000007C                 EXPORT           jd_asm_pendsv_putup
-  131 0000007C B672            CPSID            i           ;关中断
-  132 0000007E         
-  133 0000007E 480E            LDR              R0,=JD_ICRS
-  134 00000080 F04F 5180       LDR              R1,=0X10000000
-  135 00000084 6001            STR              R1,[R0]
-  136 00000086         
-  137 00000086 B662            CPSIE            i           ;开中断
-  138 00000088 4770            BX               LR
-  139 0000008A                 ENDP
-  140 0000008A         
-  141 0000008A         jd_asm_pendsv_handler
+  143 0000008E                 EXPORT           jd_asm_pendsv_putup
+  144 0000008E B672            CPSID            i           ;关中断
+  145 00000090         
+  146 00000090 4810            LDR              R0,=JD_ICRS
+  147 00000092 F04F 5180       LDR              R1,=0X10000000
+  148 00000096 6001            STR              R1,[R0]
+  149 00000098         
+  150 00000098 B662            CPSIE            i           ;开中断
+  151 0000009A 4770            BX               LR
+  152 0000009C                 ENDP
+  153 0000009C         
+  154 0000009C         jd_asm_pendsv_handler
                                PROC                         ;切换上下文
-  142 0000008A                 EXPORT           jd_asm_pendsv_handler
-  143 0000008A B672            CPSID            i           ;关中断
-  144 0000008C         
-  145 0000008C 4668            MOV              R0,SP
-  146 0000008E E920 0FF0       STMFD            R0!,{R4-R11}
-  147 00000092         
-  148 00000092         ;保护现场，将堆栈指针传出
-  149 00000092 490A            LDR              R1,=jd_task_stack_sp
-  150 00000094 6809            LDR              R1,[R1]
-  151 00000096 6008            STR              R0,[R1]
-  152 00000098         
-  153 00000098         ;取下一个任务的堆栈指针,恢复现场
-  154 00000098 4905            LDR              R1,=jd_task_next_stack_sp
-  155 0000009A 6809            LDR              R1,[R1]
-  156 0000009C 6808            LDR              R0,[R1]
-  157 0000009E E8B0 0FF0       LDMFD            R0!,{R4-R11}
-  158 000000A2 4685            MOV              SP,R0
-  159 000000A4         
-  160 000000A4         ;ORR LR,#0XD ; 切换到用户栈指针
-  161 000000A4 B662            CPSIE            i           ;开中断
-  162 000000A6 4770            BX               LR
-  163 000000A8                 ENDP
-  164 000000A8         ;防止编译器报警
-  165 000000A8 BF00            NOP
-  166 000000AA                 END
-              00 00 E000ED23 
-              00000000 
-              E000E010 
-              E000ED04 
-              00000000 
-Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
-ork --depend=jdos\jd_cortex-m3.d -ojdos\jd_cortex-m3.o -I.\RTE\_jdos -ID:\Keil_
-V5\Packs\ARM\CMSIS\5.5.1\CMSIS\Core\Include -ID:\Keil_V5\Packs\Keil\STM32F1xx_D
-FP\2.3.0\Device\Include --predefine="__UVISION_VERSION SETA 528" --predefine="_
+  155 0000009C                 EXPORT           jd_asm_pendsv_handler
+  156 0000009C B672            CPSID            i           ;关中断
+  157 0000009E         
+  158 0000009E 4668            MOV              R0,SP
+  159 000000A0 E920 0FF0       STMFD            R0!,{R4-R11}
+  160 000000A4         
+  161 000000A4         ;保护现场，将堆栈指针传出
+  162 000000A4 4908            LDR              R1,=jd_task_stack_sp
+  163 000000A6 6809            LDR              R1,[R1]
+  164 000000A8 6008            STR              R0,[R1]
+  165 000000AA         
+  166 000000AA         ;取下一个任务的堆栈指针,恢复现场
+  167 000000AA 4908            LDR              R1,=jd_task_next_stack_sp
+  168 000000AC 6809            LDR              R1,[R1]
+  169 000000AE 6808            LDR              R0,[R1]
+  170 000000B0 E8B0 0FF0       LDMFD            R0!,{R4-R11}
+  171 000000B4 4685            MOV              SP,R0
 
 
 
 ARM Macro Assembler    Page 5 
 
 
+  172 000000B6         
+  173 000000B6         ;ORR LR,#0XD ; 切换到用户栈指针
+  174 000000B6 B662            CPSIE            i           ;开中断
+  175 000000B8 4770            BX               LR
+  176 000000BA                 ENDP
+  177 000000BA         ;防止编译器报警
+  178 000000BA BF00            NOP
+  179 000000BC                 END
+              E000ED23 
+              00000000 
+              00000000 
+              00000000 
+              00000000 
+              E000E010 
+              E000ED04 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
+ork --depend=jdos\jd_cortex-m3.d -ojdos\jd_cortex-m3.o -I.\RTE\_jdos -ID:\Keil_
+V5\Packs\ARM\CMSIS\5.5.1\CMSIS\Core\Include -ID:\Keil_V5\Packs\Keil\STM32F1xx_D
+FP\2.3.0\Device\Include --predefine="__UVISION_VERSION SETA 528" --predefine="_
 RTE_ SETA 1" --predefine="STM32F10X_HD SETA 1" --list=jd_cortex-m3.lst ..\jd_Co
 rtex-M3.s
 
@@ -276,60 +295,60 @@ Relocatable symbols
 
 Symbol: .text
    Definitions
-      At line 7 in file ..\jd_Cortex-M3.s
+      At line 9 in file ..\jd_Cortex-M3.s
    Uses
       None
 Comment: .text unused
-jd_asm_cps_disable 00000074
+jd_asm_cps_disable 00000086
 
 Symbol: jd_asm_cps_disable
    Definitions
-      At line 117 in file ..\jd_Cortex-M3.s
+      At line 130 in file ..\jd_Cortex-M3.s
    Uses
-      At line 118 in file ..\jd_Cortex-M3.s
+      At line 131 in file ..\jd_Cortex-M3.s
 Comment: jd_asm_cps_disable used once
-jd_asm_cps_enable 00000078
+jd_asm_cps_enable 0000008A
 
 Symbol: jd_asm_cps_enable
    Definitions
-      At line 123 in file ..\jd_Cortex-M3.s
+      At line 136 in file ..\jd_Cortex-M3.s
    Uses
-      At line 124 in file ..\jd_Cortex-M3.s
+      At line 137 in file ..\jd_Cortex-M3.s
 Comment: jd_asm_cps_enable used once
-jd_asm_pendsv_handler 0000008A
+jd_asm_pendsv_handler 0000009C
 
 Symbol: jd_asm_pendsv_handler
    Definitions
-      At line 141 in file ..\jd_Cortex-M3.s
+      At line 154 in file ..\jd_Cortex-M3.s
    Uses
-      At line 74 in file ..\jd_Cortex-M3.s
-      At line 142 in file ..\jd_Cortex-M3.s
+      At line 89 in file ..\jd_Cortex-M3.s
+      At line 155 in file ..\jd_Cortex-M3.s
 
-jd_asm_pendsv_putup 0000007C
+jd_asm_pendsv_putup 0000008E
 
 Symbol: jd_asm_pendsv_putup
    Definitions
-      At line 129 in file ..\jd_Cortex-M3.s
+      At line 142 in file ..\jd_Cortex-M3.s
    Uses
-      At line 130 in file ..\jd_Cortex-M3.s
+      At line 143 in file ..\jd_Cortex-M3.s
 Comment: jd_asm_pendsv_putup used once
-jd_asm_svc_handler 00000026
+jd_asm_svc_handler 00000038
 
 Symbol: jd_asm_svc_handler
    Definitions
-      At line 51 in file ..\jd_Cortex-M3.s
+      At line 66 in file ..\jd_Cortex-M3.s
    Uses
-      At line 52 in file ..\jd_Cortex-M3.s
+      At line 67 in file ..\jd_Cortex-M3.s
 Comment: jd_asm_svc_handler used once
-jd_asm_svc_task_exit 00000052
+jd_asm_svc_task_exit 00000064
 
 Symbol: jd_asm_svc_task_exit
    Definitions
-      At line 88 in file ..\jd_Cortex-M3.s
+      At line 103 in file ..\jd_Cortex-M3.s
    Uses
-      At line 89 in file ..\jd_Cortex-M3.s
+      At line 104 in file ..\jd_Cortex-M3.s
 Comment: jd_asm_svc_task_exit used once
-jd_asm_svc_task_switch 0000004C
+jd_asm_svc_task_switch 0000005E
 
 
 
@@ -339,50 +358,50 @@ Relocatable symbols
 
 Symbol: jd_asm_svc_task_switch
    Definitions
-      At line 81 in file ..\jd_Cortex-M3.s
+      At line 96 in file ..\jd_Cortex-M3.s
    Uses
-      At line 82 in file ..\jd_Cortex-M3.s
+      At line 97 in file ..\jd_Cortex-M3.s
 Comment: jd_asm_svc_task_switch used once
-jd_asm_systick_init 00000058
+jd_asm_systick_init 0000006A
 
 Symbol: jd_asm_systick_init
    Definitions
-      At line 98 in file ..\jd_Cortex-M3.s
+      At line 111 in file ..\jd_Cortex-M3.s
    Uses
-      At line 99 in file ..\jd_Cortex-M3.s
+      At line 112 in file ..\jd_Cortex-M3.s
 Comment: jd_asm_systick_init used once
 jd_asm_task_exit_switch 00000014
 
 Symbol: jd_asm_task_exit_switch
    Definitions
-      At line 32 in file ..\jd_Cortex-M3.s
+      At line 34 in file ..\jd_Cortex-M3.s
    Uses
-      At line 33 in file ..\jd_Cortex-M3.s
-      At line 77 in file ..\jd_Cortex-M3.s
+      At line 35 in file ..\jd_Cortex-M3.s
+      At line 92 in file ..\jd_Cortex-M3.s
 
 jd_asm_task_first_switch 00000000
 
 Symbol: jd_asm_task_first_switch
    Definitions
-      At line 11 in file ..\jd_Cortex-M3.s
+      At line 13 in file ..\jd_Cortex-M3.s
    Uses
-      At line 12 in file ..\jd_Cortex-M3.s
+      At line 14 in file ..\jd_Cortex-M3.s
 Comment: jd_asm_task_first_switch used once
-svc_handler_0 00000044
+svc_handler_0 00000056
 
 Symbol: svc_handler_0
    Definitions
-      At line 73 in file ..\jd_Cortex-M3.s
+      At line 88 in file ..\jd_Cortex-M3.s
    Uses
-      At line 67 in file ..\jd_Cortex-M3.s
+      At line 82 in file ..\jd_Cortex-M3.s
 Comment: svc_handler_0 used once
-svc_handler_1 00000048
+svc_handler_1 0000005A
 
 Symbol: svc_handler_1
    Definitions
-      At line 76 in file ..\jd_Cortex-M3.s
+      At line 91 in file ..\jd_Cortex-M3.s
    Uses
-      At line 71 in file ..\jd_Cortex-M3.s
+      At line 86 in file ..\jd_Cortex-M3.s
 Comment: svc_handler_1 used once
 13 symbols
 
@@ -397,7 +416,7 @@ Symbol: JD_ICRS
    Definitions
       At line 1 in file ..\jd_Cortex-M3.s
    Uses
-      At line 133 in file ..\jd_Cortex-M3.s
+      At line 146 in file ..\jd_Cortex-M3.s
 Comment: JD_ICRS used once
 JD_PRI_14 E000ED23
 
@@ -405,7 +424,7 @@ Symbol: JD_PRI_14
    Definitions
       At line 2 in file ..\jd_Cortex-M3.s
    Uses
-      At line 16 in file ..\jd_Cortex-M3.s
+      At line 18 in file ..\jd_Cortex-M3.s
 Comment: JD_PRI_14 used once
 JD_SYSTICK_CTRL E000E010
 
@@ -413,7 +432,7 @@ Symbol: JD_SYSTICK_CTRL
    Definitions
       At line 3 in file ..\jd_Cortex-M3.s
    Uses
-      At line 102 in file ..\jd_Cortex-M3.s
+      At line 115 in file ..\jd_Cortex-M3.s
 Comment: JD_SYSTICK_CTRL used once
 3 symbols
 
@@ -422,14 +441,30 @@ Comment: JD_SYSTICK_CTRL used once
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 External symbols
 
+jd_task_entry 00000000
+
+Symbol: jd_task_entry
+   Definitions
+      At line 7 in file ..\jd_Cortex-M3.s
+   Uses
+      At line 39 in file ..\jd_Cortex-M3.s
+Comment: jd_task_entry used once
+jd_task_exit_entry 00000000
+
+Symbol: jd_task_exit_entry
+   Definitions
+      At line 8 in file ..\jd_Cortex-M3.s
+   Uses
+      At line 42 in file ..\jd_Cortex-M3.s
+Comment: jd_task_exit_entry used once
 jd_task_next_stack_sp 00000000
 
 Symbol: jd_task_next_stack_sp
    Definitions
       At line 6 in file ..\jd_Cortex-M3.s
    Uses
-      At line 37 in file ..\jd_Cortex-M3.s
-      At line 154 in file ..\jd_Cortex-M3.s
+      At line 52 in file ..\jd_Cortex-M3.s
+      At line 167 in file ..\jd_Cortex-M3.s
 
 jd_task_stack_sp 00000000
 
@@ -437,7 +472,8 @@ Symbol: jd_task_stack_sp
    Definitions
       At line 5 in file ..\jd_Cortex-M3.s
    Uses
-      At line 149 in file ..\jd_Cortex-M3.s
-Comment: jd_task_stack_sp used once
-2 symbols
-353 symbols in table
+      At line 45 in file ..\jd_Cortex-M3.s
+      At line 162 in file ..\jd_Cortex-M3.s
+
+4 symbols
+355 symbols in table

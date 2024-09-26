@@ -4,6 +4,8 @@ JD_SYSTICK_CTRL 	EQU 0xE000E010	;SysTick控制及状态寄存器
 	
 	IMPORT jd_task_stack_sp
 	IMPORT jd_task_next_stack_sp
+	IMPORT jd_task_entry
+	IMPORT jd_task_exit_entry
 						AREA |.text|, CODE, READONLY, ALIGN=3
 							
 							
@@ -32,6 +34,19 @@ jd_asm_task_first_switch 	PROC	;进入main
 jd_asm_task_exit_switch 	PROC	;任务结束运行（没有while），切换下一个任务
 							EXPORT  jd_asm_task_exit_switch
 								CPSID i ;关中断
+								
+								; 此处应该硬性改变堆栈中LR与PC的，相当于回复第一次执行的程序入口数据
+								LDR R1,=jd_task_entry ;此次程序的入口地址
+								LDR R1,[R1]
+								
+								LDR R2,=jd_task_exit_entry ;此次程序的exit的入口地址
+								LDR R2,[R2]
+								
+								LDR R0,=jd_task_stack_sp ;此次任务的栈指针
+								LDR R0,[R0]
+								LDR R0,[R0]
+								STR R1,[R0,#56]
+								STR R2,[R0,#52]
 								
 								;取下一个任务的堆栈指针,恢复现场
 								LDR R1,=jd_task_next_stack_sp
@@ -88,8 +103,6 @@ jd_asm_svc_task_switch	PROC	;SVC call
 jd_asm_svc_task_exit	PROC	;SVC call
 						EXPORT  jd_asm_svc_task_exit
 						CPSIE i ;开中断
-						
-						; 此处应该硬性改变LR的值，将当前任务的载入地址放在此处
 						SVC 1
 						BX LR
 						ENDP

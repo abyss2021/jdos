@@ -36,11 +36,16 @@ void jd_delay(jd_uint32_t ms)
 	jd_asm_svc_task_switch();
 }
 
+
+jd_uint32_t jd_task_entry;
+jd_uint32_t jd_task_exit_entry;
 /*定时任务销毁程序*/
 void jd_timer_exit()
 {
 	jd_task_t *jd_task = jd_task_runing;
-
+	
+	jd_task_entry = (jd_uint32_t)jd_task->entry; //传递程序入口值
+	jd_task_exit_entry = (jd_uint32_t)jd_timer_exit; //传递退出时程序销毁入口
 	//暂停任务，将任务从链表中删除
 	jd_task_pause(jd_task);
 
@@ -59,7 +64,8 @@ void jd_timer_exit()
 		// 将节点加入延时链表
 		jd_task_list_delaying = jd_node_in_rd(jd_task_list_delaying, jd_task_runing->node);
 	}
-
+	
+	jd_task_stack_sp = &jd_task->stack_sp;
 	// 获取数据域
 	jd_task = jd_task_list_readying->addr; // 获取任务数据
 	// 任务暂停或延时状态，或者当前任务优先级低，当前任务放弃CPU使用权
@@ -68,6 +74,7 @@ void jd_timer_exit()
 	jd_task_next_stack_sp = &jd_task_runing->stack_sp; // 更新下一个任务全局栈指针变量
 	
 	//这里不是悬挂PendSV异常，所以直接跳转会出发异常，寄存器数据不会自动出栈，应该使用SVC呼叫异常	
+
 	jd_asm_svc_task_exit();
 }
 

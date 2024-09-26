@@ -223,11 +223,6 @@ jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_
 	all_register_t *stack_register = (struct all_register *)jd_new_task->stack_sp;									  // 将指针转换成寄存器指针
 
 	// 将任务运行数据搬移到内存中
-	stack_register->r0 = 0;
-	stack_register->r1 = 0;
-	stack_register->r2 = 0;
-	stack_register->r3 = 0;
-	stack_register->r12 = 0;
 	stack_register->lr = (jd_uint32_t)jd_task_exit;
 	stack_register->pc = (jd_uint32_t)jd_new_task->entry;
 	stack_register->xpsr = 0x01000000L; // 由于Armv7-M只支持执行Thumb指令，因此必须始终将其值保持为1，否则任务切换会异常
