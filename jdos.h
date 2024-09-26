@@ -144,6 +144,7 @@ jd_int32_t jd_node_insert(jd_node_list_t *node_previous, jd_node_list_t *node, j
 jd_node_list_t *jd_node_delete(jd_node_list_t *list, jd_node_list_t *node);                                // 删除节点
 jd_int64_t compare_priority(jd_task_t *task1, jd_task_t *task2);                                           // 比较函数，用于jd_node_in_rd中使用
 jd_node_list_t *jd_node_in_rd(jd_node_list_t *list, jd_node_list_t *node);                                 // 将节点插入就绪或者延时链表
+void jd_task_exit(); //任务执行完成后由系统调用
 
 /******************jd_memory************************/
 jd_uint32_t jd_mem_init();//mem初始化

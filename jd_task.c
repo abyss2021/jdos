@@ -178,13 +178,36 @@ jd_node_list_t *jd_node_in_rd(jd_node_list_t *list, jd_node_list_t *node)
 	return list;
 }
 
+
+jd_uint32_t jd_task_entry; //任务入口
+jd_uint32_t jd_task_exit_entry; //任务exit入口
 /*任务退出函数,用户任务处理完后自动处理,系统自动调用*/
 void jd_task_exit()
 {
 	jd_task_t *jd_task = jd_task_runing;
 	
-	jd_task_delete(jd_task);
+	jd_task_entry = (jd_uint32_t)jd_task->entry; //传递程序入口值
+	jd_task_exit_entry = (jd_uint32_t)jd_task_exit; //传递退出时程序销毁入口
+	//暂停任务，将任务从链表中删除
+	jd_task_pause(jd_task);
+
+
+	jd_task->stack_sp = (jd_uint32_t)(jd_task->stack_origin_addr) + jd_task->stack_size - sizeof(struct all_register) - 4; // 腾出寄存器的空间
+	all_register_t *stack_register = (struct all_register *)jd_task->stack_sp;									  // 将指针转换成寄存器指针
+
+	// 设置必要数据
+	stack_register->lr = (jd_uint32_t)jd_task_exit;
+	stack_register->pc = (jd_uint32_t)jd_task->entry;
+	stack_register->xpsr = 0x01000000L; 
+
+	jd_task->status = JD_DELAY;
+
+	if(jd_task->timer_loop == JD_TIMER_LOOP)
+		// 将节点加入延时链表
+		jd_task_list_delaying = jd_node_in_rd(jd_task_list_delaying, jd_task_runing->node);
+
 	
+	jd_task_stack_sp = &jd_task->stack_sp;
 	// 获取数据域
 	jd_task = jd_task_list_readying->addr; // 获取任务数据
 	// 任务暂停或延时状态，或者当前任务优先级低，当前任务放弃CPU使用权
@@ -193,6 +216,7 @@ void jd_task_exit()
 	jd_task_next_stack_sp = &jd_task_runing->stack_sp; // 更新下一个任务全局栈指针变量
 	
 	//这里不是悬挂PendSV异常，所以直接跳转会出发异常，寄存器数据不会自动出栈，应该使用SVC呼叫异常	
+
 	jd_asm_svc_task_exit();
 }
 

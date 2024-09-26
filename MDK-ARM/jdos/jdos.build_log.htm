@@ -27,13 +27,68 @@ Project File Date:  09/25/2024
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'D:\Keil_V5\ARM\ARMCC\Bin'
 Build target 'jdos'
-assembling jd_Cortex-M3.s...
-..\jd_Cortex-M3.s(81): warning: A1865W: '#' not seen before constant expression
-..\jd_Cortex-M3.s(85): warning: A1865W: '#' not seen before constant expression
+compiling jd_it.c...
+..\jdos.h(147): warning:  #1295-D: Deprecated declaration jd_task_exit - give arg types
+  void jd_task_exit(); //任务执行完成后由系统调用
+..\jdos.h(150): warning:  #1295-D: Deprecated declaration jd_mem_init - give arg types
+  jd_uint32_t jd_mem_init();//mem初始�?
+..\jd_it.c(53): warning:  #223-D: function "jd_asm_svc_handler" declared implicitly
+  	jd_asm_svc_handler();
+..\jd_it.c: 3 warnings, 0 errors
+compiling jd_main.c...
+..\jdos.h(147): warning:  #1295-D: Deprecated declaration jd_task_exit - give arg types
+  void jd_task_exit(); //任务执行完成后由系统调用
+..\jdos.h(150): warning:  #1295-D: Deprecated declaration jd_mem_init - give arg types
+  jd_uint32_t jd_mem_init();//mem初始�?
+..\jd_main.c(8): warning:  #177-D: variable "a"  was declared but never referenced
+  		int a=1;
+..\jd_main.c(9): warning:  #177-D: variable "b"  was declared but never referenced
+  	int b =2;
+..\jd_main.c(10): warning:  #177-D: variable "c"  was declared but never referenced
+  	int c;
+..\jd_main.c(20): warning:  #177-D: variable "a"  was declared but never referenced
+  	int a=1;
+..\jd_main.c(21): warning:  #177-D: variable "b"  was declared but never referenced
+  	int b =2;
+..\jd_main.c(22): warning:  #177-D: variable "c"  was declared but never referenced
+  	int c;
+..\jd_main.c(38): warning:  #177-D: variable "a"  was declared but never referenced
+  		int a=1;
+..\jd_main.c(39): warning:  #177-D: variable "b"  was declared but never referenced
+  	int b =2;
+..\jd_main.c(40): warning:  #177-D: variable "c"  was declared but never referenced
+  	int c;
+..\jd_main.c: 11 warnings, 0 errors
+compiling jd_timer.c...
+..\jdos.h(147): warning:  #1295-D: Deprecated declaration jd_task_exit - give arg types
+  void jd_task_exit(); //任务执行完成后由系统调用
+..\jdos.h(150): warning:  #1295-D: Deprecated declaration jd_mem_init - give arg types
+  jd_uint32_t jd_mem_init();//mem初始�?
+..\jd_timer.c(36): warning:  #223-D: function "jd_asm_svc_task_switch" declared implicitly
+  	jd_asm_svc_task_switch();
+..\jd_timer.c(102): warning:  #940-D: missing return statement at end of non-void function "jd_timer_stop" 
+  }
+..\jd_timer.c: 4 warnings, 0 errors
+compiling jd_task.c...
+..\jdos.h(147): warning:  #1295-D: Deprecated declaration jd_task_exit - give arg types
+  void jd_task_exit(); //任务执行完成后由系统调用
+..\jdos.h(150): warning:  #1295-D: Deprecated declaration jd_mem_init - give arg types
+  jd_uint32_t jd_mem_init();//mem初始�?
+..\jd_task.c(220): warning:  #223-D: function "jd_asm_svc_task_exit" declared implicitly
+  	jd_asm_svc_task_exit();
+..\jd_task.c: 3 warnings, 0 errors
+compiling jd_memory.c...
+..\jdos.h(147): warning:  #1295-D: Deprecated declaration jd_task_exit - give arg types
+  void jd_task_exit(); //任务执行完成后由系统调用
+..\jdos.h(150): warning:  #1295-D: Deprecated declaration jd_mem_init - give arg types
+  jd_uint32_t jd_mem_init();//mem初始�?
+..\jd_memory.c(17): warning:  #940-D: missing return statement at end of non-void function "jd_mem_init" 
+  }
+..\jd_memory.c: 3 warnings, 0 errors
 linking...
-Program Size: Code=4392 RO-data=372 RW-data=68 ZI-data=13412  
+Program Size: Code=4192 RO-data=372 RW-data=68 ZI-data=13412  
 FromELF: creating hex file...
-"jdos\jdos.axf" - 0 Error(s), 2 Warning(s).
+"jdos\jdos.axf" - 0 Error(s), 24 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -56,7 +111,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.2.0
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>
