@@ -71,6 +71,7 @@ Section Cross References
     jd_task.o(i.jd_task_delete) refers to jd_task.o(i.jd_task_pause) for jd_task_pause
     jd_task.o(i.jd_task_delete) refers to jd_memory.o(i.jd_free) for jd_free
     jd_task.o(i.jd_task_delete) refers to jd_task.o(.data) for .data
+    jd_task.o(i.jd_task_exit) refers to jd_task.o(i.jd_task_delete) for jd_task_delete
     jd_task.o(i.jd_task_exit) refers to jd_task.o(i.jd_task_pause) for jd_task_pause
     jd_task.o(i.jd_task_exit) refers to jd_task.o(i.jd_node_in_rd) for jd_node_in_rd
     jd_task.o(i.jd_task_exit) refers to jd_cortex-m3.o(.text) for jd_asm_svc_task_exit
@@ -314,15 +315,14 @@ Removing Unused input sections from the image.
     Removing jd_task.o(.rev16_text), (4 bytes).
     Removing jd_task.o(.revsh_text), (4 bytes).
     Removing jd_task.o(.rrx_text), (6 bytes).
-    Removing jd_task.o(i.jd_task_delete), (40 bytes).
+    Removing jd_task.o(i.jd_task_auto_delate), (16 bytes).
     Removing jd_timer.o(.rev16_text), (4 bytes).
     Removing jd_timer.o(.revsh_text), (4 bytes).
     Removing jd_timer.o(.rrx_text), (6 bytes).
-    Removing jd_timer.o(i.jd_timer_stop), (20 bytes).
+    Removing jd_timer.o(i.jd_timer_stop), (24 bytes).
     Removing jd_memory.o(.rev16_text), (4 bytes).
     Removing jd_memory.o(.revsh_text), (4 bytes).
     Removing jd_memory.o(.rrx_text), (6 bytes).
-    Removing jd_memory.o(i.jd_free), (92 bytes).
     Removing stm32f1xx_hal_gpio_ex.o(.rev16_text), (4 bytes).
     Removing stm32f1xx_hal_gpio_ex.o(.revsh_text), (4 bytes).
     Removing stm32f1xx_hal_gpio_ex.o(.rrx_text), (6 bytes).
@@ -491,7 +491,7 @@ Removing Unused input sections from the image.
     Removing system_stm32f1xx.o(i.SystemCoreClockUpdate), (104 bytes).
     Removing system_stm32f1xx.o(.constdata), (8 bytes).
 
-195 unused section(s) (total 8390 bytes) removed from the image.
+194 unused section(s) (total 8278 bytes) removed from the image.
 
 ==============================================================================
 
@@ -518,53 +518,53 @@ Image Symbol Table
     ../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c 0x00000000   Number         0  stm32f1xx_hal_rcc_ex.o ABSOLUTE
     ../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.c 0x00000000   Number         0  stm32f1xx_hal_tim.o ABSOLUTE
     ../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c 0x00000000   Number         0  stm32f1xx_hal_tim_ex.o ABSOLUTE
-    ../clib/angel/boardlib.s                 0x00000000   Number         0  boardshut.o ABSOLUTE
     ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit1.o ABSOLUTE
     ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit2.o ABSOLUTE
     ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit3.o ABSOLUTE
-    ../clib/angel/handlers.s                 0x00000000   Number         0  __scatter_zi.o ABSOLUTE
+    ../clib/angel/boardlib.s                 0x00000000   Number         0  boardshut.o ABSOLUTE
     ../clib/angel/handlers.s                 0x00000000   Number         0  __scatter_copy.o ABSOLUTE
-    ../clib/angel/kernel.s                   0x00000000   Number         0  __rtentry4.o ABSOLUTE
+    ../clib/angel/handlers.s                 0x00000000   Number         0  __scatter_zi.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  __rtentry.o ABSOLUTE
-    ../clib/angel/kernel.s                   0x00000000   Number         0  rtexit2.o ABSOLUTE
-    ../clib/angel/kernel.s                   0x00000000   Number         0  rtexit.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  __rtentry2.o ABSOLUTE
+    ../clib/angel/kernel.s                   0x00000000   Number         0  rtexit.o ABSOLUTE
+    ../clib/angel/kernel.s                   0x00000000   Number         0  rtexit2.o ABSOLUTE
+    ../clib/angel/kernel.s                   0x00000000   Number         0  __rtentry4.o ABSOLUTE
     ../clib/angel/rt.s                       0x00000000   Number         0  rt_raise.o ABSOLUTE
     ../clib/angel/scatter.s                  0x00000000   Number         0  __scatter.o ABSOLUTE
     ../clib/angel/startup.s                  0x00000000   Number         0  __main.o ABSOLUTE
-    ../clib/angel/sys.s                      0x00000000   Number         0  indicate_semi.o ABSOLUTE
     ../clib/angel/sys.s                      0x00000000   Number         0  use_no_semi.o ABSOLUTE
-    ../clib/angel/sys.s                      0x00000000   Number         0  libspace.o ABSOLUTE
     ../clib/angel/sys.s                      0x00000000   Number         0  sys_stackheap_outer.o ABSOLUTE
-    ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_exit.o ABSOLUTE
-    ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_command.o ABSOLUTE
+    ../clib/angel/sys.s                      0x00000000   Number         0  libspace.o ABSOLUTE
+    ../clib/angel/sys.s                      0x00000000   Number         0  indicate_semi.o ABSOLUTE
     ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_wrch.o ABSOLUTE
-    ../clib/armsys.c                         0x00000000   Number         0  argv_veneer.o ABSOLUTE
-    ../clib/armsys.c                         0x00000000   Number         0  argv_veneer.o ABSOLUTE
+    ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_command.o ABSOLUTE
+    ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_exit.o ABSOLUTE
     ../clib/armsys.c                         0x00000000   Number         0  no_argv.o ABSOLUTE
+    ../clib/armsys.c                         0x00000000   Number         0  argv_veneer.o ABSOLUTE
+    ../clib/armsys.c                         0x00000000   Number         0  argv_veneer.o ABSOLUTE
     ../clib/armsys.c                         0x00000000   Number         0  _get_argv_nomalloc.o ABSOLUTE
     ../clib/heapalloc.c                      0x00000000   Number         0  hrguard.o ABSOLUTE
     ../clib/heapaux.c                        0x00000000   Number         0  heapauxi.o ABSOLUTE
-    ../clib/libinit.s                        0x00000000   Number         0  libinit2.o ABSOLUTE
-    ../clib/libinit.s                        0x00000000   Number         0  libinit.o ABSOLUTE
     ../clib/libinit.s                        0x00000000   Number         0  libshutdown.o ABSOLUTE
+    ../clib/libinit.s                        0x00000000   Number         0  libinit.o ABSOLUTE
     ../clib/libinit.s                        0x00000000   Number         0  libshutdown2.o ABSOLUTE
+    ../clib/libinit.s                        0x00000000   Number         0  libinit2.o ABSOLUTE
     ../clib/longlong.s                       0x00000000   Number         0  llushr.o ABSOLUTE
     ../clib/memcpset.s                       0x00000000   Number         0  rt_memclr_w.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_other.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_cppl_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_segv_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_cppl_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_pvfn_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_stak_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_rtred_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_fpe_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_abrt_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_general.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_abrt_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_outer.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_formal.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  __raise.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_exit.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_formal.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_outer.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_rtred_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_stak_inner.o ABSOLUTE
     ../clib/signal.s                         0x00000000   Number         0  defsig.o ABSOLUTE
     ../clib/stdlib.c                         0x00000000   Number         0  exit.o ABSOLUTE
     ../fplib/fpinit.s                        0x00000000   Number         0  fpinit.o ABSOLUTE
@@ -689,26 +689,28 @@ Image Symbol Table
     i.jd_PendSV_Handler                      0x08000d38   Section        0  jd_it.o(i.jd_PendSV_Handler)
     i.jd_SVC_handler                         0x08000d6c   Section        0  jd_it.o(i.jd_SVC_handler)
     i.jd_delay                               0x08000d70   Section        0  jd_timer.o(i.jd_delay)
-    i.jd_init                                0x08000de0   Section        0  jd_task.o(i.jd_init)
-    i.jd_main                                0x08000e28   Section        0  jd_main.o(i.jd_main)
-    i.jd_malloc                              0x08000e84   Section        0  jd_memory.o(i.jd_malloc)
-    i.jd_mem_init                            0x08000ed8   Section        0  jd_memory.o(i.jd_mem_init)
-    i.jd_node_delete                         0x08000ef8   Section        0  jd_task.o(i.jd_node_delete)
-    i.jd_node_in_rd                          0x08000f2c   Section        0  jd_task.o(i.jd_node_in_rd)
-    i.jd_node_insert                         0x08000f98   Section        0  jd_task.o(i.jd_node_insert)
-    i.jd_task_create                         0x08000fd8   Section        0  jd_task.o(i.jd_task_create)
-    i.jd_task_exit                           0x08001024   Section        0  jd_task.o(i.jd_task_exit)
-    i.jd_task_pause                          0x08001084   Section        0  jd_task.o(i.jd_task_pause)
-    i.jd_task_run                            0x080010dc   Section        0  jd_task.o(i.jd_task_run)
-    i.jd_timer_start                         0x080010fc   Section        0  jd_timer.o(i.jd_timer_start)
-    i.main                                   0x0800115c   Section        0  main.o(i.main)
-    i.task1                                  0x08001170   Section        0  jd_main.o(i.task1)
-    i.task2                                  0x0800117c   Section        0  jd_main.o(i.task2)
-    i.task3                                  0x08001188   Section        0  jd_main.o(i.task3)
-    .constdata                               0x08001190   Section       18  stm32f1xx_hal_rcc.o(.constdata)
-    aPredivFactorTable                       0x08001190   Data           2  stm32f1xx_hal_rcc.o(.constdata)
-    aPLLMULFactorTable                       0x08001192   Data          16  stm32f1xx_hal_rcc.o(.constdata)
-    .constdata                               0x080011a2   Section       16  system_stm32f1xx.o(.constdata)
+    i.jd_free                                0x08000dd8   Section        0  jd_memory.o(i.jd_free)
+    i.jd_init                                0x08000e2c   Section        0  jd_task.o(i.jd_init)
+    i.jd_main                                0x08000e6c   Section        0  jd_main.o(i.jd_main)
+    i.jd_malloc                              0x08000ec8   Section        0  jd_memory.o(i.jd_malloc)
+    i.jd_mem_init                            0x08000f14   Section        0  jd_memory.o(i.jd_mem_init)
+    i.jd_node_delete                         0x08000f34   Section        0  jd_task.o(i.jd_node_delete)
+    i.jd_node_in_rd                          0x08000f68   Section        0  jd_task.o(i.jd_node_in_rd)
+    i.jd_node_insert                         0x08000fd0   Section        0  jd_task.o(i.jd_node_insert)
+    i.jd_task_create                         0x08001010   Section        0  jd_task.o(i.jd_task_create)
+    i.jd_task_delete                         0x0800105c   Section        0  jd_task.o(i.jd_task_delete)
+    i.jd_task_exit                           0x08001084   Section        0  jd_task.o(i.jd_task_exit)
+    i.jd_task_pause                          0x080010f4   Section        0  jd_task.o(i.jd_task_pause)
+    i.jd_task_run                            0x08001144   Section        0  jd_task.o(i.jd_task_run)
+    i.jd_timer_start                         0x08001164   Section        0  jd_timer.o(i.jd_timer_start)
+    i.main                                   0x080011c4   Section        0  main.o(i.main)
+    i.task1                                  0x080011d8   Section        0  jd_main.o(i.task1)
+    i.task2                                  0x080011e4   Section        0  jd_main.o(i.task2)
+    i.task3                                  0x080011f0   Section        0  jd_main.o(i.task3)
+    .constdata                               0x080011f8   Section       18  stm32f1xx_hal_rcc.o(.constdata)
+    aPredivFactorTable                       0x080011f8   Data           2  stm32f1xx_hal_rcc.o(.constdata)
+    aPLLMULFactorTable                       0x080011fa   Data          16  stm32f1xx_hal_rcc.o(.constdata)
+    .constdata                               0x0800120a   Section       16  system_stm32f1xx.o(.constdata)
     .data                                    0x20000000   Section       12  jd_main.o(.data)
     .data                                    0x2000000c   Section       32  jd_task.o(.data)
     .data                                    0x2000002c   Section        4  jd_timer.o(.data)
@@ -924,28 +926,30 @@ Image Symbol Table
     UsageFault_Handler                       0x08000d01   Thumb Code     2  stm32f1xx_it.o(i.UsageFault_Handler)
     compare_priority                         0x08000d23   Thumb Code    12  jd_task.o(i.compare_priority)
     compare_timeout                          0x08000d2f   Thumb Code     8  jd_task.o(i.compare_timeout)
-    jd_PendSV_Handler                        0x08000d39   Thumb Code    36  jd_it.o(i.jd_PendSV_Handler)
+    jd_PendSV_Handler                        0x08000d39   Thumb Code    34  jd_it.o(i.jd_PendSV_Handler)
     jd_SVC_handler                           0x08000d6d   Thumb Code     4  jd_it.o(i.jd_SVC_handler)
-    jd_delay                                 0x08000d71   Thumb Code    86  jd_timer.o(i.jd_delay)
-    jd_init                                  0x08000de1   Thumb Code    62  jd_task.o(i.jd_init)
-    jd_main                                  0x08000e29   Thumb Code    76  jd_main.o(i.jd_main)
-    jd_malloc                                0x08000e85   Thumb Code    80  jd_memory.o(i.jd_malloc)
-    jd_mem_init                              0x08000ed9   Thumb Code    24  jd_memory.o(i.jd_mem_init)
-    jd_node_delete                           0x08000ef9   Thumb Code    52  jd_task.o(i.jd_node_delete)
-    jd_node_in_rd                            0x08000f2d   Thumb Code    96  jd_task.o(i.jd_node_in_rd)
-    jd_node_insert                           0x08000f99   Thumb Code    62  jd_task.o(i.jd_node_insert)
-    jd_task_create                           0x08000fd9   Thumb Code    72  jd_task.o(i.jd_task_create)
-    jd_task_exit                             0x08001025   Thumb Code    92  jd_task.o(i.jd_task_exit)
-    jd_task_pause                            0x08001085   Thumb Code    82  jd_task.o(i.jd_task_pause)
-    jd_task_run                              0x080010dd   Thumb Code    28  jd_task.o(i.jd_task_run)
-    jd_timer_start                           0x080010fd   Thumb Code    78  jd_timer.o(i.jd_timer_start)
-    main                                     0x0800115d   Thumb Code    18  main.o(i.main)
-    task1                                    0x08001171   Thumb Code     8  jd_main.o(i.task1)
-    task2                                    0x0800117d   Thumb Code    12  jd_main.o(i.task2)
-    task3                                    0x08001189   Thumb Code     8  jd_main.o(i.task3)
-    AHBPrescTable                            0x080011a2   Data          16  system_stm32f1xx.o(.constdata)
-    Region$$Table$$Base                      0x080011b4   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x080011d4   Number         0  anon$$obj.o(Region$$Table)
+    jd_delay                                 0x08000d71   Thumb Code    80  jd_timer.o(i.jd_delay)
+    jd_free                                  0x08000dd9   Thumb Code    84  jd_memory.o(i.jd_free)
+    jd_init                                  0x08000e2d   Thumb Code    56  jd_task.o(i.jd_init)
+    jd_main                                  0x08000e6d   Thumb Code    76  jd_main.o(i.jd_main)
+    jd_malloc                                0x08000ec9   Thumb Code    70  jd_memory.o(i.jd_malloc)
+    jd_mem_init                              0x08000f15   Thumb Code    24  jd_memory.o(i.jd_mem_init)
+    jd_node_delete                           0x08000f35   Thumb Code    52  jd_task.o(i.jd_node_delete)
+    jd_node_in_rd                            0x08000f69   Thumb Code    92  jd_task.o(i.jd_node_in_rd)
+    jd_node_insert                           0x08000fd1   Thumb Code    62  jd_task.o(i.jd_node_insert)
+    jd_task_create                           0x08001011   Thumb Code    70  jd_task.o(i.jd_task_create)
+    jd_task_delete                           0x0800105d   Thumb Code    34  jd_task.o(i.jd_task_delete)
+    jd_task_exit                             0x08001085   Thumb Code   106  jd_task.o(i.jd_task_exit)
+    jd_task_pause                            0x080010f5   Thumb Code    76  jd_task.o(i.jd_task_pause)
+    jd_task_run                              0x08001145   Thumb Code    28  jd_task.o(i.jd_task_run)
+    jd_timer_start                           0x08001165   Thumb Code    80  jd_timer.o(i.jd_timer_start)
+    main                                     0x080011c5   Thumb Code    18  main.o(i.main)
+    task1                                    0x080011d9   Thumb Code     8  jd_main.o(i.task1)
+    task2                                    0x080011e5   Thumb Code    12  jd_main.o(i.task2)
+    task3                                    0x080011f1   Thumb Code     8  jd_main.o(i.task3)
+    AHBPrescTable                            0x0800120a   Data          16  system_stm32f1xx.o(.constdata)
+    Region$$Table$$Base                      0x0800121c   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x0800123c   Number         0  anon$$obj.o(Region$$Table)
     test_task1                               0x20000000   Data           4  jd_main.o(.data)
     test_task2                               0x20000004   Data           4  jd_main.o(.data)
     test_task3                               0x20000008   Data           4  jd_main.o(.data)
@@ -975,89 +979,89 @@ Memory Map of the image
 
   Image Entry point : 0x08000131
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00001218, Max: 0x00040000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00001280, Max: 0x00040000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x000011d4, Max: 0x00040000, ABSOLUTE)
+    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x0000123c, Max: 0x00040000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x08000000   0x08000000   0x00000130   Data   RO            3    RESET               startup_stm32f103xe.o
-    0x08000130   0x08000130   0x00000008   Code   RO         1587  * !!!main             c_w.l(__main.o)
-    0x08000138   0x08000138   0x00000034   Code   RO         1744    !!!scatter          c_w.l(__scatter.o)
-    0x0800016c   0x0800016c   0x0000001a   Code   RO         1746    !!handler_copy      c_w.l(__scatter_copy.o)
+    0x08000130   0x08000130   0x00000008   Code   RO         1593  * !!!main             c_w.l(__main.o)
+    0x08000138   0x08000138   0x00000034   Code   RO         1750    !!!scatter          c_w.l(__scatter.o)
+    0x0800016c   0x0800016c   0x0000001a   Code   RO         1752    !!handler_copy      c_w.l(__scatter_copy.o)
     0x08000186   0x08000186   0x00000002   PAD
-    0x08000188   0x08000188   0x0000001c   Code   RO         1748    !!handler_zi        c_w.l(__scatter_zi.o)
-    0x080001a4   0x080001a4   0x00000002   Code   RO         1614    .ARM.Collect$$libinit$$00000000  c_w.l(libinit.o)
-    0x080001a6   0x080001a6   0x00000000   Code   RO         1621    .ARM.Collect$$libinit$$00000002  c_w.l(libinit2.o)
-    0x080001a6   0x080001a6   0x00000000   Code   RO         1623    .ARM.Collect$$libinit$$00000004  c_w.l(libinit2.o)
-    0x080001a6   0x080001a6   0x00000000   Code   RO         1626    .ARM.Collect$$libinit$$0000000A  c_w.l(libinit2.o)
-    0x080001a6   0x080001a6   0x00000000   Code   RO         1628    .ARM.Collect$$libinit$$0000000C  c_w.l(libinit2.o)
-    0x080001a6   0x080001a6   0x00000000   Code   RO         1630    .ARM.Collect$$libinit$$0000000E  c_w.l(libinit2.o)
-    0x080001a6   0x080001a6   0x00000000   Code   RO         1633    .ARM.Collect$$libinit$$00000011  c_w.l(libinit2.o)
-    0x080001a6   0x080001a6   0x00000000   Code   RO         1635    .ARM.Collect$$libinit$$00000013  c_w.l(libinit2.o)
-    0x080001a6   0x080001a6   0x00000000   Code   RO         1637    .ARM.Collect$$libinit$$00000015  c_w.l(libinit2.o)
-    0x080001a6   0x080001a6   0x00000000   Code   RO         1639    .ARM.Collect$$libinit$$00000017  c_w.l(libinit2.o)
-    0x080001a6   0x080001a6   0x00000000   Code   RO         1641    .ARM.Collect$$libinit$$00000019  c_w.l(libinit2.o)
-    0x080001a6   0x080001a6   0x00000000   Code   RO         1643    .ARM.Collect$$libinit$$0000001B  c_w.l(libinit2.o)
-    0x080001a6   0x080001a6   0x00000000   Code   RO         1645    .ARM.Collect$$libinit$$0000001D  c_w.l(libinit2.o)
-    0x080001a6   0x080001a6   0x00000000   Code   RO         1647    .ARM.Collect$$libinit$$0000001F  c_w.l(libinit2.o)
-    0x080001a6   0x080001a6   0x00000000   Code   RO         1649    .ARM.Collect$$libinit$$00000021  c_w.l(libinit2.o)
-    0x080001a6   0x080001a6   0x00000000   Code   RO         1651    .ARM.Collect$$libinit$$00000023  c_w.l(libinit2.o)
-    0x080001a6   0x080001a6   0x00000000   Code   RO         1653    .ARM.Collect$$libinit$$00000025  c_w.l(libinit2.o)
-    0x080001a6   0x080001a6   0x00000000   Code   RO         1657    .ARM.Collect$$libinit$$0000002C  c_w.l(libinit2.o)
-    0x080001a6   0x080001a6   0x00000000   Code   RO         1659    .ARM.Collect$$libinit$$0000002E  c_w.l(libinit2.o)
-    0x080001a6   0x080001a6   0x00000000   Code   RO         1661    .ARM.Collect$$libinit$$00000030  c_w.l(libinit2.o)
-    0x080001a6   0x080001a6   0x00000000   Code   RO         1663    .ARM.Collect$$libinit$$00000032  c_w.l(libinit2.o)
-    0x080001a6   0x080001a6   0x00000002   Code   RO         1664    .ARM.Collect$$libinit$$00000033  c_w.l(libinit2.o)
-    0x080001a8   0x080001a8   0x00000002   Code   RO         1684    .ARM.Collect$$libshutdown$$00000000  c_w.l(libshutdown.o)
-    0x080001aa   0x080001aa   0x00000000   Code   RO         1697    .ARM.Collect$$libshutdown$$00000002  c_w.l(libshutdown2.o)
-    0x080001aa   0x080001aa   0x00000000   Code   RO         1699    .ARM.Collect$$libshutdown$$00000004  c_w.l(libshutdown2.o)
-    0x080001aa   0x080001aa   0x00000000   Code   RO         1702    .ARM.Collect$$libshutdown$$00000007  c_w.l(libshutdown2.o)
-    0x080001aa   0x080001aa   0x00000000   Code   RO         1705    .ARM.Collect$$libshutdown$$0000000A  c_w.l(libshutdown2.o)
-    0x080001aa   0x080001aa   0x00000000   Code   RO         1707    .ARM.Collect$$libshutdown$$0000000C  c_w.l(libshutdown2.o)
-    0x080001aa   0x080001aa   0x00000000   Code   RO         1710    .ARM.Collect$$libshutdown$$0000000F  c_w.l(libshutdown2.o)
-    0x080001aa   0x080001aa   0x00000002   Code   RO         1711    .ARM.Collect$$libshutdown$$00000010  c_w.l(libshutdown2.o)
-    0x080001ac   0x080001ac   0x00000000   Code   RO         1589    .ARM.Collect$$rtentry$$00000000  c_w.l(__rtentry.o)
-    0x080001ac   0x080001ac   0x00000000   Code   RO         1591    .ARM.Collect$$rtentry$$00000002  c_w.l(__rtentry2.o)
-    0x080001ac   0x080001ac   0x00000006   Code   RO         1603    .ARM.Collect$$rtentry$$00000004  c_w.l(__rtentry4.o)
-    0x080001b2   0x080001b2   0x00000000   Code   RO         1593    .ARM.Collect$$rtentry$$00000009  c_w.l(__rtentry2.o)
-    0x080001b2   0x080001b2   0x00000004   Code   RO         1594    .ARM.Collect$$rtentry$$0000000A  c_w.l(__rtentry2.o)
-    0x080001b6   0x080001b6   0x00000000   Code   RO         1596    .ARM.Collect$$rtentry$$0000000C  c_w.l(__rtentry2.o)
-    0x080001b6   0x080001b6   0x00000008   Code   RO         1597    .ARM.Collect$$rtentry$$0000000D  c_w.l(__rtentry2.o)
-    0x080001be   0x080001be   0x00000002   Code   RO         1618    .ARM.Collect$$rtexit$$00000000  c_w.l(rtexit.o)
-    0x080001c0   0x080001c0   0x00000000   Code   RO         1666    .ARM.Collect$$rtexit$$00000002  c_w.l(rtexit2.o)
-    0x080001c0   0x080001c0   0x00000004   Code   RO         1667    .ARM.Collect$$rtexit$$00000003  c_w.l(rtexit2.o)
-    0x080001c4   0x080001c4   0x00000006   Code   RO         1668    .ARM.Collect$$rtexit$$00000004  c_w.l(rtexit2.o)
+    0x08000188   0x08000188   0x0000001c   Code   RO         1754    !!handler_zi        c_w.l(__scatter_zi.o)
+    0x080001a4   0x080001a4   0x00000002   Code   RO         1620    .ARM.Collect$$libinit$$00000000  c_w.l(libinit.o)
+    0x080001a6   0x080001a6   0x00000000   Code   RO         1627    .ARM.Collect$$libinit$$00000002  c_w.l(libinit2.o)
+    0x080001a6   0x080001a6   0x00000000   Code   RO         1629    .ARM.Collect$$libinit$$00000004  c_w.l(libinit2.o)
+    0x080001a6   0x080001a6   0x00000000   Code   RO         1632    .ARM.Collect$$libinit$$0000000A  c_w.l(libinit2.o)
+    0x080001a6   0x080001a6   0x00000000   Code   RO         1634    .ARM.Collect$$libinit$$0000000C  c_w.l(libinit2.o)
+    0x080001a6   0x080001a6   0x00000000   Code   RO         1636    .ARM.Collect$$libinit$$0000000E  c_w.l(libinit2.o)
+    0x080001a6   0x080001a6   0x00000000   Code   RO         1639    .ARM.Collect$$libinit$$00000011  c_w.l(libinit2.o)
+    0x080001a6   0x080001a6   0x00000000   Code   RO         1641    .ARM.Collect$$libinit$$00000013  c_w.l(libinit2.o)
+    0x080001a6   0x080001a6   0x00000000   Code   RO         1643    .ARM.Collect$$libinit$$00000015  c_w.l(libinit2.o)
+    0x080001a6   0x080001a6   0x00000000   Code   RO         1645    .ARM.Collect$$libinit$$00000017  c_w.l(libinit2.o)
+    0x080001a6   0x080001a6   0x00000000   Code   RO         1647    .ARM.Collect$$libinit$$00000019  c_w.l(libinit2.o)
+    0x080001a6   0x080001a6   0x00000000   Code   RO         1649    .ARM.Collect$$libinit$$0000001B  c_w.l(libinit2.o)
+    0x080001a6   0x080001a6   0x00000000   Code   RO         1651    .ARM.Collect$$libinit$$0000001D  c_w.l(libinit2.o)
+    0x080001a6   0x080001a6   0x00000000   Code   RO         1653    .ARM.Collect$$libinit$$0000001F  c_w.l(libinit2.o)
+    0x080001a6   0x080001a6   0x00000000   Code   RO         1655    .ARM.Collect$$libinit$$00000021  c_w.l(libinit2.o)
+    0x080001a6   0x080001a6   0x00000000   Code   RO         1657    .ARM.Collect$$libinit$$00000023  c_w.l(libinit2.o)
+    0x080001a6   0x080001a6   0x00000000   Code   RO         1659    .ARM.Collect$$libinit$$00000025  c_w.l(libinit2.o)
+    0x080001a6   0x080001a6   0x00000000   Code   RO         1663    .ARM.Collect$$libinit$$0000002C  c_w.l(libinit2.o)
+    0x080001a6   0x080001a6   0x00000000   Code   RO         1665    .ARM.Collect$$libinit$$0000002E  c_w.l(libinit2.o)
+    0x080001a6   0x080001a6   0x00000000   Code   RO         1667    .ARM.Collect$$libinit$$00000030  c_w.l(libinit2.o)
+    0x080001a6   0x080001a6   0x00000000   Code   RO         1669    .ARM.Collect$$libinit$$00000032  c_w.l(libinit2.o)
+    0x080001a6   0x080001a6   0x00000002   Code   RO         1670    .ARM.Collect$$libinit$$00000033  c_w.l(libinit2.o)
+    0x080001a8   0x080001a8   0x00000002   Code   RO         1690    .ARM.Collect$$libshutdown$$00000000  c_w.l(libshutdown.o)
+    0x080001aa   0x080001aa   0x00000000   Code   RO         1703    .ARM.Collect$$libshutdown$$00000002  c_w.l(libshutdown2.o)
+    0x080001aa   0x080001aa   0x00000000   Code   RO         1705    .ARM.Collect$$libshutdown$$00000004  c_w.l(libshutdown2.o)
+    0x080001aa   0x080001aa   0x00000000   Code   RO         1708    .ARM.Collect$$libshutdown$$00000007  c_w.l(libshutdown2.o)
+    0x080001aa   0x080001aa   0x00000000   Code   RO         1711    .ARM.Collect$$libshutdown$$0000000A  c_w.l(libshutdown2.o)
+    0x080001aa   0x080001aa   0x00000000   Code   RO         1713    .ARM.Collect$$libshutdown$$0000000C  c_w.l(libshutdown2.o)
+    0x080001aa   0x080001aa   0x00000000   Code   RO         1716    .ARM.Collect$$libshutdown$$0000000F  c_w.l(libshutdown2.o)
+    0x080001aa   0x080001aa   0x00000002   Code   RO         1717    .ARM.Collect$$libshutdown$$00000010  c_w.l(libshutdown2.o)
+    0x080001ac   0x080001ac   0x00000000   Code   RO         1595    .ARM.Collect$$rtentry$$00000000  c_w.l(__rtentry.o)
+    0x080001ac   0x080001ac   0x00000000   Code   RO         1597    .ARM.Collect$$rtentry$$00000002  c_w.l(__rtentry2.o)
+    0x080001ac   0x080001ac   0x00000006   Code   RO         1609    .ARM.Collect$$rtentry$$00000004  c_w.l(__rtentry4.o)
+    0x080001b2   0x080001b2   0x00000000   Code   RO         1599    .ARM.Collect$$rtentry$$00000009  c_w.l(__rtentry2.o)
+    0x080001b2   0x080001b2   0x00000004   Code   RO         1600    .ARM.Collect$$rtentry$$0000000A  c_w.l(__rtentry2.o)
+    0x080001b6   0x080001b6   0x00000000   Code   RO         1602    .ARM.Collect$$rtentry$$0000000C  c_w.l(__rtentry2.o)
+    0x080001b6   0x080001b6   0x00000008   Code   RO         1603    .ARM.Collect$$rtentry$$0000000D  c_w.l(__rtentry2.o)
+    0x080001be   0x080001be   0x00000002   Code   RO         1624    .ARM.Collect$$rtexit$$00000000  c_w.l(rtexit.o)
+    0x080001c0   0x080001c0   0x00000000   Code   RO         1672    .ARM.Collect$$rtexit$$00000002  c_w.l(rtexit2.o)
+    0x080001c0   0x080001c0   0x00000004   Code   RO         1673    .ARM.Collect$$rtexit$$00000003  c_w.l(rtexit2.o)
+    0x080001c4   0x080001c4   0x00000006   Code   RO         1674    .ARM.Collect$$rtexit$$00000004  c_w.l(rtexit2.o)
     0x080001ca   0x080001ca   0x00000002   PAD
     0x080001cc   0x080001cc   0x00000044   Code   RO            4    .text               startup_stm32f103xe.o
     0x08000210   0x08000210   0x000000d8   Code   RO          229    .text               jd_cortex-m3.o
-    0x080002e8   0x080002e8   0x0000004e   Code   RO         1583    .text               c_w.l(rt_memclr_w.o)
-    0x08000336   0x08000336   0x00000006   Code   RO         1585    .text               c_w.l(heapauxi.o)
-    0x0800033c   0x0800033c   0x0000004a   Code   RO         1605    .text               c_w.l(sys_stackheap_outer.o)
-    0x08000386   0x08000386   0x00000012   Code   RO         1607    .text               c_w.l(exit.o)
-    0x08000398   0x08000398   0x00000008   Code   RO         1615    .text               c_w.l(libspace.o)
-    0x080003a0   0x080003a0   0x0000000c   Code   RO         1676    .text               c_w.l(sys_exit.o)
-    0x080003ac   0x080003ac   0x00000002   Code   RO         1687    .text               c_w.l(use_no_semi.o)
-    0x080003ae   0x080003ae   0x00000000   Code   RO         1689    .text               c_w.l(indicate_semi.o)
+    0x080002e8   0x080002e8   0x0000004e   Code   RO         1589    .text               c_w.l(rt_memclr_w.o)
+    0x08000336   0x08000336   0x00000006   Code   RO         1591    .text               c_w.l(heapauxi.o)
+    0x0800033c   0x0800033c   0x0000004a   Code   RO         1611    .text               c_w.l(sys_stackheap_outer.o)
+    0x08000386   0x08000386   0x00000012   Code   RO         1613    .text               c_w.l(exit.o)
+    0x08000398   0x08000398   0x00000008   Code   RO         1621    .text               c_w.l(libspace.o)
+    0x080003a0   0x080003a0   0x0000000c   Code   RO         1682    .text               c_w.l(sys_exit.o)
+    0x080003ac   0x080003ac   0x00000002   Code   RO         1693    .text               c_w.l(use_no_semi.o)
+    0x080003ae   0x080003ae   0x00000000   Code   RO         1695    .text               c_w.l(indicate_semi.o)
     0x080003ae   0x080003ae   0x00000002   Code   RO          133    i.BusFault_Handler  stm32f1xx_it.o
     0x080003b0   0x080003b0   0x00000002   Code   RO          134    i.DebugMon_Handler  stm32f1xx_it.o
     0x080003b2   0x080003b2   0x00000002   PAD
-    0x080003b4   0x080003b4   0x00000024   Code   RO          574    i.HAL_Delay         stm32f1xx_hal.o
-    0x080003d8   0x080003d8   0x000001f8   Code   RO          884    i.HAL_GPIO_Init     stm32f1xx_hal_gpio.o
-    0x080005d0   0x080005d0   0x00000010   Code   RO          887    i.HAL_GPIO_TogglePin  stm32f1xx_hal_gpio.o
-    0x080005e0   0x080005e0   0x0000000a   Code   RO          888    i.HAL_GPIO_WritePin  stm32f1xx_hal_gpio.o
+    0x080003b4   0x080003b4   0x00000024   Code   RO          580    i.HAL_Delay         stm32f1xx_hal.o
+    0x080003d8   0x080003d8   0x000001f8   Code   RO          890    i.HAL_GPIO_Init     stm32f1xx_hal_gpio.o
+    0x080005d0   0x080005d0   0x00000010   Code   RO          893    i.HAL_GPIO_TogglePin  stm32f1xx_hal_gpio.o
+    0x080005e0   0x080005e0   0x0000000a   Code   RO          894    i.HAL_GPIO_WritePin  stm32f1xx_hal_gpio.o
     0x080005ea   0x080005ea   0x00000002   PAD
-    0x080005ec   0x080005ec   0x0000000c   Code   RO          578    i.HAL_GetTick       stm32f1xx_hal.o
+    0x080005ec   0x080005ec   0x0000000c   Code   RO          584    i.HAL_GetTick       stm32f1xx_hal.o
     0x080005f8   0x080005f8   0x00000060   Code   RO          236    i.HAL_IncTick       jd_it.o
-    0x08000658   0x08000658   0x00000024   Code   RO          585    i.HAL_Init          stm32f1xx_hal.o
-    0x0800067c   0x0800067c   0x00000040   Code   RO          586    i.HAL_InitTick      stm32f1xx_hal.o
+    0x08000658   0x08000658   0x00000024   Code   RO          591    i.HAL_Init          stm32f1xx_hal.o
+    0x0800067c   0x0800067c   0x00000040   Code   RO          592    i.HAL_InitTick      stm32f1xx_hal.o
     0x080006bc   0x080006bc   0x0000003c   Code   RO          208    i.HAL_MspInit       stm32f1xx_hal_msp.o
-    0x080006f8   0x080006f8   0x00000040   Code   RO         1050    i.HAL_NVIC_SetPriority  stm32f1xx_hal_cortex.o
-    0x08000738   0x08000738   0x00000024   Code   RO         1051    i.HAL_NVIC_SetPriorityGrouping  stm32f1xx_hal_cortex.o
-    0x0800075c   0x0800075c   0x0000012c   Code   RO          742    i.HAL_RCC_ClockConfig  stm32f1xx_hal_rcc.o
-    0x08000888   0x08000888   0x0000004c   Code   RO          751    i.HAL_RCC_GetSysClockFreq  stm32f1xx_hal_rcc.o
-    0x080008d4   0x080008d4   0x00000320   Code   RO          754    i.HAL_RCC_OscConfig  stm32f1xx_hal_rcc.o
-    0x08000bf4   0x08000bf4   0x00000028   Code   RO         1055    i.HAL_SYSTICK_Config  stm32f1xx_hal_cortex.o
+    0x080006f8   0x080006f8   0x00000040   Code   RO         1056    i.HAL_NVIC_SetPriority  stm32f1xx_hal_cortex.o
+    0x08000738   0x08000738   0x00000024   Code   RO         1057    i.HAL_NVIC_SetPriorityGrouping  stm32f1xx_hal_cortex.o
+    0x0800075c   0x0800075c   0x0000012c   Code   RO          748    i.HAL_RCC_ClockConfig  stm32f1xx_hal_rcc.o
+    0x08000888   0x08000888   0x0000004c   Code   RO          757    i.HAL_RCC_GetSysClockFreq  stm32f1xx_hal_rcc.o
+    0x080008d4   0x080008d4   0x00000320   Code   RO          760    i.HAL_RCC_OscConfig  stm32f1xx_hal_rcc.o
+    0x08000bf4   0x08000bf4   0x00000028   Code   RO         1061    i.HAL_SYSTICK_Config  stm32f1xx_hal_cortex.o
     0x08000c1c   0x08000c1c   0x00000002   Code   RO          135    i.HardFault_Handler  stm32f1xx_it.o
     0x08000c1e   0x08000c1e   0x00000002   PAD
     0x08000c20   0x08000c20   0x00000070   Code   RO           14    i.MX_GPIO_Init      main.o
@@ -1067,52 +1071,54 @@ Memory Map of the image
     0x08000c98   0x08000c98   0x00000004   Code   RO          139    i.SVC_Handler       stm32f1xx_it.o
     0x08000c9c   0x08000c9c   0x00000004   Code   RO          140    i.SysTick_Handler   stm32f1xx_it.o
     0x08000ca0   0x08000ca0   0x0000005e   Code   RO           15    i.SystemClock_Config  main.o
-    0x08000cfe   0x08000cfe   0x00000002   Code   RO         1545    i.SystemInit        system_stm32f1xx.o
+    0x08000cfe   0x08000cfe   0x00000002   Code   RO         1551    i.SystemInit        system_stm32f1xx.o
     0x08000d00   0x08000d00   0x00000002   Code   RO          141    i.UsageFault_Handler  stm32f1xx_it.o
-    0x08000d02   0x08000d02   0x00000020   Code   RO         1057    i.__NVIC_SetPriority  stm32f1xx_hal_cortex.o
+    0x08000d02   0x08000d02   0x00000020   Code   RO         1063    i.__NVIC_SetPriority  stm32f1xx_hal_cortex.o
     0x08000d22   0x08000d22   0x0000000c   Code   RO          321    i.compare_priority  jd_task.o
     0x08000d2e   0x08000d2e   0x00000008   Code   RO          322    i.compare_timeout   jd_task.o
     0x08000d36   0x08000d36   0x00000002   PAD
     0x08000d38   0x08000d38   0x00000034   Code   RO          237    i.jd_PendSV_Handler  jd_it.o
     0x08000d6c   0x08000d6c   0x00000004   Code   RO          238    i.jd_SVC_handler    jd_it.o
-    0x08000d70   0x08000d70   0x00000070   Code   RO          412    i.jd_delay          jd_timer.o
-    0x08000de0   0x08000de0   0x00000048   Code   RO          323    i.jd_init           jd_task.o
-    0x08000e28   0x08000e28   0x0000005c   Code   RO          276    i.jd_main           jd_main.o
-    0x08000e84   0x08000e84   0x00000054   Code   RO          456    i.jd_malloc         jd_memory.o
-    0x08000ed8   0x08000ed8   0x00000020   Code   RO          457    i.jd_mem_init       jd_memory.o
-    0x08000ef8   0x08000ef8   0x00000034   Code   RO          324    i.jd_node_delete    jd_task.o
-    0x08000f2c   0x08000f2c   0x0000006c   Code   RO          325    i.jd_node_in_rd     jd_task.o
-    0x08000f98   0x08000f98   0x0000003e   Code   RO          326    i.jd_node_insert    jd_task.o
-    0x08000fd6   0x08000fd6   0x00000002   PAD
-    0x08000fd8   0x08000fd8   0x0000004c   Code   RO          327    i.jd_task_create    jd_task.o
-    0x08001024   0x08001024   0x00000060   Code   RO          329    i.jd_task_exit      jd_task.o
-    0x08001084   0x08001084   0x00000058   Code   RO          330    i.jd_task_pause     jd_task.o
-    0x080010dc   0x080010dc   0x00000020   Code   RO          331    i.jd_task_run       jd_task.o
-    0x080010fc   0x080010fc   0x00000060   Code   RO          413    i.jd_timer_start    jd_timer.o
-    0x0800115c   0x0800115c   0x00000012   Code   RO           16    i.main              main.o
-    0x0800116e   0x0800116e   0x00000002   PAD
-    0x08001170   0x08001170   0x0000000c   Code   RO          277    i.task1             jd_main.o
-    0x0800117c   0x0800117c   0x0000000c   Code   RO          278    i.task2             jd_main.o
-    0x08001188   0x08001188   0x00000008   Code   RO          279    i.task3             jd_main.o
-    0x08001190   0x08001190   0x00000012   Data   RO          755    .constdata          stm32f1xx_hal_rcc.o
-    0x080011a2   0x080011a2   0x00000010   Data   RO         1546    .constdata          system_stm32f1xx.o
-    0x080011b2   0x080011b2   0x00000002   PAD
-    0x080011b4   0x080011b4   0x00000020   Data   RO         1742    Region$$Table       anon$$obj.o
+    0x08000d70   0x08000d70   0x00000068   Code   RO          418    i.jd_delay          jd_timer.o
+    0x08000dd8   0x08000dd8   0x00000054   Code   RO          461    i.jd_free           jd_memory.o
+    0x08000e2c   0x08000e2c   0x00000040   Code   RO          323    i.jd_init           jd_task.o
+    0x08000e6c   0x08000e6c   0x0000005c   Code   RO          276    i.jd_main           jd_main.o
+    0x08000ec8   0x08000ec8   0x0000004c   Code   RO          462    i.jd_malloc         jd_memory.o
+    0x08000f14   0x08000f14   0x00000020   Code   RO          463    i.jd_mem_init       jd_memory.o
+    0x08000f34   0x08000f34   0x00000034   Code   RO          324    i.jd_node_delete    jd_task.o
+    0x08000f68   0x08000f68   0x00000068   Code   RO          325    i.jd_node_in_rd     jd_task.o
+    0x08000fd0   0x08000fd0   0x0000003e   Code   RO          326    i.jd_node_insert    jd_task.o
+    0x0800100e   0x0800100e   0x00000002   PAD
+    0x08001010   0x08001010   0x0000004c   Code   RO          328    i.jd_task_create    jd_task.o
+    0x0800105c   0x0800105c   0x00000028   Code   RO          329    i.jd_task_delete    jd_task.o
+    0x08001084   0x08001084   0x00000070   Code   RO          330    i.jd_task_exit      jd_task.o
+    0x080010f4   0x080010f4   0x00000050   Code   RO          331    i.jd_task_pause     jd_task.o
+    0x08001144   0x08001144   0x00000020   Code   RO          332    i.jd_task_run       jd_task.o
+    0x08001164   0x08001164   0x00000060   Code   RO          419    i.jd_timer_start    jd_timer.o
+    0x080011c4   0x080011c4   0x00000012   Code   RO           16    i.main              main.o
+    0x080011d6   0x080011d6   0x00000002   PAD
+    0x080011d8   0x080011d8   0x0000000c   Code   RO          277    i.task1             jd_main.o
+    0x080011e4   0x080011e4   0x0000000c   Code   RO          278    i.task2             jd_main.o
+    0x080011f0   0x080011f0   0x00000008   Code   RO          279    i.task3             jd_main.o
+    0x080011f8   0x080011f8   0x00000012   Data   RO          761    .constdata          stm32f1xx_hal_rcc.o
+    0x0800120a   0x0800120a   0x00000010   Data   RO         1552    .constdata          system_stm32f1xx.o
+    0x0800121a   0x0800121a   0x00000002   PAD
+    0x0800121c   0x0800121c   0x00000020   Data   RO         1748    Region$$Table       anon$$obj.o
 
 
-    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x080011d4, Size: 0x000034a8, Max: 0x0000c000, ABSOLUTE)
+    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x0800123c, Size: 0x000034a8, Max: 0x0000c000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x080011d4   0x0000000c   Data   RW          280    .data               jd_main.o
-    0x2000000c   0x080011e0   0x00000020   Data   RW          332    .data               jd_task.o
-    0x2000002c   0x08001200   0x00000004   Data   RW          415    .data               jd_timer.o
-    0x20000030   0x08001204   0x00000004   Data   RW          459    .data               jd_memory.o
-    0x20000034   0x08001208   0x0000000c   Data   RW          592    .data               stm32f1xx_hal.o
-    0x20000040   0x08001214   0x00000004   Data   RW         1548    .data               system_stm32f1xx.o
-    0x20000044        -       0x00002000   Zero   RW          458    .bss                jd_memory.o
-    0x20002044        -       0x00000060   Zero   RW         1616    .bss                c_w.l(libspace.o)
-    0x200020a4   0x08001218   0x00000004   PAD
+    0x20000000   0x0800123c   0x0000000c   Data   RW          280    .data               jd_main.o
+    0x2000000c   0x08001248   0x00000020   Data   RW          333    .data               jd_task.o
+    0x2000002c   0x08001268   0x00000004   Data   RW          421    .data               jd_timer.o
+    0x20000030   0x0800126c   0x00000004   Data   RW          465    .data               jd_memory.o
+    0x20000034   0x08001270   0x0000000c   Data   RW          598    .data               stm32f1xx_hal.o
+    0x20000040   0x0800127c   0x00000004   Data   RW         1554    .data               system_stm32f1xx.o
+    0x20000044        -       0x00002000   Zero   RW          464    .bss                jd_memory.o
+    0x20002044        -       0x00000060   Zero   RW         1622    .bss                c_w.l(libspace.o)
+    0x200020a4   0x08001280   0x00000004   PAD
     0x200020a8        -       0x00001000   Zero   RW            2    HEAP                startup_stm32f103xe.o
     0x200030a8        -       0x00000400   Zero   RW            1    STACK               startup_stm32f103xe.o
 
@@ -1125,11 +1131,11 @@ Image component sizes
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
        216         28          0          0          0        820   jd_cortex-m3.o
-       152         34          0          0          0       3117   jd_it.o
-       124         20          0         12          0       1877   jd_main.o
-       116         12          0          4       8192       1632   jd_memory.o
-       606         40          0         32          0       8316   jd_task.o
-       208         44          0          4          0       3412   jd_timer.o
+       152         36          0          0          0       3213   jd_it.o
+       124         20          0         12          0       1785   jd_main.o
+       192         14          0          4       8192       2274   jd_memory.o
+       642         46          0         32          0       8985   jd_task.o
+       200         40          0          4          0       3512   jd_timer.o
        224         10          0          0          0     441896   main.o
         68         28        304          0       5120        804   startup_stm32f103xe.o
        148         24          0         12          0       5879   stm32f1xx_hal.o
@@ -1141,7 +1147,7 @@ Image component sizes
          2          0         16          4          0       1047   system_stm32f1xx.o
 
     ----------------------------------------------------------------------
-      3838        364        372         68      13312     508797   Object Totals
+      3942        370        372         68      13312     510212   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         12          0          2          0          0          0   (incl. Padding)
 
@@ -1191,15 +1197,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      4192        380        372         68      13412     506909   Grand Totals
-      4192        380        372         68      13412     506909   ELF Image Totals
-      4192        380        372         68          0          0   ROM Totals
+      4296        386        372         68      13412     508220   Grand Totals
+      4296        386        372         68      13412     508220   ELF Image Totals
+      4296        386        372         68          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 4564 (   4.46kB)
+    Total RO  Size (Code + RO Data)                 4668 (   4.56kB)
     Total RW  Size (RW Data + ZI Data)             13480 (  13.16kB)
-    Total ROM Size (Code + RO Data + RW Data)       4632 (   4.52kB)
+    Total ROM Size (Code + RO Data + RW Data)       4736 (   4.63kB)
 
 ==============================================================================
 

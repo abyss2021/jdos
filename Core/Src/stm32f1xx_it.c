@@ -144,7 +144,7 @@ void UsageFault_Handler(void)
 void SVC_Handler(void)
 {
   /* USER CODE BEGIN SVCall_IRQn 0 */
-	
+	extern void jd_SVC_handler(void);
 	jd_SVC_handler();
 
   /* USER CODE END SVCall_IRQn 0 */
@@ -172,6 +172,7 @@ void DebugMon_Handler(void)
  void PendSV_Handler(void)
  {
    /* USER CODE BEGIN PendSV_IRQn 0 */
+	 extern void jd_PendSV_Handler(void);
 	 jd_PendSV_Handler();
    /* USER CODE END PendSV_IRQn 0 */
    /* USER CODE BEGIN PendSV_IRQn 1 */

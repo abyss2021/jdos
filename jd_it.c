@@ -8,7 +8,7 @@ void HAL_IncTick(void)
 	jd_time++; // jd_lck++
 	// 判断延时表头是否到达时间，若没有到达时间，则切换，若到达时间则将任务加入到就绪任务,再切换任务
 	jd_task_t *jd_task;
-	jd_task = jd_task_list_delaying->addr; // 获取任务数据
+	jd_task = (jd_task_t *)jd_task_list_delaying; // 获取任务数据
 	
 	while (jd_task->timeout == jd_time)
 	{
@@ -23,7 +23,7 @@ void HAL_IncTick(void)
 		
 		if(jd_task_list_delaying == JD_NULL)
 			break;
-		jd_task = jd_task_list_delaying->addr;												  // 获取任务数据
+		jd_task = (jd_task_t *)jd_task_list_delaying;												  // 获取任务数据
 	}
 	
 	jd_asm_pendsv_putup();
@@ -36,7 +36,7 @@ void HAL_IncTick(void)
 	jd_task_t *jd_task;
 	
 	// 获取数据域
-	jd_task = jd_task_list_readying->addr; // 获取任务数据
+	jd_task = (jd_task_t *)jd_task_list_readying; // 获取任务数据
 	jd_task_runing->status = JD_READY;
 	// 任务暂停或延时状态，或者当前任务优先级低，当前任务放弃CPU使用权
 	jd_task->status = JD_RUNNING;					   // 即将运行的任务改为正在运行状态

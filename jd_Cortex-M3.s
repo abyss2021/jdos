@@ -78,11 +78,11 @@ jd_asm_svc_handler			PROC	;SVC处理
 								LDRB R1, [R1, #-2] 
 								
 								;svc_0服务，任务自动切换下一个任务
-								CMP R1, 0
+								CMP R1, #0
 								BEQ svc_handler_0
 								
 								;svc_1服务，任务中没有while循环，执行完成后退出，需要系统对任务进行操作
-								CMP R1, 1
+								CMP R1, #1
 								BEQ svc_handler_1
 								BX LR
 svc_handler_0

@@ -126,7 +126,7 @@ ARM Macro Assembler    Page 2
    78 00000048 F811 1C02       LDRB             R1, [R1, #-2]
    79 0000004C         
    80 0000004C         ;svc_0服务，任务自动切换下一个任务
-   81 0000004C 2900            CMP              R1, 0
+   81 0000004C 2900            CMP              R1, #0
    82 0000004E D002            BEQ              svc_handler_0
 
 
@@ -137,7 +137,7 @@ ARM Macro Assembler    Page 3
    83 00000050         
    84 00000050         ;svc_1服务，任务中没有while循环，执行完成
                        后退出，需要系统对任务进行操作
-   85 00000050 2901            CMP              R1, 1
+   85 00000050 2901            CMP              R1, #1
    86 00000052 D002            BEQ              svc_handler_1
    87 00000054 4770            BX               LR
    88 00000056         svc_handler_0

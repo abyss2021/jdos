@@ -5,9 +5,6 @@ jd_task_t *test_task1, *test_task2, *test_task3;
 void task1()
 {
 	// printf("1 hello\r\n");
-		int a=1;
-	int b =2;
-	int c;
 	// while (1)
 	{
 		//jd_delay(100);
@@ -17,9 +14,6 @@ void task1()
 void task2()
 {
 	// printf("2 hello\r\n");
-	int a=1;
-	int b =2;
-	int c;
 	while (1)
 	{
 
@@ -35,9 +29,6 @@ void task2()
 void task3()
 {
 	// printf("3 hello\r\n");
-		int a=1;
-	int b =2;
-	int c;
 	while (1)
 	{
 		jd_delay(100);
@@ -53,7 +44,7 @@ __weak void jd_main(void)
 	// printf("jd hello\r\n");
 	test_task1 = jd_task_create(task1, 512, 3);
 	if (test_task1 != JD_NULL)
-		jd_timer_start(test_task1,200,JD_TIMER_LOOP);
+		jd_timer_start(test_task1,200,JD_TIMER_NOLOOP);
 
 	test_task2 = jd_task_create(task2, 512, 1);
 	if (test_task1 != JD_NULL)

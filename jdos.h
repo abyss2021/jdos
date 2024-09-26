@@ -46,6 +46,14 @@ typedef enum jd_timer_status
 } jd_timer_status_t;
 
 
+/*定时任务使用状态*/
+typedef enum jd_task_auto_delate
+{
+    JD_TASK_NODELATE = 0,  //不销毁任务，不回收内存，下次可不用从新create
+    JD_TASK_DELATE, //系统销毁任务，回收内存
+}jd_task_auto_delate_t;
+
+
 /*定义所有寄存器，根据入栈规则有先后顺序*/
 typedef struct all_register
 {
@@ -74,14 +82,13 @@ typedef struct all_register
 typedef struct jd_node_list
 {
     struct jd_node_list *previous; // 上一个节点
-    void *addr;                    // 当前节点地址
     struct jd_node_list *next;     // 下一个节点
 } jd_node_list_t;
 
 /*定义任务控制块*/
 typedef struct jd_task
 {
-    jd_node_list_t *node;          // 链表节点
+    jd_node_list_t node;          // 链表节点
     void (*entry)();               // 指向任务入口函数
     jd_task_status_t status;       // 当前任务状态
     jd_uint32_t stack_size;        // 堆栈大小
@@ -91,6 +98,7 @@ typedef struct jd_task
     jd_int8_t priority;            // 优先级-128 - 127,越低优先级越高,一般从0开始用
     jd_timer_status_t timer_loop;           //是否为定时任务，如果是定时任务是否为循环模式
     jd_uint32_t timer_loop_timeout;   //任务处于循环状态，定时时间
+    jd_task_auto_delate_t auto_delate; //任务执行完成后是否需要系统销毁任务
 } jd_task_t;
 
 /*内存使用状态*/
@@ -126,6 +134,9 @@ extern void jd_asm_pendsv_handler(void);                     // PendSV切换上�
 extern void jd_asm_systick_init(void);                       // systick初始化
 extern void jd_asm_cps_disable(void);                        // 除能 NMI 和硬 fault 之外的所有异常
 extern void jd_asm_cps_enable(void);                         // 使能中断
+extern void jd_asm_svc_handler(void); //pendsv异常处理
+extern void jd_asm_svc_task_switch(void); //任务上下文切换
+extern void jd_asm_svc_task_exit(void); //任务推出
 
 /******************jd_timer************************/
 void jd_delay(jd_uint32_t ms);               // jdos延时，让出CPU使用权
@@ -135,6 +146,7 @@ jd_int32_t jd_timer_stop(jd_task_t *task); // 定时器任务删除
 /******************jd_task************************/
 jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_t priority); // 创建任务
 jd_int32_t jd_task_delete(jd_task_t *jd_task);                                               // 删除任务
+jd_int32_t jd_task_auto_delate(jd_task_t *jd_task); //设置任务运行完成后自动回收内存，删除任务
 jd_int32_t jd_task_run(jd_task_t *jd_task);                                                  // 将任务加入就绪链表
 jd_int32_t jd_task_pause(jd_task_t *jd_task);                                                // 任务暂停
 jd_int32_t jd_init(void);                                                                    // jd初始化
@@ -144,10 +156,10 @@ jd_int32_t jd_node_insert(jd_node_list_t *node_previous, jd_node_list_t *node, j
 jd_node_list_t *jd_node_delete(jd_node_list_t *list, jd_node_list_t *node);                                // 删除节点
 jd_int64_t compare_priority(jd_task_t *task1, jd_task_t *task2);                                           // 比较函数，用于jd_node_in_rd中使用
 jd_node_list_t *jd_node_in_rd(jd_node_list_t *list, jd_node_list_t *node);                                 // 将节点插入就绪或者延时链表
-void jd_task_exit(); //任务执行完成后由系统调用
+void jd_task_exit(void); //任务执行完成后由系统调用
 
 /******************jd_memory************************/
-jd_uint32_t jd_mem_init();//mem初始化
+jd_uint32_t jd_mem_init(void);//mem初始化
 void *jd_malloc(jd_uint32_t mem_size); // malloc
 void jd_free(void *ptr);               // free
 #endif

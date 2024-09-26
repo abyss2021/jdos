@@ -143,11 +143,11 @@ jd_node_list_t *jd_node_in_rd(jd_node_list_t *list, jd_node_list_t *node)
 		// 临时节点，用于遍历链表
 		node_temp = list;
 		// 插入节点的任务数据
-		jd_task_in_temp = node->addr;
+		jd_task_in_temp = (jd_task_t *)node;
 		// 遍历链表
 		while (1)
 		{
-			jd_task_temp = node_temp->addr; // 获取任务数据
+			jd_task_temp = (jd_task_t *)node_temp; // 获取任务数据
 
 			// 如果数字越小，优先级越高，或者延时时间越短
 			if (compare(jd_task_in_temp, jd_task_temp) <= 0)
@@ -188,9 +188,17 @@ void jd_task_exit()
 	
 	jd_task_entry = (jd_uint32_t)jd_task->entry; //传递程序入口值
 	jd_task_exit_entry = (jd_uint32_t)jd_task_exit; //传递退出时程序销毁入口
-	//暂停任务，将任务从链表中删除
-	jd_task_pause(jd_task);
 
+	if(jd_task->auto_delate == JD_TASK_NODELATE)
+	{
+		//暂停任务
+		jd_task_pause(jd_task);
+	}
+	else
+	{
+		//删除任务
+		jd_task_delete(jd_task);
+	}
 
 	jd_task->stack_sp = (jd_uint32_t)(jd_task->stack_origin_addr) + jd_task->stack_size - sizeof(struct all_register) - 4; // 腾出寄存器的空间
 	all_register_t *stack_register = (struct all_register *)jd_task->stack_sp;									  // 将指针转换成寄存器指针
@@ -204,12 +212,12 @@ void jd_task_exit()
 
 	if(jd_task->timer_loop == JD_TIMER_LOOP)
 		// 将节点加入延时链表
-		jd_task_list_delaying = jd_node_in_rd(jd_task_list_delaying, jd_task_runing->node);
+		jd_task_list_delaying = jd_node_in_rd(jd_task_list_delaying, &jd_task_runing->node);
 
 	
 	jd_task_stack_sp = &jd_task->stack_sp;
 	// 获取数据域
-	jd_task = jd_task_list_readying->addr; // 获取任务数据
+	jd_task = (jd_task_t *)jd_task_list_readying; // 获取任务数据
 	// 任务暂停或延时状态，或者当前任务优先级低，当前任务放弃CPU使用权
 	jd_task->status = JD_RUNNING;					   // 即将运行的任务改为正在运行状态
 	jd_task_runing = jd_task;						   // 更改当前为运行的任务
@@ -223,6 +231,7 @@ void jd_task_exit()
 /*创建任务
  * task_entry:函数入口
  * stack_size：任务栈大小
+ * priority:任务优先级-128-127，数字越小，优先级越高
  * return：返回当前任务节点指针
  */
 jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_t priority)
@@ -233,9 +242,8 @@ jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_
 	if (jd_new_task == NULL)
 		return JD_NULL; // 判断分配空间是否成功
 
-	jd_new_task->node = (jd_node_list_t *)(((jd_uint8_t *)jd_new_task) + sizeof(jd_task_t)); // 申请节点空间
-	jd_new_task->node->next = JD_NULL;									  // 初始化节点指针
-	jd_new_task->node->previous = JD_NULL;								  // 初始化节点指针
+	jd_new_task->node.next = JD_NULL;									  // 初始化节点指针
+	jd_new_task->node.previous = JD_NULL;								  // 初始化节点指针
 	jd_new_task->stack_origin_addr = (jd_uint32_t)jd_new_task; // 记录栈底指针
 
 	jd_new_task->timeout = 0;			  // 没有延时时间
@@ -252,9 +260,10 @@ jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_
 	stack_register->xpsr = 0x01000000L; // 由于Armv7-M只支持执行Thumb指令，因此必须始终将其值保持为1，否则任务切换会异常
 
 	jd_new_task->priority = priority;	   // 设置优先级
-	jd_new_task->node->addr = jd_new_task; // 记录节点内存地址，方便通过节点找到任务数据域
+	//jd_new_task->node->addr = jd_new_task; // 记录节点内存地址，方便通过节点找到任务数据域
 
 	jd_new_task->timer_loop = JD_TIMER_NOTIMER; //不是定时任务
+	jd_new_task->auto_delate = JD_TASK_NODELATE; //	任务执行完成后不自动回收内存，任务不删除，下次可直接运行
 
 	return jd_new_task; // 返回当前任务节点
 }
@@ -277,6 +286,14 @@ jd_int32_t jd_task_delete(jd_task_t *jd_task)
 	return JD_OK;
 }
 
+/*设置任务执行完成后自动回收内存，任务销毁*/
+jd_int32_t jd_task_auto_delate(jd_task_t *jd_task)
+{
+	if (jd_task == JD_NULL)
+		return JD_ERR;
+	jd_task->auto_delate = JD_TASK_DELATE;
+	return JD_OK;
+}
 /*将任务加入就绪链表
  * jd_task:任务节点指针
  * return：返回JD_OK或JD_ERR
@@ -288,7 +305,7 @@ jd_int32_t jd_task_run(jd_task_t *jd_task)
 	jd_task->status = JD_READY; // 将任务更改为就绪状态
 
 	// 加入就绪链表
-	jd_task_list_readying = jd_node_in_rd(jd_task_list_readying, jd_task->node);
+	jd_task_list_readying = jd_node_in_rd(jd_task_list_readying, &jd_task->node);
 
 	// 插入节点
 	return JD_OK;
@@ -312,28 +329,28 @@ jd_int32_t jd_task_pause(jd_task_t *jd_task)
 		return JD_OK;
 
 	// 在就绪链表表头
-	if (jd_task_list_readying == jd_task->node)
+	if (jd_task_list_readying == &jd_task->node)
 	{
 		// 移动表头，同时将表头中指向的上一个节点信息删除
-		jd_task_list_readying = jd_task->node->next;
+		jd_task_list_readying = jd_task->node.next;
 		jd_task_list_readying->previous = JD_NULL;
 	}
 	// 在延时链表表头
-	else if (jd_task_list_delaying == jd_task->node)
+	else if (jd_task_list_delaying == &jd_task->node)
 	{
 		// 移动表头，同时将表头中指向的上一个节点信息删除
-		jd_task_list_delaying = jd_task->node->next;
+		jd_task_list_delaying = jd_task->node.next;
 		jd_task_list_delaying->previous = JD_NULL;
 	}
 	else
 	{
 		// 直接删除节点
-		jd_node_insert(jd_task->node->previous, JD_NULL, jd_task->node->next);
+		jd_node_insert(jd_task->node.previous, JD_NULL, jd_task->node.next);
 	}
 	jd_task->status = JD_PAUSE; // 将任务更改为暂停状态状态
 	// 清除任务节点信息
-	jd_task->node->next = JD_NULL;
-	jd_task->node->previous = JD_NULL;
+	jd_task->node.next = JD_NULL;
+	jd_task->node.previous = JD_NULL;
 	return JD_OK;
 }
 
@@ -359,9 +376,9 @@ jd_int32_t jd_init(void)
 
 	jd_task_frist->status = JD_READY; // 任务就绪
 
-	jd_task_frist->node->addr = jd_task_frist; // 记录节点内存地址，方便通过节点找到任务数据域
+	//jd_task_frist->node->addr = jd_task_frist; // 记录节点内存地址，方便通过节点找到任务数据域
 
-	jd_task_list_readying = jd_task_frist->node; // 将任务挂在就绪链表上
+	jd_task_list_readying = &jd_task_frist->node; // 将任务挂在就绪链表上
 	jd_task_runing = jd_task_frist;				 // 保存当前任务为正在运行任务
 	// jd_asm_systick_init(); //启动systick,hal库已自动使能systick
 

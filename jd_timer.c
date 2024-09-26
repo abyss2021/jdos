@@ -16,16 +16,16 @@ void jd_delay(jd_uint32_t ms)
 	jd_task_runing->status = JD_DELAY;
 	jd_task_runing->timeout = jd_time + ms; // 将延时时间写入节点
 	// 删除就绪链表中的节点
-	jd_task_list_readying = jd_node_delete(jd_task_list_readying, jd_task_runing->node);
+	jd_task_list_readying = jd_node_delete(jd_task_list_readying, &jd_task_runing->node);
 
 	// 将节点加入延时链表
-	jd_task_list_delaying = jd_node_in_rd(jd_task_list_delaying, jd_task_runing->node);
+	jd_task_list_delaying = jd_node_in_rd(jd_task_list_delaying, &jd_task_runing->node);
 
 	// 切换线程，让出CPU，等延时后调度，用svc指令
 	jd_task_t *jd_task;
 	
 	// 获取数据域
-	jd_task = jd_task_list_readying->addr; // 获取任务数据
+	jd_task = (jd_task_t *)jd_task_list_readying; // 获取任务数据
 
 	// 任务暂停或延时状态，或者当前任务优先级低，当前任务放弃CPU使用权
 	jd_task->status = JD_RUNNING;					   // 即将运行的任务改为正在运行状态
@@ -75,11 +75,11 @@ jd_int32_t jd_timer_start(jd_task_t *jd_task,jd_uint32_t ms,jd_timer_status_t ti
 	if(jd_task->status == JD_RUNNING||jd_task->status == JD_READY)
 	{
 		// 删除就绪链表中的节点
-		jd_task_list_readying = jd_node_delete(jd_task_list_readying, jd_task->node);
+		jd_task_list_readying = jd_node_delete(jd_task_list_readying, &jd_task->node);
 	}
 
 	// 将节点加入延时链表
-	jd_task_list_delaying = jd_node_in_rd(jd_task_list_delaying, jd_task->node);
+	jd_task_list_delaying = jd_node_in_rd(jd_task_list_delaying, &jd_task->node);
 
 	return JD_OK;
 }
@@ -99,6 +99,7 @@ jd_int32_t jd_timer_stop(jd_task_t *jd_task)
 	
 	//关闭定时器任务	
 	jd_task->timer_loop = JD_TIMER_NOTIMER;
+	return JD_OK;
 }
 
 

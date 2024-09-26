@@ -7,13 +7,15 @@ jd_uint8_t jd_mem_space[MEM_MAX_SIZE];
 jd_uint32_t jd_mem_init()
 {
     jd_mem_use = (jd_mem_t *)jd_mem_space; // 传入内存块地址
-    jd_mem_use->node.addr = jd_mem_use;    // 保存内存块地址
+    //jd_mem_use->node.addr = jd_mem_use;    // 保存内存块地址
 
     jd_mem_use->node.next = JD_NULL;
     jd_mem_use->node.previous = JD_NULL;
 
     jd_mem_use->used = JD_MEM_FREE;      // 初始为空闲内存
     jd_mem_use->mem_size = MEM_MAX_SIZE; // 初始内存块大小
+	
+	return JD_OK;
 }
 
 
@@ -32,7 +34,7 @@ void *jd_malloc(jd_uint32_t mem_size)
         {
             jd_mem_new_free = (jd_mem_t *)(((jd_uint8_t *)jd_mem_temp) + mem_size + sizeof(jd_mem_t));                     // 将剩余的内存添加上内存块信息
             jd_mem_new_free->mem_size = jd_mem_temp->mem_size - mem_size - sizeof(jd_mem_t); // 剩余内存大小
-            jd_mem_new_free->node.addr = jd_mem_new_free;                                    // 保存当前内存的起点地址
+            //jd_mem_new_free->node.addr = jd_mem_new_free;                                    // 保存当前内存的起点地址
             jd_mem_new_free->used = JD_MEM_FREE;                                             // 标记为空闲内存
 
             jd_mem_temp->used = JD_MEM_USED;                     // 标记为使用状态
@@ -42,7 +44,7 @@ void *jd_malloc(jd_uint32_t mem_size)
             if (jd_mem_temp->node.next != JD_NULL)
             {
                 jd_mem_t *jd_mem_new_next;
-                jd_mem_new_next = jd_mem_temp->node.next->addr;
+                jd_mem_new_next = (jd_mem_t *)jd_mem_temp->node.next;
 
                 jd_node_insert(&jd_mem_temp->node, &jd_mem_new_free->node, &jd_mem_new_next->node); // 插入内存节点
             }
@@ -59,7 +61,7 @@ void *jd_malloc(jd_uint32_t mem_size)
         {
             return JD_NULL;
         }
-        jd_mem_temp = jd_mem_temp->node.next->addr;
+        jd_mem_temp = (jd_mem_t *)jd_mem_temp->node.next;
     }
 				
     return (void *)(((jd_uint8_t *)jd_mem_temp) + sizeof(jd_mem_t)); // 返回分配的地址
@@ -77,7 +79,7 @@ void jd_free(void *ptr)
     // 下一个控制块存在
     if (jd_mem_old->node.next != JD_NULL)
     {
-        jd_mem_next = (jd_mem_t *)jd_mem_old->node.next->addr;
+        jd_mem_next = (jd_mem_t *)jd_mem_old->node.next;
         // 判断下一个内存块是free
         if (jd_mem_next->used == JD_MEM_FREE)
         {
@@ -87,7 +89,7 @@ void jd_free(void *ptr)
             // 判断下一个控制块 的下一个存在
             if (jd_mem_next->node.next != JD_NULL)
             {
-                jd_mem_next_next = jd_mem_next->node.next->addr;
+                jd_mem_next_next = (jd_mem_t *)jd_mem_next->node.next;
                 jd_node_insert(&jd_mem_old->node, JD_NULL, &jd_mem_next_next->node);
             }
             // 不存在
@@ -102,7 +104,7 @@ void jd_free(void *ptr)
     if (jd_mem_old->node.previous != JD_NULL)
     {
         // 获得上一个控制块的信息
-        jd_mem_previous = (jd_mem_t *)jd_mem_old->node.previous->addr;
+        jd_mem_previous = (jd_mem_t *)jd_mem_old->node.previous;
 
         // 判断上一个内存块是free
         if (jd_mem_previous->used == JD_MEM_FREE)
@@ -111,7 +113,7 @@ void jd_free(void *ptr)
             // 判断下一块内存 存在
             if (jd_mem_old->node.next != JD_NULL)
             {
-                jd_mem_next = (jd_mem_t *)jd_mem_old->node.next->addr;
+                jd_mem_next = (jd_mem_t *)jd_mem_old->node.next;
                 jd_node_insert(&jd_mem_previous->node, JD_NULL, &jd_mem_next->node);
             }
             // 下一块内存不存在
@@ -121,5 +123,6 @@ void jd_free(void *ptr)
             }
         }
     }
+    ptr = JD_NULL;
 }
 
