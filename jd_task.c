@@ -2,10 +2,10 @@
 
 jd_node_list_t *jd_task_list_readying = NULL; // 创建就绪任务链表
 jd_node_list_t *jd_task_list_delaying = NULL; // 创建延时任务链表
-jd_task_t *jd_task_runing = NULL;             // 创建当前任务指针
-void *jd_task_stack_sp = NULL;                // 创建当前任务堆栈指针的地址
-void *jd_task_next_stack_sp = NULL;           // 创建下一个任务堆栈指针的地址
-jd_task_t *jd_task_frist = NULL;              // 创建一个系统空闲任务
+jd_task_t *jd_task_runing = NULL;			  // 创建当前任务指针
+void *jd_task_stack_sp = NULL;				  // 创建当前任务堆栈指针的地址
+void *jd_task_next_stack_sp = NULL;			  // 创建下一个任务堆栈指针的地址
+jd_task_t *jd_task_frist = NULL;			  // 创建一个系统空闲任务
 
 /*新节点插入链表中
  * node_previous:想要插入的链表节点处的上一个节点
@@ -178,43 +178,41 @@ jd_node_list_t *jd_node_in_rd(jd_node_list_t *list, jd_node_list_t *node)
 	return list;
 }
 
-
-jd_uint32_t jd_task_entry; //任务入口
-jd_uint32_t jd_task_exit_entry; //任务exit入口
+jd_uint32_t jd_task_entry;		// 任务入口
+jd_uint32_t jd_task_exit_entry; // 任务exit入口
 /*任务退出函数,用户任务处理完后自动处理,系统自动调用*/
 void jd_task_exit()
 {
 	jd_task_t *jd_task = jd_task_runing;
-	
-	jd_task_entry = (jd_uint32_t)jd_task->entry; //传递程序入口值
-	jd_task_exit_entry = (jd_uint32_t)jd_task_exit; //传递退出时程序销毁入口
 
-	if(jd_task->auto_delate == JD_TASK_NODELATE)
+	jd_task_entry = (jd_uint32_t)jd_task->entry;	// 传递程序入口值
+	jd_task_exit_entry = (jd_uint32_t)jd_task_exit; // 传递退出时程序销毁入口
+
+	if (jd_task->auto_delate == JD_TASK_NODELATE)
 	{
-		//暂停任务
+		// 暂停任务
 		jd_task_pause(jd_task);
 	}
 	else
 	{
-		//删除任务
+		// 删除任务
 		jd_task_delete(jd_task);
 	}
 
 	jd_task->stack_sp = (jd_uint32_t)(jd_task->stack_origin_addr) + jd_task->stack_size - sizeof(struct all_register) - 4; // 腾出寄存器的空间
-	all_register_t *stack_register = (struct all_register *)jd_task->stack_sp;									  // 将指针转换成寄存器指针
+	all_register_t *stack_register = (struct all_register *)jd_task->stack_sp;											   // 将指针转换成寄存器指针
 
 	// 设置必要数据
 	stack_register->lr = (jd_uint32_t)jd_task_exit;
 	stack_register->pc = (jd_uint32_t)jd_task->entry;
-	stack_register->xpsr = 0x01000000L; 
+	stack_register->xpsr = 0x01000000L;
 
 	jd_task->status = JD_DELAY;
 
-	if(jd_task->timer_loop == JD_TIMER_LOOP)
+	if (jd_task->timer_loop == JD_TIMER_LOOP)
 		// 将节点加入延时链表
 		jd_task_list_delaying = jd_node_in_rd(jd_task_list_delaying, &jd_task_runing->node);
 
-	
 	jd_task_stack_sp = &jd_task->stack_sp;
 	// 获取数据域
 	jd_task = (jd_task_t *)jd_task_list_readying; // 获取任务数据
@@ -222,8 +220,8 @@ void jd_task_exit()
 	jd_task->status = JD_RUNNING;					   // 即将运行的任务改为正在运行状态
 	jd_task_runing = jd_task;						   // 更改当前为运行的任务
 	jd_task_next_stack_sp = &jd_task_runing->stack_sp; // 更新下一个任务全局栈指针变量
-	
-	//这里不是悬挂PendSV异常，所以直接跳转会出发异常，寄存器数据不会自动出栈，应该使用SVC呼叫异常	
+
+	// 这里不是悬挂PendSV异常，所以直接跳转会出发异常，寄存器数据不会自动出栈，应该使用SVC呼叫异常
 
 	jd_asm_svc_task_exit();
 }
@@ -242,8 +240,8 @@ jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_
 	if (jd_new_task == NULL)
 		return JD_NULL; // 判断分配空间是否成功
 
-	jd_new_task->node.next = JD_NULL;									  // 初始化节点指针
-	jd_new_task->node.previous = JD_NULL;								  // 初始化节点指针
+	jd_new_task->node.next = JD_NULL;						   // 初始化节点指针
+	jd_new_task->node.previous = JD_NULL;					   // 初始化节点指针
 	jd_new_task->stack_origin_addr = (jd_uint32_t)jd_new_task; // 记录栈底指针
 
 	jd_new_task->timeout = 0;			  // 没有延时时间
@@ -252,17 +250,17 @@ jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_
 	jd_new_task->stack_size = stack_size; // 记录当前任务堆栈大小
 
 	jd_new_task->stack_sp = (jd_uint32_t)(jd_new_task->stack_origin_addr) + jd_new_task->stack_size - sizeof(struct all_register) - 4; // 腾出寄存器的空间
-	all_register_t *stack_register = (struct all_register *)jd_new_task->stack_sp;									  // 将指针转换成寄存器指针
+	all_register_t *stack_register = (struct all_register *)jd_new_task->stack_sp;													   // 将指针转换成寄存器指针
 
 	// 将任务运行数据搬移到内存中
 	stack_register->lr = (jd_uint32_t)jd_task_exit;
 	stack_register->pc = (jd_uint32_t)jd_new_task->entry;
 	stack_register->xpsr = 0x01000000L; // 由于Armv7-M只支持执行Thumb指令，因此必须始终将其值保持为1，否则任务切换会异常
 
-	jd_new_task->priority = priority;	   // 设置优先级
-	//jd_new_task->node->addr = jd_new_task; // 记录节点内存地址，方便通过节点找到任务数据域
+	jd_new_task->priority = priority; // 设置优先级
+	// jd_new_task->node->addr = jd_new_task; // 记录节点内存地址，方便通过节点找到任务数据域
 
-	jd_new_task->timer_loop = JD_TIMER_NOTIMER; //不是定时任务
+	jd_new_task->timer_loop = JD_TIMER_NOTIMER;	 // 不是定时任务
 	jd_new_task->auto_delate = JD_TASK_NODELATE; //	任务执行完成后不自动回收内存，任务不删除，下次可直接运行
 
 	return jd_new_task; // 返回当前任务节点
@@ -357,7 +355,7 @@ jd_int32_t jd_task_pause(jd_task_t *jd_task)
 /*jd初始化*/
 jd_int32_t jd_init(void)
 {
-	//初始化内存
+	// 初始化内存
 	jd_mem_init();
 	// 初始化链表
 	jd_task_list_readying = JD_NULL;
@@ -367,22 +365,21 @@ jd_int32_t jd_init(void)
 	jd_task_frist = jd_task_create(jd_main, JD_DEFAULT_STACK_SIZE, 127);
 	while (jd_task_frist == NULL)
 		; // 空闲任务不能创建则死循环
-	
-	
-	all_register_t *stack_register = (struct all_register *)jd_task_frist->stack_sp;									  // 将指针转换成寄存器指针
+
+	all_register_t *stack_register = (struct all_register *)jd_task_frist->stack_sp; // 将指针转换成寄存器指针
 
 	// jd_main任务没有退出的程序，故返回地址指向自己
 	stack_register->lr = (jd_uint32_t)jd_main;
 
 	jd_task_frist->status = JD_READY; // 任务就绪
 
-	//jd_task_frist->node->addr = jd_task_frist; // 记录节点内存地址，方便通过节点找到任务数据域
+	// jd_task_frist->node->addr = jd_task_frist; // 记录节点内存地址，方便通过节点找到任务数据域
 
 	jd_task_list_readying = &jd_task_frist->node; // 将任务挂在就绪链表上
-	jd_task_runing = jd_task_frist;				 // 保存当前任务为正在运行任务
+	jd_task_runing = jd_task_frist;				  // 保存当前任务为正在运行任务
 	// jd_asm_systick_init(); //启动systick,hal库已自动使能systick
 
-	//进入空闲任务
+	// 进入空闲任务
 	jd_asm_task_first_switch(&jd_task_frist->stack_sp, jd_main);
 	return JD_OK;
 }
