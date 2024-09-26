@@ -1,3 +1,12 @@
+/*
+ * @Author: 江小鉴 abyss_er@163.com
+ * @Date: 2024-09-11 11:09:06
+ * @LastEditors: 江小鉴 abyss_er@163.com
+ * @LastEditTime: 2024-09-26 13:09:46
+ * @FilePath: \jd_rtos\jdos.h
+ * @Description: jdos 头文件
+ */
+
 #ifndef __JDOS_H
 #define __JDOS_H
 
@@ -122,6 +131,8 @@ extern jd_task_t *jd_task_runing;             // 创建当前任务指针
 extern void *jd_task_stack_sp;                // 创建当前任务堆栈指针的地址
 extern void *jd_task_next_stack_sp;           // 创建下一个任务堆栈指针的地址
 extern jd_task_t *jd_task_frist;              // 创建一个系统空闲任务
+extern jd_uint32_t jd_task_entry;             // 任务入口
+extern jd_uint32_t jd_task_exit_entry;        // 任务exit入口
 extern jd_time_t jd_time;                     // 系统时钟，单位ms
 
 /******************汇编函数************************/

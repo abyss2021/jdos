@@ -1,6 +1,18 @@
+/*
+ * @Author: 江小鉴 abyss_er@163.com
+ * @Date: 2024-09-18 16:12:28
+ * @LastEditors: 江小鉴 abyss_er@163.com
+ * @LastEditTime: 2024-09-26 12:37:13
+ * @FilePath: \jd_rtos\jd_it.c
+ * @Description: jdos异常管理
+ */
+
 #include "jdos.h"
 
-/*hal库已自动使能systick，以下为hal库systick异常回调函数*/
+/**
+ * @description: hal库已自动使能systick，以下为hal库systick异常回调函数
+ * @return {*}
+ */
 void HAL_IncTick(void)
 {
 	uwTick += uwTickFreq; // 系统自带不可删除,否则hal_delay等hal库函数不可用
@@ -29,7 +41,10 @@ void HAL_IncTick(void)
 	jd_asm_pendsv_putup();
 }
 
-/*PendSV处理函数*/
+/**
+ * @description: PendSV处理函数
+ * @return {*}
+ */
 void jd_PendSV_Handler(void)
 {
 	jd_task_t *jd_task;
@@ -46,7 +61,10 @@ void jd_PendSV_Handler(void)
 	jd_asm_pendsv_handler(); // 切换上下文
 }
 
-/*SVC处理函数*/
+/**
+ * @description: SVC处理函数
+ * @return {*}
+ */
 void jd_SVC_handler(void)
 {
 	jd_asm_svc_handler();

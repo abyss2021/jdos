@@ -1,3 +1,12 @@
+/*
+ * @Author: 江小鉴 abyss_er@163.com
+ * @Date: 2024-09-09 10:14:21
+ * @LastEditors: 江小鉴 abyss_er@163.com
+ * @LastEditTime: 2024-09-26 13:09:26
+ * @FilePath: \jd_rtos\jd_main.c
+ * @Description: jd main
+ */
+
 #include "jdos.h"
 
 jd_task_t *test_task1, *test_task2, *test_task3;
@@ -36,9 +45,10 @@ void task3()
 	};
 }
 
-// jd_uint8_t mem_set[4096];
-
-/*系统main,系统第一个任务，不可使用jd_task_delete删除，可添加其他任务初始化代码*/
+/**
+ * @description: 系统main,系统第一个任务，不可使用jd_task_delete删除，可添加其他任务初始化代码
+ * @return {*}
+ */
 __weak void jd_main(void)
 {
 	// printf("jd hello\r\n");

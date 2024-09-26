@@ -1,3 +1,10 @@
+; @Author: 江小鉴 abyss_er@163.com
+; @Date: 2024-09-18 14:56:45
+; @LastEditors: 江小鉴 abyss_er@163.com
+; @LastEditTime: 2024-09-26 13:10:46
+; @FilePath: \jd_rtos\jd_Cortex-M3.s
+; @Description: 汇编文件
+
 JD_ICRS				EQU 0XE000ED04	;中断控制及状态寄存器
 JD_PRI_14 			EQU 0XE000ED23	;PendSV的优先级设置寄存器
 JD_SYSTICK_CTRL 	EQU 0xE000E010	;SysTick控制及状态寄存器

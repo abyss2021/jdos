@@ -1,9 +1,21 @@
+/*
+ * @Author: 江小鉴 abyss_er@163.com
+ * @Date: 2024-09-23 09:36:38
+ * @LastEditors: 江小鉴 abyss_er@163.com
+ * @LastEditTime: 2024-09-26 12:34:39
+ * @FilePath: \jd_rtos\jd_memory.c
+ * @Description: 用于内存管理
+ */
+
 #include "jdos.h"
 
 jd_mem_t *jd_mem_use = JD_NULL;
 jd_uint8_t jd_mem_space[MEM_MAX_SIZE];
 
-/*mem初始化*/
+/**
+ * @description: 内存初始化
+ * @return {*}
+ */
 jd_uint32_t jd_mem_init()
 {
     jd_mem_use = (jd_mem_t *)jd_mem_space; // 传入内存块地址
@@ -18,9 +30,10 @@ jd_uint32_t jd_mem_init()
     return JD_OK;
 }
 
-/*分配内存空间
- * mem_size:需要分配的空间
- * return：成功则返回分配的地址，失败则返回JD_NULL
+/**
+ * @description: 分配内存空间
+ * @param {jd_uint32_t} mem_size 需要分配的空间
+ * @return {*}
  */
 void *jd_malloc(jd_uint32_t mem_size)
 {
@@ -66,8 +79,10 @@ void *jd_malloc(jd_uint32_t mem_size)
     return (void *)(((jd_uint8_t *)jd_mem_temp) + sizeof(jd_mem_t)); // 返回分配的地址
 }
 
-/*释放内存空间
- * ptr：传入申请的空间的地址
+/**
+ * @description: 释放内存空间
+ * @param {void} *ptr 传入申请的空间的地址
+ * @return {*}
  */
 void jd_free(void *ptr)
 {

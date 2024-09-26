@@ -1,20 +1,20 @@
 /*
- * @Author: 江小鉴
- * @Date: 2024-09-25 16:06:21
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-09-26 11:58:49
- * @Description: JDOS-简单os!
+ * @Author: 江小鉴 abyss_er@163.com
+ * @Date: 2024-09-18 09:10:51
+ * @LastEditors: 江小鉴 abyss_er@163.com
+ * @LastEditTime: 2024-09-26 12:30:39
+ * @FilePath: \jd_rtos\jd_timer.c
+ * @Description:用于定时管理
  */
-
-
-
 #include "jdos.h"
 
 /*系统时钟，单位ms*/
 jd_time_t jd_time = 0;
 
-/*jdos延时，让出CPU使用权
- * ms:延时时间，单位ms
+/**
+ * @description: jdos延时，让出CPU使用权
+ * @param {jd_uint32_t} ms  延时时间，单位ms
+ * @return {*}
  */
 void jd_delay(jd_uint32_t ms)
 {
@@ -45,10 +45,12 @@ void jd_delay(jd_uint32_t ms)
 	jd_asm_svc_task_switch();
 }
 
-/*timer创建
- * jd_task:创建的普通任务
- * ms：定时时间
- * timer_status：是否为循环任务
+/**
+ * @description: 定时任务创建
+ * @param {jd_task_t} *jd_task 创建的普通任务
+ * @param {jd_uint32_t} ms 定时时间
+ * @param {jd_timer_status_t} timer_status 是否为循环任务
+ * @return {*}
  */
 jd_int32_t jd_timer_start(jd_task_t *jd_task, jd_uint32_t ms, jd_timer_status_t timer_status)
 {

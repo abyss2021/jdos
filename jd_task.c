@@ -1,3 +1,12 @@
+/*
+ * @Author: 江小鉴 abyss_er@163.com
+ * @Date: 2024-09-18 16:11:38
+ * @LastEditors: 江小鉴 abyss_er@163.com
+ * @LastEditTime: 2024-09-26 13:07:07
+ * @FilePath: \jd_rtos\jd_task.c
+ * @Description: 任务管理
+ */
+
 #include "jdos.h"
 
 jd_node_list_t *jd_task_list_readying = NULL; // 创建就绪任务链表
@@ -6,11 +15,15 @@ jd_task_t *jd_task_runing = NULL;			  // 创建当前任务指针
 void *jd_task_stack_sp = NULL;				  // 创建当前任务堆栈指针的地址
 void *jd_task_next_stack_sp = NULL;			  // 创建下一个任务堆栈指针的地址
 jd_task_t *jd_task_frist = NULL;			  // 创建一个系统空闲任务
+jd_uint32_t jd_task_entry;					  // 任务入口
+jd_uint32_t jd_task_exit_entry;				  // 任务exit入口
 
-/*新节点插入链表中
- * node_previous:想要插入的链表节点处的上一个节点
- * node:想要插入的节点,为JD_NULL表示连接前后两个节点
- * node_next：想要插入的链表节点处的下一个节点
+/**
+ * @description: 新节点插入链表中
+ * @param {jd_node_list_t} *node_previous 想要插入的链表节点处的上一个节点
+ * @param {jd_node_list_t} *node 想要插入的节点,为JD_NULL表示连接前后两个节点
+ * @param {jd_node_list_t} *node_next 想要插入的链表节点处的下一个节点
+ * @return {*}
  */
 jd_int32_t jd_node_insert(jd_node_list_t *node_previous, jd_node_list_t *node, jd_node_list_t *node_next)
 {
@@ -64,10 +77,11 @@ jd_int32_t jd_node_insert(jd_node_list_t *node_previous, jd_node_list_t *node, j
 	return JD_OK;
 }
 
-/*删除节点
- * list:需要进行删除的链表
- * node：需要删除的节点
- * return：链表地址
+/**
+ * @description: 删除节点
+ * @param {jd_node_list_t} *list 需要进行删除的链表
+ * @param {jd_node_list_t} *node 需要删除的节点
+ * @return {*}
  */
 jd_node_list_t *jd_node_delete(jd_node_list_t *list, jd_node_list_t *node)
 {
@@ -100,7 +114,12 @@ jd_node_list_t *jd_node_delete(jd_node_list_t *list, jd_node_list_t *node)
 	return list;
 }
 
-/*比较函数，用于jd_node_in_rd中使用*/
+/**
+ * @description: 比较函数，用于jd_node_in_rd中使用
+ * @param {jd_task_t} *task1 用于比较的任务1
+ * @param {jd_task_t} *task2 用于比较的任务2
+ * @return {*}
+ */
 jd_int64_t compare_priority(jd_task_t *task1, jd_task_t *task2)
 {
 	return task1->priority - task2->priority;
@@ -109,10 +128,12 @@ jd_int64_t compare_timeout(jd_task_t *task1, jd_task_t *task2)
 {
 	return task1->timeout - task2->timeout;
 }
-/*将节点插入就绪或者延时链表
- * list:要插入的链表
- * node:要插入的节点
- * return：链表地址
+
+/**
+ * @description: 将节点插入就绪或者延时链表
+ * @param {jd_node_list_t} *list 要插入的链表
+ * @param {jd_node_list_t} *node 要插入的节点
+ * @return {*}
  */
 jd_node_list_t *jd_node_in_rd(jd_node_list_t *list, jd_node_list_t *node)
 {
@@ -178,9 +199,10 @@ jd_node_list_t *jd_node_in_rd(jd_node_list_t *list, jd_node_list_t *node)
 	return list;
 }
 
-jd_uint32_t jd_task_entry;		// 任务入口
-jd_uint32_t jd_task_exit_entry; // 任务exit入口
-/*任务退出函数,用户任务处理完后自动处理,系统自动调用*/
+/**
+ * @description:任务退出函数,用户任务处理完后自动处理,系统自动调用
+ * @return {*}
+ */
 void jd_task_exit()
 {
 	jd_task_t *jd_task = jd_task_runing;
@@ -226,11 +248,11 @@ void jd_task_exit()
 	jd_asm_svc_task_exit();
 }
 
-/*创建任务
- * task_entry:函数入口
- * stack_size：任务栈大小
- * priority:任务优先级-128-127，数字越小，优先级越高
- * return：返回当前任务节点指针
+/**
+ * @description: 创建任务
+ * @param {jd_uint32_t} stack_size 任务栈大小
+ * @param {jd_int8_t} priority 任务优先级-128-127，数字越小，优先级越高
+ * @return {*}
  */
 jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_t priority)
 {
@@ -266,9 +288,10 @@ jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_
 	return jd_new_task; // 返回当前任务节点
 }
 
-/*删除任务
- * jd_task:任务节点指针
- * return：返回JD_OK或JD_ERR
+/**
+ * @description: 删除任务
+ * @param {jd_task_t} *jd_task 任务节点指针
+ * @return {*}
  */
 jd_int32_t jd_task_delete(jd_task_t *jd_task)
 {
@@ -284,7 +307,11 @@ jd_int32_t jd_task_delete(jd_task_t *jd_task)
 	return JD_OK;
 }
 
-/*设置任务执行完成后自动回收内存，任务销毁*/
+/**
+ * @description: 设置任务执行完成后自动回收内存，任务销毁
+ * @param {jd_task_t} *jd_task 任务节点指针
+ * @return {*}
+ */
 jd_int32_t jd_task_auto_delate(jd_task_t *jd_task)
 {
 	if (jd_task == JD_NULL)
@@ -292,9 +319,11 @@ jd_int32_t jd_task_auto_delate(jd_task_t *jd_task)
 	jd_task->auto_delate = JD_TASK_DELATE;
 	return JD_OK;
 }
-/*将任务加入就绪链表
- * jd_task:任务节点指针
- * return：返回JD_OK或JD_ERR
+
+/**
+ * @description: 将任务加入就绪链表
+ * @param {jd_task_t} *jd_task 任务节点指针
+ * @return {*}
  */
 jd_int32_t jd_task_run(jd_task_t *jd_task)
 {
@@ -309,9 +338,10 @@ jd_int32_t jd_task_run(jd_task_t *jd_task)
 	return JD_OK;
 }
 
-/*任务暂停
- *	jd_task:任务节点指针
- * return：返回JD_OK或JD_ERR
+/**
+ * @description: 任务暂停
+ * @param {jd_task_t} *jd_task 任务节点指针
+ * @return {*}
  */
 jd_int32_t jd_task_pause(jd_task_t *jd_task)
 {
@@ -352,7 +382,10 @@ jd_int32_t jd_task_pause(jd_task_t *jd_task)
 	return JD_OK;
 }
 
-/*jd初始化*/
+/**
+ * @description: jd初始化
+ * @return {*}
+ */
 jd_int32_t jd_init(void)
 {
 	// 初始化内存
