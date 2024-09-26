@@ -35,11 +35,6 @@ jdos非常简单，只有7个文件，将这7个文件加入到自己的工程�
 
 ![输入图片说明](2a0c09f3b00dfb5f96635b8390068b6.png)
 
-5.设置keil，勾选Use MicroLIB。
-
-![输入图片说明](https://foruda.gitee.com/images/1726032143415200813/37cf47df_8205780.png "85b4cd65a085f282b47238f949ab7dc.png")
-
-![输入图片说明](9e3b49c003d7c62ab9f23fe9d1084f2.png)
 
 编译试试吧！
 
