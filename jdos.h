@@ -2,8 +2,8 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-11 11:09:06
  * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-09-26 13:09:46
- * @FilePath: \jd_rtos\jdos.h
+ * @LastEditTime: 2024-09-27 09:25:16
+ * @FilePath: \jdos\jdos.h
  * @Description: jdos 头文件
  */
 
@@ -170,4 +170,7 @@ void jd_task_exit(void);                                                        
 jd_uint32_t jd_mem_init(void);         // mem初始化
 void *jd_malloc(jd_uint32_t mem_size); // malloc
 void jd_free(void *ptr);               // free
+
+/******************jd_printf************************/
+void jd_printf(const char* format, ...);
 #endif

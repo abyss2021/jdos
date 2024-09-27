@@ -2,7 +2,7 @@
 ; @Date: 2024-09-18 14:56:45
 ; @LastEditors: 江小鉴 abyss_er@163.com
 ; @LastEditTime: 2024-09-26 13:10:46
-; @FilePath: \jd_rtos\jd_Cortex-M3.s
+; @FilePath: \jdos\jd_Cortex-M3.s
 ; @Description: 汇编文件
 
 JD_ICRS				EQU 0XE000ED04	;中断控制及状态寄存器

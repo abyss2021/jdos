@@ -3,7 +3,7 @@
  * @Date: 2024-09-23 09:36:38
  * @LastEditors: 江小鉴 abyss_er@163.com
  * @LastEditTime: 2024-09-26 12:34:39
- * @FilePath: \jd_rtos\jd_memory.c
+ * @FilePath: \jdos\jd_memory.c
  * @Description: 用于内存管理
  */
 

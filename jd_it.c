@@ -3,7 +3,7 @@
  * @Date: 2024-09-18 16:12:28
  * @LastEditors: 江小鉴 abyss_er@163.com
  * @LastEditTime: 2024-09-26 12:37:13
- * @FilePath: \jd_rtos\jd_it.c
+ * @FilePath: \jdos\jd_it.c
  * @Description: jdos异常管理
  */
 

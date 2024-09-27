@@ -3,7 +3,7 @@
  * @Date: 2024-09-18 09:10:51
  * @LastEditors: 江小鉴 abyss_er@163.com
  * @LastEditTime: 2024-09-26 12:30:39
- * @FilePath: \jd_rtos\jd_timer.c
+ * @FilePath: \jdos\jd_timer.c
  * @Description:用于定时管理
  */
 #include "jdos.h"
