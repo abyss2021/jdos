@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-09 10:14:21
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-09-27 17:44:05
+ * @LastEditTime: 2024-09-27 18:21:03
  * @FilePath: \jdos\jd_main.c
  * @Description: jd main
  */
@@ -15,7 +15,9 @@ void task1()
 {
 	// while (1)
 	{
+		#ifdef JD_PRINTF_ENABLE
 		jd_printf("task1\r\n");
+		#endif
 		// jd_delay(100);
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 	};
@@ -25,9 +27,11 @@ void task2()
 
 	while (1)
 	{
+		#ifdef JD_PRINTF_ENABLE
 		jd_printf("task2\r\n");
-		// HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
-		jd_delay(500);
+		#endif
+		HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
+		jd_delay(300);
 		/*
 		 test_task1 = jd_task_create(task1, 512, 3);
 		 if (test_task1 != JD_NULL)
@@ -39,9 +43,11 @@ void task3()
 
 	while (1)
 	{
+		#ifdef JD_PRINTF_ENABLE
 		jd_printf("task3\r\n");
+		#endif
 		jd_delay(100);
-		// HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
+		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 	};
 }
 
@@ -52,8 +58,10 @@ void task3()
 __weak void jd_main(void)
 {
 	test_task1 = jd_task_create(task1, 512, 3);
+	#ifdef JD_TIMER_ENABLE
 	if (test_task1 != JD_NULL)
-		jd_timer_start(test_task1, 200, JD_TIMER_LOOP);
+		jd_timer_start(test_task1, 380, JD_TIMER_LOOP);
+	#endif
 
 	test_task2 = jd_task_create(task2, 512, 1);
 	if (test_task1 != JD_NULL)

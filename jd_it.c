@@ -1,8 +1,8 @@
 /*
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-18 16:12:28
- * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-09-26 12:37:13
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-09-27 18:11:16
  * @FilePath: \jdos\jd_it.c
  * @Description: jdos异常管理
  */
@@ -65,7 +65,7 @@ void jd_PendSV_Handler(void)
  * @description: SVC处理函数
  * @return {*}
  */
-void jd_SVC_handler(void)
+void jd_SVC_Handler(void)
 {
 	jd_asm_svc_handler();
 }

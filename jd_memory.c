@@ -6,8 +6,8 @@
  * @FilePath: \jdos\jd_memory.c
  * @Description: 用于内存管理
  */
-
 #include "jdos.h"
+#ifdef JD_MEMORY_ENABLE
 
 jd_mem_t *jd_mem_use = JD_NULL;
 jd_uint8_t jd_mem_space[MEM_MAX_SIZE];
@@ -139,3 +139,4 @@ void jd_free(void *ptr)
     }
     ptr = JD_NULL;
 }
+#endif

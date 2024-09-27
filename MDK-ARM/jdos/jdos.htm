@@ -3,7 +3,7 @@
 <title>Static Call Graph - [jdos\jdos.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image jdos\jdos.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Sep 27 17:47:09 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Sep 27 22:37:47 2024
 <BR><P>
 <H3>Maximum Stack Usage =        208 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -25,7 +25,6 @@ Mutually Recursive functions
  <LI><a href="#[4]">NMI_Handler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[4]">NMI_Handler</a><BR>
  <LI><a href="#[8]">UsageFault_Handler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[8]">UsageFault_Handler</a><BR>
  <LI><a href="#[84]">UART_EndRxTransfer</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[84]">UART_EndRxTransfer</a><BR>
- <LI><a href="#[4e]">task3</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[4e]">task3</a><BR>
 </UL>
 <P>
 <H3>
@@ -453,7 +452,7 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_asm_task_exit_switch
 <LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_asm_pendsv_handler
 </UL>
-<BR>[Called By]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_SVC_handler
+<BR>[Called By]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_SVC_Handler
 </UL>
 
 <P><STRONG><a name="[8a]"></a>jd_asm_svc_task_switch</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, jd_cm3.o(.text))
@@ -562,7 +561,9 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[a1]"></a>HAL_GPIO_TogglePin</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, stm32f1xx_hal_gpio.o(i.HAL_GPIO_TogglePin))
-<BR><BR>[Called By]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;task1
+<BR><BR>[Called By]<UL><LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;task3
+<LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;task2
+<LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;task1
 </UL>
 
 <P><STRONG><a name="[7f]"></a>HAL_GPIO_WritePin</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, stm32f1xx_hal_gpio.o(i.HAL_GPIO_WritePin))
@@ -716,7 +717,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f103xe.o(RESET)
 </UL>
 <P><STRONG><a name="[9]"></a>SVC_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f1xx_it.o(i.SVC_Handler))
-<BR><BR>[Calls]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_SVC_handler
+<BR><BR>[Calls]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_SVC_Handler
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f103xe.o(RESET)
 </UL>
@@ -759,7 +760,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PendSV_Handler
 </UL>
 
-<P><STRONG><a name="[81]"></a>jd_SVC_handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, jd_it.o(i.jd_SVC_handler))
+<P><STRONG><a name="[81]"></a>jd_SVC_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, jd_it.o(i.jd_SVC_Handler))
 <BR><BR>[Calls]<UL><LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_asm_svc_handler
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SVC_Handler
@@ -796,7 +797,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[4b]"></a>jd_main</STRONG> (Thumb, 76 bytes, Stack size 0 bytes, jd_main.o(i.jd_main))
+<P><STRONG><a name="[4b]"></a>jd_main</STRONG> (Thumb, 78 bytes, Stack size 0 bytes, jd_main.o(i.jd_main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = jd_main &rArr; jd_timer_start &rArr; jd_node_in_rd
 </UL>
 <BR>[Calls]<UL><LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_timer_start
@@ -988,23 +989,21 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> jd_main.o(i.jd_main)
 </UL>
-<P><STRONG><a name="[4d]"></a>task2</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, jd_main.o(i.task2))
+<P><STRONG><a name="[4d]"></a>task2</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, jd_main.o(i.task2))
 <BR><BR>[Stack]<UL><LI>Max Depth = 192<LI>Call Chain = task2 &rArr; jd_printf &rArr; jd_printfloat &rArr; jd_printint &rArr; jd_putjd_int8_t &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printf
 <LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_delay
+<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_TogglePin
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> jd_main.o(i.jd_main)
 </UL>
-<P><STRONG><a name="[4e]"></a>task3</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, jd_main.o(i.task3))
-<BR><BR>[Stack]<UL><LI>Max Depth = 192 + In Cycle
-<LI>Call Chain = task3 &rArr;  task3 (Cycle)
+<P><STRONG><a name="[4e]"></a>task3</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, jd_main.o(i.task3))
+<BR><BR>[Stack]<UL><LI>Max Depth = 192<LI>Call Chain = task3 &rArr; jd_printf &rArr; jd_printfloat &rArr; jd_printint &rArr; jd_putjd_int8_t &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printf
 <LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_delay
-<LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;task3
-</UL>
-<BR>[Called By]<UL><LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;task3
+<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_TogglePin
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> jd_main.o(i.jd_main)
 </UL>

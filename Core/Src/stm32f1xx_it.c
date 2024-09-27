@@ -144,8 +144,8 @@ void UsageFault_Handler(void)
 void SVC_Handler(void)
 {
   /* USER CODE BEGIN SVCall_IRQn 0 */
-	extern void jd_SVC_handler(void);
-	jd_SVC_handler();
+	extern void jd_SVC_Handler(void);
+	jd_SVC_Handler();
 
   /* USER CODE END SVCall_IRQn 0 */
   /* USER CODE BEGIN SVCall_IRQn 1 */

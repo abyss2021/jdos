@@ -1,8 +1,8 @@
 /*
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-11 11:09:06
- * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-09-27 09:25:16
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-09-27 22:21:46
  * @FilePath: \jdos\jdos.h
  * @Description: jdos 头文件
  */
@@ -11,6 +11,14 @@
 #define __JDOS_H
 
 #include "stm32f1xx_hal.h"
+
+
+/******************选择开启的功能************************/
+#define JD_PRINTF_ENABLE  //开启打印功能
+#define JD_MEMORY_ENABLE  //开启内存管理功能
+#define JD_TIMER_ENABLE  //开启定时任务管理功能
+
+
 
 /******************宏定义************************/
 /*开辟内存大小*/
@@ -147,9 +155,11 @@ extern void jd_asm_svc_task_switch(void);                    // 任务上下文�
 extern void jd_asm_svc_task_exit(void);                      // 任务推出
 
 /******************jd_timer************************/
-void jd_delay(jd_uint32_t ms);                                                                 // jdos延时，让出CPU使用权
+void jd_delay(jd_uint32_t ms);    
+#ifdef JD_TIMER_ENABLE                                                             // jdos延时，让出CPU使用权
 jd_int32_t jd_timer_start(jd_task_t *jd_task, jd_uint32_t ms, jd_timer_status_t timer_status); // 定时器任务创建
-jd_int32_t jd_timer_stop(jd_task_t *task);                                                     // 定时器任务删除
+jd_int32_t jd_timer_stop(jd_task_t *task);          // 定时器任务停止
+#endif                                           
 
 /******************jd_task************************/
 jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_t priority); // 创建任务
@@ -167,10 +177,15 @@ jd_node_list_t *jd_node_in_rd(jd_node_list_t *list, jd_node_list_t *node);      
 void jd_task_exit(void);                                                                                   // 任务执行完成后由系统调用
 
 /******************jd_memory************************/
+#ifdef JD_MEMORY_ENABLE
 jd_uint32_t jd_mem_init(void);         // mem初始化
 void *jd_malloc(jd_uint32_t mem_size); // malloc
 void jd_free(void *ptr);               // free
+#endif
 
 /******************jd_printf************************/
+#ifdef JD_PRINTF_ENABLE
 void jd_printf(const jd_int8_t *format, ...);
+#endif
+
 #endif

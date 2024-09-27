@@ -44,7 +44,7 @@ void jd_delay(jd_uint32_t ms)
 
 	jd_asm_svc_task_switch();
 }
-
+#ifdef JD_TIMER_ENABLE
 /**
  * @description: 定时任务创建
  * @param {jd_task_t} *jd_task 创建的普通任务
@@ -110,3 +110,4 @@ jd_int32_t jd_timer_stop(jd_task_t *jd_task)
 	jd_task->timer_loop = JD_TIMER_NOTIMER;
 	return JD_OK;
 }
+#endif
