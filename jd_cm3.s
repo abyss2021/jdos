@@ -26,7 +26,6 @@ jd_asm_task_first_switch 	PROC	;进入main
 
 								;第一次进入任务，主要目的是定位堆栈，进入程序入口，其他数据无用
 								LDR R0,[R0]
-								;MOV SP,R0
 								MSR PSP, R0 ; 用户程序堆栈指针
 								MOV LR,R1				
 								
@@ -68,7 +67,6 @@ jd_asm_task_exit_switch 	PROC	;任务结束运行（没有while），切换下�
 								LDR R1,[R1]
 								LDR R0,[R1]
 								LDMFD R0!,{R4-R11}
-								;MOV SP,R0
 								MSR PSP, R0 ; 用户程序堆栈指针
 								
 								MOV R0, #0x2 ; 设置CONTROL寄存器，让用户程序使用PSP
@@ -170,9 +168,7 @@ jd_asm_pendsv_putup 		PROC	;悬挂PendSV异常
 jd_asm_pendsv_handler   	PROC	;切换上下文
 							EXPORT  jd_asm_pendsv_handler 
 								CPSID i ;关中断
-								
-								;MOV R0,SP
-								
+
 								MRS R0,PSP ; 用户程序堆栈指针
 								
 								STMFD R0!,{R4-R11}	
@@ -187,7 +183,6 @@ jd_asm_pendsv_handler   	PROC	;切换上下文
 								LDR R1,[R1]
 								LDR R0,[R1]
 								LDMFD R0!,{R4-R11}
-								;MOV SP,R0
 								MSR PSP, R0 ; 用户程序堆栈指针
 								
 								MOV R0, #0x2 ; 设置CONTROL寄存器，让用户程序使用PSP
