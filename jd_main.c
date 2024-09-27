@@ -15,6 +15,7 @@ void task1()
 {
 	// while (1)
 	{
+		jd_printf("task1\r\n");
 		// jd_delay(100);
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 	};
@@ -24,7 +25,7 @@ void task2()
 
 	while (1)
 	{
-
+		jd_printf("task2\r\n");
 		// HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
 		jd_delay(500);
 		/*
@@ -38,6 +39,7 @@ void task3()
 
 	while (1)
 	{
+		jd_printf("task3\r\n");
 		jd_delay(100);
 		// HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 	};

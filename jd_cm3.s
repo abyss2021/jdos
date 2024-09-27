@@ -28,12 +28,21 @@ jd_asm_task_first_switch 	PROC	;进入main
 								LDR R0,[R0]
 								;MOV SP,R0
 								MSR PSP, R0 ; 用户程序堆栈指针
-								MOV LR,R1
-
-								MOV R0, #0x3 ; 设置CONTROL寄存器，让用户程序使用PSP
-								MSR CONTROL,R0
+								MOV LR,R1				
 								
-								CPSIE i ;开中断
+								; 清除SysTick悬起状态
+								LDR R0, =JD_ICRS ; ICSR寄存器的地址
+								LDR R1, [R0]        ; 读取当前ICSR寄存器的值
+								ORR R1, R1, #0x04000000 ; 设置PENDSTCLR位
+								STR R1, [R0]        ; 写回ICSR寄存器
+								
+								MOV R0, #0x2 ; 设置CONTROL寄存器，让用户程序使用PSP
+								MSR CONTROL,R0	
+								CPSIE i ;开中断	
+								
+								;全速运行上面的CONTROL无法设置  待研究
+
+
 								BX LR
 							ENDP
 								
@@ -61,11 +70,11 @@ jd_asm_task_exit_switch 	PROC	;任务结束运行（没有while），切换下�
 								LDMFD R0!,{R4-R11}
 								;MOV SP,R0
 								MSR PSP, R0 ; 用户程序堆栈指针
-
-								MOV R0, #0x3 ; 设置CONTROL寄存器，让用户程序使用PSP，没有内存管理，PSP模式下无法分配系统空间
-								MSR CONTROL,R0
 								
-								CPSIE i ;开中断
+								MOV R0, #0x2 ; 设置CONTROL寄存器，让用户程序使用PSP
+								MSR CONTROL,R0	
+								CPSIE i ;开中断	
+								
 								BX LR
 							ENDP	
 
@@ -181,11 +190,11 @@ jd_asm_pendsv_handler   	PROC	;切换上下文
 								;MOV SP,R0
 								MSR PSP, R0 ; 用户程序堆栈指针
 								
-								MOV R0, #0x3 ; 设置CONTROL寄存器，让用户程序使用PSP，没有内存管理，PSP模式下无法分配系统空间
-								MSR CONTROL,R0
+								MOV R0, #0x2 ; 设置CONTROL寄存器，让用户程序使用PSP
+								MSR CONTROL,R0	
+								CPSIE i ;开中断	
 								
 								
-								CPSIE i ;开中断
 								BX LR
 							ENDP
 	;防止编译器报警
