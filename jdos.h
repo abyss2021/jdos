@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-11 11:09:06
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-09-27 22:21:46
+ * @LastEditTime: 2024-09-27 22:40:06
  * @FilePath: \jdos\jdos.h
  * @Description: jdos 头文件
  */
@@ -15,7 +15,7 @@
 
 /******************选择开启的功能************************/
 #define JD_PRINTF_ENABLE  //开启打印功能
-#define JD_MEMORY_ENABLE  //开启内存管理功能
+#define JD_MEMORY_ENABLE  //开启内存管理功能，关闭后请添加标准库
 #define JD_TIMER_ENABLE  //开启定时任务管理功能
 
 
