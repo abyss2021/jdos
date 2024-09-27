@@ -3,7 +3,7 @@
 <title>Static Call Graph - [jdos\jdos.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image jdos\jdos.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Sep 27 10:10:26 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Sep 27 10:13:35 2024
 <BR><P>
 <H3>Maximum Stack Usage =        224 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -849,8 +849,8 @@ Global Symbols
 <P><STRONG><a name="[93]"></a>jd_printf</STRONG> (Thumb, 270 bytes, Stack size 40 bytes, jd_printf.o(i.jd_printf))
 <BR><BR>[Stack]<UL><LI>Max Depth = 192<LI>Call Chain = jd_printf &rArr; jd_printfloat &rArr; jd_printint &rArr; jd_putchar &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;usart_printstring
-<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_putchar
+<BR>[Calls]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_putchar
+<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printstring
 <LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printint
 <LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printfloat
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2f
@@ -880,12 +880,20 @@ Global Symbols
 <LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printf
 </UL>
 
+<P><STRONG><a name="[97]"></a>jd_printstring</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, jd_printf.o(i.jd_printstring))
+<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = jd_printstring &rArr; jd_putchar &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+</UL>
+<BR>[Calls]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_putchar
+</UL>
+<BR>[Called By]<UL><LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printf
+</UL>
+
 <P><STRONG><a name="[94]"></a>jd_putchar</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, jd_printf.o(i.jd_putchar))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = jd_putchar &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_transmit
 </UL>
-<BR>[Called By]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;usart_printstring
+<BR>[Called By]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printstring
 <LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printint
 <LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printfloat
 <LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printf
@@ -992,14 +1000,6 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> jd_main.o(i.jd_main)
 </UL>
-<P><STRONG><a name="[97]"></a>usart_printstring</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, jd_printf.o(i.usart_printstring))
-<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = usart_printstring &rArr; jd_putchar &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
-</UL>
-<BR>[Calls]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_putchar
-</UL>
-<BR>[Called By]<UL><LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printf
-</UL>
-
 <P><STRONG><a name="[95]"></a>__aeabi_d2f</STRONG> (Thumb, 0 bytes, Stack size 32 bytes, d2f.o(x$fpl$d2f))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = __aeabi_d2f
 </UL>

@@ -1,8 +1,8 @@
 /*
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-09 10:14:21
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-09-27 10:08:29
+ * @LastEditors: 江小鉴 abyss_er@163.com
+ * @LastEditTime: 2024-09-27 10:23:34
  * @FilePath: \jdos\jd_main.c
  * @Description: jd main
  */
@@ -28,7 +28,6 @@ void task2()
 
 		// HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
 		jd_delay(500);
-		jd_printf("Hello, STM32! %d, %f, %s, %x, %X, %p, %u, %o, %b, %%\r\n", 123, 3.1415926, "Test",0x1A, 0x1A, (void*)0x12345678, 123456, 123, 7);
 		/*
 		 test_task1 = jd_task_create(task1, 512, 3);
 		 if (test_task1 != JD_NULL)

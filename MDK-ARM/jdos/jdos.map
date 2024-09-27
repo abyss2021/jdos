@@ -88,7 +88,7 @@ Section Cross References
     jd_printf.o(i.jd_printf) refers to jd_printf.o(i.jd_putchar) for jd_putchar
     jd_printf.o(i.jd_printf) refers to d2f.o(x$fpl$d2f) for __aeabi_d2f
     jd_printf.o(i.jd_printf) refers to jd_printf.o(i.jd_printfloat) for jd_printfloat
-    jd_printf.o(i.jd_printf) refers to jd_printf.o(i.usart_printstring) for usart_printstring
+    jd_printf.o(i.jd_printf) refers to jd_printf.o(i.jd_printstring) for jd_printstring
     jd_printf.o(i.jd_printf) refers to jd_printf.o(i.jd_printint) for jd_printint
     jd_printf.o(i.jd_printfloat) refers to jd_printf.o(i.jd_putchar) for jd_putchar
     jd_printf.o(i.jd_printfloat) refers to ffix.o(x$fpl$ffix) for __aeabi_f2iz
@@ -97,10 +97,10 @@ Section Cross References
     jd_printf.o(i.jd_printfloat) refers to jd_printf.o(i.jd_printint) for jd_printint
     jd_printf.o(i.jd_printfloat) refers to fmul.o(x$fpl$fmul) for __aeabi_fmul
     jd_printf.o(i.jd_printint) refers to jd_printf.o(i.jd_putchar) for jd_putchar
+    jd_printf.o(i.jd_printstring) refers to jd_printf.o(i.jd_putchar) for jd_putchar
     jd_printf.o(i.jd_putchar) refers to jd_printf.o(i.jd_transmit) for jd_transmit
     jd_printf.o(i.jd_transmit) refers to stm32f1xx_hal_uart.o(i.HAL_UART_Transmit) for HAL_UART_Transmit
     jd_printf.o(i.jd_transmit) refers to main.o(.bss) for huart1
-    jd_printf.o(i.usart_printstring) refers to jd_printf.o(i.jd_putchar) for jd_putchar
     main.o(i.MX_GPIO_Init) refers to stm32f1xx_hal_gpio.o(i.HAL_GPIO_WritePin) for HAL_GPIO_WritePin
     main.o(i.MX_GPIO_Init) refers to stm32f1xx_hal_gpio.o(i.HAL_GPIO_Init) for HAL_GPIO_Init
     main.o(i.SystemClock_Config) refers to rt_memclr_w.o(.text) for __aeabi_memclr4
@@ -903,19 +903,19 @@ Image Symbol Table
     i.jd_printf                              0x0800133a   Section        0  jd_printf.o(i.jd_printf)
     i.jd_printfloat                          0x08001448   Section        0  jd_printf.o(i.jd_printfloat)
     i.jd_printint                            0x080014c8   Section        0  jd_printf.o(i.jd_printint)
-    i.jd_putchar                             0x08001522   Section        0  jd_printf.o(i.jd_putchar)
-    i.jd_task_create                         0x08001530   Section        0  jd_task.o(i.jd_task_create)
-    i.jd_task_delete                         0x0800157c   Section        0  jd_task.o(i.jd_task_delete)
-    i.jd_task_exit                           0x080015a4   Section        0  jd_task.o(i.jd_task_exit)
-    i.jd_task_pause                          0x08001614   Section        0  jd_task.o(i.jd_task_pause)
-    i.jd_task_run                            0x08001664   Section        0  jd_task.o(i.jd_task_run)
-    i.jd_timer_start                         0x08001684   Section        0  jd_timer.o(i.jd_timer_start)
-    i.jd_transmit                            0x080016e4   Section        0  jd_printf.o(i.jd_transmit)
-    i.main                                   0x080016f8   Section        0  main.o(i.main)
-    i.task1                                  0x08001738   Section        0  jd_main.o(i.task1)
-    i.task2                                  0x08001744   Section        0  jd_main.o(i.task2)
-    i.task3                                  0x080017d4   Section        0  jd_main.o(i.task3)
-    i.usart_printstring                      0x080017dc   Section        0  jd_printf.o(i.usart_printstring)
+    i.jd_printstring                         0x08001522   Section        0  jd_printf.o(i.jd_printstring)
+    i.jd_putchar                             0x08001536   Section        0  jd_printf.o(i.jd_putchar)
+    i.jd_task_create                         0x08001544   Section        0  jd_task.o(i.jd_task_create)
+    i.jd_task_delete                         0x08001590   Section        0  jd_task.o(i.jd_task_delete)
+    i.jd_task_exit                           0x080015b8   Section        0  jd_task.o(i.jd_task_exit)
+    i.jd_task_pause                          0x08001628   Section        0  jd_task.o(i.jd_task_pause)
+    i.jd_task_run                            0x08001678   Section        0  jd_task.o(i.jd_task_run)
+    i.jd_timer_start                         0x08001698   Section        0  jd_timer.o(i.jd_timer_start)
+    i.jd_transmit                            0x080016f8   Section        0  jd_printf.o(i.jd_transmit)
+    i.main                                   0x0800170c   Section        0  main.o(i.main)
+    i.task1                                  0x0800174c   Section        0  jd_main.o(i.task1)
+    i.task2                                  0x08001758   Section        0  jd_main.o(i.task2)
+    i.task3                                  0x080017e8   Section        0  jd_main.o(i.task3)
     x$fpl$d2f                                0x080017f0   Section       98  d2f.o(x$fpl$d2f)
     x$fpl$dnaninf                            0x08001852   Section      156  dnaninf.o(x$fpl$dnaninf)
     x$fpl$fadd                               0x080018f0   Section      196  faddsub_clz.o(x$fpl$fadd)
@@ -1169,19 +1169,19 @@ Image Symbol Table
     jd_printf                                0x0800133b   Thumb Code   270  jd_printf.o(i.jd_printf)
     jd_printfloat                            0x08001449   Thumb Code   122  jd_printf.o(i.jd_printfloat)
     jd_printint                              0x080014c9   Thumb Code    90  jd_printf.o(i.jd_printint)
-    jd_putchar                               0x08001523   Thumb Code    12  jd_printf.o(i.jd_putchar)
-    jd_task_create                           0x08001531   Thumb Code    70  jd_task.o(i.jd_task_create)
-    jd_task_delete                           0x0800157d   Thumb Code    34  jd_task.o(i.jd_task_delete)
-    jd_task_exit                             0x080015a5   Thumb Code   106  jd_task.o(i.jd_task_exit)
-    jd_task_pause                            0x08001615   Thumb Code    76  jd_task.o(i.jd_task_pause)
-    jd_task_run                              0x08001665   Thumb Code    28  jd_task.o(i.jd_task_run)
-    jd_timer_start                           0x08001685   Thumb Code    80  jd_timer.o(i.jd_timer_start)
-    jd_transmit                              0x080016e5   Thumb Code    14  jd_printf.o(i.jd_transmit)
-    main                                     0x080016f9   Thumb Code    56  main.o(i.main)
-    task1                                    0x08001739   Thumb Code     8  jd_main.o(i.task1)
-    task2                                    0x08001745   Thumb Code    62  jd_main.o(i.task2)
-    task3                                    0x080017d5   Thumb Code     8  jd_main.o(i.task3)
-    usart_printstring                        0x080017dd   Thumb Code    20  jd_printf.o(i.usart_printstring)
+    jd_printstring                           0x08001523   Thumb Code    20  jd_printf.o(i.jd_printstring)
+    jd_putchar                               0x08001537   Thumb Code    12  jd_printf.o(i.jd_putchar)
+    jd_task_create                           0x08001545   Thumb Code    70  jd_task.o(i.jd_task_create)
+    jd_task_delete                           0x08001591   Thumb Code    34  jd_task.o(i.jd_task_delete)
+    jd_task_exit                             0x080015b9   Thumb Code   106  jd_task.o(i.jd_task_exit)
+    jd_task_pause                            0x08001629   Thumb Code    76  jd_task.o(i.jd_task_pause)
+    jd_task_run                              0x08001679   Thumb Code    28  jd_task.o(i.jd_task_run)
+    jd_timer_start                           0x08001699   Thumb Code    80  jd_timer.o(i.jd_timer_start)
+    jd_transmit                              0x080016f9   Thumb Code    14  jd_printf.o(i.jd_transmit)
+    main                                     0x0800170d   Thumb Code    56  main.o(i.main)
+    task1                                    0x0800174d   Thumb Code     8  jd_main.o(i.task1)
+    task2                                    0x08001759   Thumb Code    62  jd_main.o(i.task2)
+    task3                                    0x080017e9   Thumb Code     8  jd_main.o(i.task3)
     __aeabi_d2f                              0x080017f1   Thumb Code     0  d2f.o(x$fpl$d2f)
     _d2f                                     0x080017f1   Thumb Code    98  d2f.o(x$fpl$d2f)
     __fpl_dnaninf                            0x08001853   Thumb Code   156  dnaninf.o(x$fpl$dnaninf)
@@ -1354,20 +1354,20 @@ Memory Map of the image
     0x0800133a   0x0800133a   0x0000010e   Code   RO          361    i.jd_printf         jd_printf.o
     0x08001448   0x08001448   0x00000080   Code   RO          362    i.jd_printfloat     jd_printf.o
     0x080014c8   0x080014c8   0x0000005a   Code   RO          363    i.jd_printint       jd_printf.o
-    0x08001522   0x08001522   0x0000000c   Code   RO          364    i.jd_putchar        jd_printf.o
-    0x0800152e   0x0800152e   0x00000002   PAD
-    0x08001530   0x08001530   0x0000004c   Code   RO          188    i.jd_task_create    jd_task.o
-    0x0800157c   0x0800157c   0x00000028   Code   RO          189    i.jd_task_delete    jd_task.o
-    0x080015a4   0x080015a4   0x00000070   Code   RO          190    i.jd_task_exit      jd_task.o
-    0x08001614   0x08001614   0x00000050   Code   RO          191    i.jd_task_pause     jd_task.o
-    0x08001664   0x08001664   0x00000020   Code   RO          192    i.jd_task_run       jd_task.o
-    0x08001684   0x08001684   0x00000060   Code   RO          279    i.jd_timer_start    jd_timer.o
-    0x080016e4   0x080016e4   0x00000014   Code   RO          365    i.jd_transmit       jd_printf.o
-    0x080016f8   0x080016f8   0x00000040   Code   RO          419    i.main              main.o
-    0x08001738   0x08001738   0x0000000c   Code   RO          137    i.task1             jd_main.o
-    0x08001744   0x08001744   0x00000090   Code   RO          138    i.task2             jd_main.o
-    0x080017d4   0x080017d4   0x00000008   Code   RO          139    i.task3             jd_main.o
-    0x080017dc   0x080017dc   0x00000014   Code   RO          366    i.usart_printstring  jd_printf.o
+    0x08001522   0x08001522   0x00000014   Code   RO          364    i.jd_printstring    jd_printf.o
+    0x08001536   0x08001536   0x0000000c   Code   RO          365    i.jd_putchar        jd_printf.o
+    0x08001542   0x08001542   0x00000002   PAD
+    0x08001544   0x08001544   0x0000004c   Code   RO          188    i.jd_task_create    jd_task.o
+    0x08001590   0x08001590   0x00000028   Code   RO          189    i.jd_task_delete    jd_task.o
+    0x080015b8   0x080015b8   0x00000070   Code   RO          190    i.jd_task_exit      jd_task.o
+    0x08001628   0x08001628   0x00000050   Code   RO          191    i.jd_task_pause     jd_task.o
+    0x08001678   0x08001678   0x00000020   Code   RO          192    i.jd_task_run       jd_task.o
+    0x08001698   0x08001698   0x00000060   Code   RO          279    i.jd_timer_start    jd_timer.o
+    0x080016f8   0x080016f8   0x00000014   Code   RO          366    i.jd_transmit       jd_printf.o
+    0x0800170c   0x0800170c   0x00000040   Code   RO          419    i.main              main.o
+    0x0800174c   0x0800174c   0x0000000c   Code   RO          137    i.task1             jd_main.o
+    0x08001758   0x08001758   0x00000090   Code   RO          138    i.task2             jd_main.o
+    0x080017e8   0x080017e8   0x00000008   Code   RO          139    i.task3             jd_main.o
     0x080017f0   0x080017f0   0x00000062   Code   RO         2031    x$fpl$d2f           fz_ws.l(d2f.o)
     0x08001852   0x08001852   0x0000009c   Code   RO         2052    x$fpl$dnaninf       fz_ws.l(dnaninf.o)
     0x080018ee   0x080018ee   0x00000002   PAD
@@ -1413,25 +1413,25 @@ Image component sizes
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
        216         28          0          0          0        820   jd_cortex-m3.o
-       152         36          0          0          0     456710   jd_it.o
-       256        102          0         12          0       1817   jd_main.o
-       192         14          0          4       8192       2270   jd_memory.o
-       540         12          0          0          0       5100   jd_printf.o
-       642         46          0         32          0       8985   jd_task.o
-       200         40          0          4          0       3597   jd_timer.o
-       270         18          0          0         72       2269   main.o
+       152         36          0          0          0     456690   jd_it.o
+       256        102          0         12          0       1809   jd_main.o
+       192         14          0          4       8192       2266   jd_memory.o
+       540         12          0          0          0       5081   jd_printf.o
+       642         46          0         32          0       8957   jd_task.o
+       200         40          0          4          0       3593   jd_timer.o
+       270         18          0          0         72       2257   main.o
         68         28        304          0       5120        804   startup_stm32f103xe.o
-       148         24          0         12          0       5879   stm32f1xx_hal.o
-       172         14          0          0          0      28170   stm32f1xx_hal_cortex.o
+       148         24          0         12          0       5863   stm32f1xx_hal.o
+       172         14          0          0          0      28158   stm32f1xx_hal_cortex.o
        530         42          0          0          0       3425   stm32f1xx_hal_gpio.o
-       172         20          0          0          0       1501   stm32f1xx_hal_msp.o
-      1240         84         18          0          0       4980   stm32f1xx_hal_rcc.o
-       636          6          0          0          0       4504   stm32f1xx_hal_uart.o
-        24          0          0          0          0       3674   stm32f1xx_it.o
+       172         20          0          0          0       1493   stm32f1xx_hal_msp.o
+      1240         84         18          0          0       4968   stm32f1xx_hal_rcc.o
+       636          6          0          0          0       4488   stm32f1xx_hal_uart.o
+        24          0          0          0          0       3650   stm32f1xx_it.o
          2          0         24          4          0       1047   system_stm32f1xx.o
 
     ----------------------------------------------------------------------
-      5470        514        378         68      13384     535552   Object Totals
+      5470        514        378         68      13384     535369   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         10          0          0          0          0          0   (incl. Padding)
 
@@ -1491,8 +1491,8 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      7042        558        378         68      13484     533120   Grand Totals
-      7042        558        378         68      13484     533120   ELF Image Totals
+      7042        558        378         68      13484     532937   Grand Totals
+      7042        558        378         68      13484     532937   ELF Image Totals
       7042        558        378         68          0          0   ROM Totals
 
 ==============================================================================
