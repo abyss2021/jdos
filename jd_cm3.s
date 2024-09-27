@@ -2,7 +2,7 @@
 ; @Date: 2024-09-18 14:56:45
 ; @LastEditors: 江小鉴 abyss_er@163.com
 ; @LastEditTime: 2024-09-26 13:10:46
-; @FilePath: \jdos\jd_Cortex-M3.s
+; @FilePath: \jdos\jd_cm3.s
 ; @Description: 汇编文件
 
 JD_ICRS				EQU 0XE000ED04	;中断控制及状态寄存器
@@ -14,8 +14,6 @@ JD_SYSTICK_CTRL 	EQU 0xE000E010	;SysTick控制及状态寄存器
 	IMPORT jd_task_entry
 	IMPORT jd_task_exit_entry
 						AREA |.text|, CODE, READONLY, ALIGN=3
-							
-							
 
 jd_asm_task_first_switch 	PROC	;进入main
 							EXPORT  jd_asm_task_first_switch
@@ -28,12 +26,13 @@ jd_asm_task_first_switch 	PROC	;进入main
 
 								;第一次进入任务，主要目的是定位堆栈，进入程序入口，其他数据无用
 								LDR R0,[R0]
-								MOV SP,R0
+								;MOV SP,R0
+								MSR PSP, R0 ; 用户程序堆栈指针
 								MOV LR,R1
 
-								;MOV R0, #0x3 ; 设置CONTROL寄存器，让用户程序使用PSP，没有内存管理，PSP模式下无法分配系统空间
-								;MSR CONTROL,R0
-								;ORR LR,#0XD ;	切换到用户栈指针
+								MOV R0, #0x3 ; 设置CONTROL寄存器，让用户程序使用PSP
+								MSR CONTROL,R0
+								
 								CPSIE i ;开中断
 								BX LR
 							ENDP
@@ -60,11 +59,12 @@ jd_asm_task_exit_switch 	PROC	;任务结束运行（没有while），切换下�
 								LDR R1,[R1]
 								LDR R0,[R1]
 								LDMFD R0!,{R4-R11}
-								MOV SP,R0
+								;MOV SP,R0
+								MSR PSP, R0 ; 用户程序堆栈指针
 
-								;MOV R0, #0x3 ; 设置CONTROL寄存器，让用户程序使用PSP，没有内存管理，PSP模式下无法分配系统空间
-								;MSR CONTROL,R0
-								;ORR LR,#0XD ;	切换到用户栈指针
+								MOV R0, #0x3 ; 设置CONTROL寄存器，让用户程序使用PSP，没有内存管理，PSP模式下无法分配系统空间
+								MSR CONTROL,R0
+								
 								CPSIE i ;开中断
 								BX LR
 							ENDP	
@@ -162,7 +162,10 @@ jd_asm_pendsv_handler   	PROC	;切换上下文
 							EXPORT  jd_asm_pendsv_handler 
 								CPSID i ;关中断
 								
-								MOV R0,SP
+								;MOV R0,SP
+								
+								MRS R0,PSP ; 用户程序堆栈指针
+								
 								STMFD R0!,{R4-R11}	
 								
 								;保护现场，将堆栈指针传出
@@ -175,9 +178,13 @@ jd_asm_pendsv_handler   	PROC	;切换上下文
 								LDR R1,[R1]
 								LDR R0,[R1]
 								LDMFD R0!,{R4-R11}
-								MOV SP,R0
+								;MOV SP,R0
+								MSR PSP, R0 ; 用户程序堆栈指针
 								
-								;ORR LR,#0XD ;	切换到用户栈指针
+								MOV R0, #0x3 ; 设置CONTROL寄存器，让用户程序使用PSP，没有内存管理，PSP模式下无法分配系统空间
+								MSR CONTROL,R0
+								
+								
 								CPSIE i ;开中断
 								BX LR
 							ENDP

@@ -1,6 +1,5 @@
 --cpu Cortex-M3
 "jdos\startup_stm32f103xe.o"
-"jdos\jd_cortex-m3.o"
 "jdos\jd_it.o"
 "jdos\jd_main.o"
 "jdos\jd_task.o"
@@ -10,6 +9,7 @@
 "jdos\main.o"
 "jdos\stm32f1xx_it.o"
 "jdos\stm32f1xx_hal_msp.o"
+"jdos\jd_cm3.o"
 "jdos\stm32f1xx_hal_gpio_ex.o"
 "jdos\stm32f1xx_hal_tim.o"
 "jdos\stm32f1xx_hal_tim_ex.o"

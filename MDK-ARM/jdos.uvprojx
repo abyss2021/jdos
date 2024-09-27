@@ -398,11 +398,6 @@
               <FilePath>..\jdos.h</FilePath>
             </File>
             <File>
-              <FileName>jd_Cortex-M3.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\jd_Cortex-M3.s</FilePath>
-            </File>
-            <File>
               <FileName>jd_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\jd_it.c</FilePath>
@@ -446,6 +441,11 @@
               <FileName>stm32f1xx_hal_msp.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/stm32f1xx_hal_msp.c</FilePath>
+            </File>
+            <File>
+              <FileName>jd_cm3.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\jd_cm3.s</FilePath>
             </File>
           </Files>
         </Group>
