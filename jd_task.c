@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-18 16:11:38
  * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-09-26 13:07:07
+ * @LastEditTime: 2024-09-27 10:53:59
  * @FilePath: \jdos\jd_task.c
  * @Description: 任务管理
  */
@@ -388,6 +388,7 @@ jd_int32_t jd_task_pause(jd_task_t *jd_task)
  */
 jd_int32_t jd_init(void)
 {
+	jd_printf("================\r\n");
 	// 初始化内存
 	jd_mem_init();
 	// 初始化链表
@@ -410,8 +411,10 @@ jd_int32_t jd_init(void)
 
 	jd_task_list_readying = &jd_task_frist->node; // 将任务挂在就绪链表上
 	jd_task_runing = jd_task_frist;				  // 保存当前任务为正在运行任务
+	
 	// jd_asm_systick_init(); //启动systick,hal库已自动使能systick
 
+	jd_printf("jdos has completed initialization\r\n");
 	// 进入空闲任务
 	jd_asm_task_first_switch(&jd_task_frist->stack_sp, jd_main);
 	return JD_OK;
