@@ -49,9 +49,6 @@ void task3()
  */
 __weak void jd_main(void)
 {
-	jd_printf("Welcome!\r\n");
-	jd_printf("================\r\n");
-
 	test_task1 = jd_task_create(task1, 512, 3);
 	if (test_task1 != JD_NULL)
 		jd_timer_start(test_task1, 200, JD_TIMER_NOLOOP);

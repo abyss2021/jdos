@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-18 16:11:38
  * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-09-27 10:53:59
+ * @LastEditTime: 2024-09-27 11:01:39
  * @FilePath: \jdos\jd_task.c
  * @Description: 任务管理
  */
@@ -415,6 +415,8 @@ jd_int32_t jd_init(void)
 	// jd_asm_systick_init(); //启动systick,hal库已自动使能systick
 
 	jd_printf("jdos has completed initialization\r\n");
+	jd_printf("Welcome!\r\n");
+	jd_printf("================\r\n");
 	// 进入空闲任务
 	jd_asm_task_first_switch(&jd_task_frist->stack_sp, jd_main);
 	return JD_OK;
