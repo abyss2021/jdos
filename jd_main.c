@@ -53,7 +53,7 @@ __weak void jd_main(void)
 {
 	test_task1 = jd_task_create(task1, 512, 3);
 	if (test_task1 != JD_NULL)
-		jd_timer_start(test_task1, 200, JD_TIMER_NOLOOP);
+		jd_timer_start(test_task1, 200, JD_TIMER_LOOP);
 
 	test_task2 = jd_task_create(task2, 512, 1);
 	if (test_task1 != JD_NULL)
