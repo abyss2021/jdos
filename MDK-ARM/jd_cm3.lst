@@ -299,8 +299,9 @@ ARM Macro Assembler    Page 5
   194 000000E4                 ENDP
   195 000000E4         ;防止编译器报警
   196 000000E4 BF00            NOP
-  197 000000E6                 END
-              00 00 E000ED23 
+  197 000000E6 BF00            NOP
+  198 000000E8                 END
+              E000ED23 
               E000ED04 
               00000000 
               00000000 

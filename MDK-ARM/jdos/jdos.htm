@@ -3,11 +3,11 @@
 <title>Static Call Graph - [jdos\jdos.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image jdos\jdos.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Sep 27 15:40:06 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Sep 27 17:47:09 2024
 <BR><P>
 <H3>Maximum Stack Usage =        208 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
-__rt_entry_main &rArr; main &rArr; jd_init &rArr; jd_printf &rArr; jd_printfloat &rArr; jd_printint &rArr; jd_putchar &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+__rt_entry_main &rArr; main &rArr; jd_init &rArr; jd_printf &rArr; jd_printfloat &rArr; jd_printint &rArr; jd_putjd_int8_t &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 <P>
 <H3>
 Functions with no stack information
@@ -228,7 +228,7 @@ Global Symbols
 
 <P><STRONG><a name="[5b]"></a>__rt_entry_main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$0000000D))
 <BR><BR>[Stack]<UL><LI>Max Depth = 208 + Unknown Stack Size
-<LI>Call Chain = __rt_entry_main &rArr; main &rArr; jd_init &rArr; jd_printf &rArr; jd_printfloat &rArr; jd_printint &rArr; jd_putchar &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<LI>Call Chain = __rt_entry_main &rArr; main &rArr; jd_init &rArr; jd_printf &rArr; jd_printfloat &rArr; jd_printint &rArr; jd_putjd_int8_t &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;exit
@@ -786,7 +786,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[8d]"></a>jd_init</STRONG> (Thumb, 82 bytes, Stack size 16 bytes, jd_task.o(i.jd_init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 208<LI>Call Chain = jd_init &rArr; jd_printf &rArr; jd_printfloat &rArr; jd_printint &rArr; jd_putchar &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<BR><BR>[Stack]<UL><LI>Max Depth = 208<LI>Call Chain = jd_init &rArr; jd_printf &rArr; jd_printfloat &rArr; jd_printint &rArr; jd_putjd_int8_t &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_mem_init
 <LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_asm_task_first_switch
@@ -848,9 +848,9 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[8e]"></a>jd_printf</STRONG> (Thumb, 270 bytes, Stack size 40 bytes, jd_printf.o(i.jd_printf))
-<BR><BR>[Stack]<UL><LI>Max Depth = 192<LI>Call Chain = jd_printf &rArr; jd_printfloat &rArr; jd_printint &rArr; jd_putchar &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<BR><BR>[Stack]<UL><LI>Max Depth = 192<LI>Call Chain = jd_printf &rArr; jd_printfloat &rArr; jd_printint &rArr; jd_putjd_int8_t &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_putchar
+<BR>[Calls]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_putjd_int8_t
 <LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printstring
 <LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printint
 <LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printfloat
@@ -863,9 +863,9 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[96]"></a>jd_printfloat</STRONG> (Thumb, 122 bytes, Stack size 24 bytes, jd_printf.o(i.jd_printfloat))
-<BR><BR>[Stack]<UL><LI>Max Depth = 152<LI>Call Chain = jd_printfloat &rArr; jd_printint &rArr; jd_putchar &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<BR><BR>[Stack]<UL><LI>Max Depth = 152<LI>Call Chain = jd_printfloat &rArr; jd_printint &rArr; jd_putjd_int8_t &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_putchar
+<BR>[Calls]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_putjd_int8_t
 <LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printint
 <LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fmul
 <LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2f
@@ -876,24 +876,24 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[98]"></a>jd_printint</STRONG> (Thumb, 90 bytes, Stack size 56 bytes, jd_printf.o(i.jd_printint))
-<BR><BR>[Stack]<UL><LI>Max Depth = 128<LI>Call Chain = jd_printint &rArr; jd_putchar &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<BR><BR>[Stack]<UL><LI>Max Depth = 128<LI>Call Chain = jd_printint &rArr; jd_putjd_int8_t &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_putchar
+<BR>[Calls]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_putjd_int8_t
 </UL>
 <BR>[Called By]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printfloat
 <LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printf
 </UL>
 
 <P><STRONG><a name="[97]"></a>jd_printstring</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, jd_printf.o(i.jd_printstring))
-<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = jd_printstring &rArr; jd_putchar &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = jd_printstring &rArr; jd_putjd_int8_t &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_putchar
+<BR>[Calls]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_putjd_int8_t
 </UL>
 <BR>[Called By]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printf
 </UL>
 
-<P><STRONG><a name="[94]"></a>jd_putchar</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, jd_printf.o(i.jd_putchar))
-<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = jd_putchar &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<P><STRONG><a name="[94]"></a>jd_putjd_int8_t</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, jd_printf.o(i.jd_putjd_int8_t))
+<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = jd_putjd_int8_t &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_transmit
 </UL>
@@ -965,11 +965,11 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
 </UL>
-<BR>[Called By]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_putchar
+<BR>[Called By]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_putjd_int8_t
 </UL>
 
 <P><STRONG><a name="[5c]"></a>main</STRONG> (Thumb, 56 bytes, Stack size 0 bytes, main.o(i.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 208<LI>Call Chain = main &rArr; jd_init &rArr; jd_printf &rArr; jd_printfloat &rArr; jd_printint &rArr; jd_putchar &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<BR><BR>[Stack]<UL><LI>Max Depth = 208<LI>Call Chain = main &rArr; jd_init &rArr; jd_printf &rArr; jd_printfloat &rArr; jd_printint &rArr; jd_putjd_int8_t &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Init
 <LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Init
@@ -981,7 +981,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[4c]"></a>task1</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, jd_main.o(i.task1))
-<BR><BR>[Stack]<UL><LI>Max Depth = 200<LI>Call Chain = task1 &rArr; jd_printf &rArr; jd_printfloat &rArr; jd_printint &rArr; jd_putchar &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<BR><BR>[Stack]<UL><LI>Max Depth = 200<LI>Call Chain = task1 &rArr; jd_printf &rArr; jd_printfloat &rArr; jd_printint &rArr; jd_putjd_int8_t &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printf
 <LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_TogglePin
@@ -989,7 +989,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> jd_main.o(i.jd_main)
 </UL>
 <P><STRONG><a name="[4d]"></a>task2</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, jd_main.o(i.task2))
-<BR><BR>[Stack]<UL><LI>Max Depth = 192<LI>Call Chain = task2 &rArr; jd_printf &rArr; jd_printfloat &rArr; jd_printint &rArr; jd_putchar &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<BR><BR>[Stack]<UL><LI>Max Depth = 192<LI>Call Chain = task2 &rArr; jd_printf &rArr; jd_printfloat &rArr; jd_printint &rArr; jd_putjd_int8_t &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printf
 <LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_delay

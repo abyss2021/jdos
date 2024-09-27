@@ -194,4 +194,5 @@ jd_asm_pendsv_handler   	PROC	;切换上下文
 							ENDP
 	;防止编译器报警
 	NOP
+	NOP
 	END

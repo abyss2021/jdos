@@ -26,7 +26,7 @@
 
 // jdos变量重新定义
 typedef unsigned char jd_uint8_t;
-typedef signed char jd_int8_t;
+typedef char jd_int8_t;
 typedef unsigned short jd_uint16_t;
 typedef signed short jd_int16_t;
 typedef unsigned int jd_uint32_t;
@@ -172,5 +172,5 @@ void *jd_malloc(jd_uint32_t mem_size); // malloc
 void jd_free(void *ptr);               // free
 
 /******************jd_printf************************/
-void jd_printf(const char* format, ...);
+void jd_printf(const jd_int8_t *format, ...);
 #endif
