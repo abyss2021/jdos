@@ -39,9 +39,6 @@ jd_asm_task_first_switch 	PROC	;进入main
 								MSR CONTROL,R0	
 								CPSIE i ;开中断	
 								
-								;全速运行上面的CONTROL无法设置  待研究
-
-
 								BX LR
 							ENDP
 								
