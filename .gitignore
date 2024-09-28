@@ -1,10 +1,17 @@
-MDK-ARM/jdos.uvguix.abyss
-MDK-ARM/jdos
 # Core
 # Drivers
 https
 httpsgitee.com
-# MDK-ARM
+MDK-ARM\DebugConfig
+MDK-ARM\jdos
+MDK-ARM\RTE
+MDK-ARM\EventRecorderStub.scvd
+MDK-ARM\jd_cortex-m3.lst
+MDK-ARM\jdos.lst
+MDK-ARM\jdos.uvguix.abyss
+MDK-ARM\jdos.uvoptx
+MDK-ARM\jdos.uvprojx
+MDK-ARM\startup_stm32f103xe.lst
 # .mxproject
 # Cortex-M3权威指南（中文版）.pdf
 # DDI0403E_e_armv7m_arm.pdf

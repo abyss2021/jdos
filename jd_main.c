@@ -1,9 +1,9 @@
 /*
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-09 10:14:21
- * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-09-26 13:09:26
- * @FilePath: \jd_rtos\jd_main.c
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2024-09-27 18:21:03
+ * @FilePath: \jdos\jd_main.c
  * @Description: jd main
  */
 
@@ -13,22 +13,25 @@ jd_task_t *test_task1, *test_task2, *test_task3;
 // 测试任务
 void task1()
 {
-	// printf("1 hello\r\n");
 	// while (1)
 	{
+#ifdef JD_PRINTF_ENABLE
+		jd_printf("task1\r\n");
+#endif
 		// jd_delay(100);
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 	};
 }
 void task2()
 {
-	// printf("2 hello\r\n");
+
 	while (1)
 	{
-
-		// HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
-		jd_delay(500);
-
+#ifdef JD_PRINTF_ENABLE
+		jd_printf("task2\r\n");
+#endif
+		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
+		jd_delay(300);
 		/*
 		 test_task1 = jd_task_create(task1, 512, 3);
 		 if (test_task1 != JD_NULL)
@@ -37,11 +40,14 @@ void task2()
 }
 void task3()
 {
-	// printf("3 hello\r\n");
+
 	while (1)
 	{
+#ifdef JD_PRINTF_ENABLE
+		jd_printf("task3\r\n");
+#endif
 		jd_delay(100);
-		// HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
+		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 	};
 }
 
@@ -51,10 +57,11 @@ void task3()
  */
 __weak void jd_main(void)
 {
-	// printf("jd hello\r\n");
 	test_task1 = jd_task_create(task1, 512, 3);
+#ifdef JD_TIMER_ENABLE
 	if (test_task1 != JD_NULL)
-		jd_timer_start(test_task1, 200, JD_TIMER_NOLOOP);
+		jd_timer_start(test_task1, 380, JD_TIMER_LOOP);
+#endif
 
 	test_task2 = jd_task_create(task2, 512, 1);
 	if (test_task1 != JD_NULL)
@@ -63,10 +70,9 @@ __weak void jd_main(void)
 	test_task3 = jd_task_create(task3, 512, 2);
 	if (test_task1 != JD_NULL)
 		jd_task_run(test_task3);
+
 	while (1)
 	{
-		// HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
-
 		// 注意此处调用延时切换任务，如果所有任务都不为就绪状态，程序将死循环，直到有就绪任务才会切换
 		// 应该在此处休眠或者其他不重要的工作
 		HAL_Delay(100);

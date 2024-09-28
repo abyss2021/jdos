@@ -3,7 +3,7 @@
  * @Date: 2024-09-18 09:10:51
  * @LastEditors: 江小鉴 abyss_er@163.com
  * @LastEditTime: 2024-09-26 12:30:39
- * @FilePath: \jd_rtos\jd_timer.c
+ * @FilePath: \jdos\jd_timer.c
  * @Description:用于定时管理
  */
 #include "jdos.h"
@@ -44,7 +44,7 @@ void jd_delay(jd_uint32_t ms)
 
 	jd_asm_svc_task_switch();
 }
-
+#ifdef JD_TIMER_ENABLE
 /**
  * @description: 定时任务创建
  * @param {jd_task_t} *jd_task 创建的普通任务
@@ -110,3 +110,4 @@ jd_int32_t jd_timer_stop(jd_task_t *jd_task)
 	jd_task->timer_loop = JD_TIMER_NOTIMER;
 	return JD_OK;
 }
+#endif
