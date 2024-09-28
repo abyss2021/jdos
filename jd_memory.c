@@ -44,13 +44,13 @@ void *jd_malloc(jd_uint32_t mem_size)
         // 找到足够的空闲空间
         if (jd_mem_temp->used == JD_MEM_FREE && (mem_size + sizeof(jd_mem_t) <= jd_mem_temp->mem_size))
         {
-            jd_mem_temp->used = JD_MEM_USED;  // 标记为使用状态
-            //当前内存空间不够分割，则将整块内存进行分配，防止内存管理中出现泄露,剩余内存足够分割至少sizeof(jd_mem_t)+1的空间
-            if((jd_mem_temp->mem_size-mem_size) > sizeof(jd_mem_t))
+            jd_mem_temp->used = JD_MEM_USED; // 标记为使用状态
+            // 当前内存空间不够分割，则将整块内存进行分配，防止内存管理中出现泄露,剩余内存足够分割至少sizeof(jd_mem_t)+1的空间
+            if ((jd_mem_temp->mem_size - mem_size) > sizeof(jd_mem_t))
             {
                 jd_mem_new_free = (jd_mem_t *)(((jd_uint8_t *)jd_mem_temp) + mem_size + sizeof(jd_mem_t)); // 将剩余的内存添加上内存块信息
                 jd_mem_new_free->mem_size = jd_mem_temp->mem_size - mem_size - sizeof(jd_mem_t);           // 剩余内存大小
-                jd_mem_new_free->used = JD_MEM_FREE; // 标记为空闲内存
+                jd_mem_new_free->used = JD_MEM_FREE;                                                       // 标记为空闲内存
 
                 jd_mem_temp->mem_size = mem_size + sizeof(jd_mem_t); // 标记当前内存块总大小
 

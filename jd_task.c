@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-18 16:11:38
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-09-27 18:20:55
+ * @LastEditTime: 2024-09-28 10:58:10
  * @FilePath: \jdos\jd_task.c
  * @Description: 任务管理
  */
@@ -257,11 +257,11 @@ void jd_task_exit()
 jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_t priority)
 {
 	jd_task_t *jd_new_task = NULL; // 创建一个任务节点指针
-	#ifdef JD_MEMORY_ENABLE
+#ifdef JD_MEMORY_ENABLE
 	jd_new_task = (jd_task_t *)jd_malloc(stack_size); // 分配空间
-	#else
+#else
 	jd_new_task = (jd_task_t *)malloc(stack_size); // 分配空间
-	#endif
+#endif
 	if (jd_new_task == NULL)
 		return JD_NULL; // 判断分配空间是否成功
 
@@ -305,13 +305,13 @@ jd_int32_t jd_task_delete(jd_task_t *jd_task)
 		return JD_ERR; // 判断是否为系统第一个任务，系统第一个任务不可删除
 
 	jd_task_pause(jd_task); // 将任务修改为暂停状态，目的是从就绪或延时链表中删除节点
-	
-	#ifdef JD_MEMORY_ENABLE
+
+#ifdef JD_MEMORY_ENABLE
 	jd_free((jd_uint32_t *)jd_task); // 释放任务栈内存
-	#else
+#else
 	free((jd_uint32_t *)jd_task); // 释放任务栈内存
-	#endif
-	
+#endif
+
 	return JD_OK;
 }
 
@@ -396,22 +396,22 @@ jd_int32_t jd_task_pause(jd_task_t *jd_task)
  */
 jd_int32_t jd_init(void)
 {
-	#ifdef JD_PRINTF_ENABLE
+#ifdef JD_PRINTF_ENABLE
 	jd_printf("================\r\n");
-	#endif
-	
-	#ifdef JD_MEMORY_ENABLE
+#endif
+
+#ifdef JD_MEMORY_ENABLE
 	// 初始化内存
 	jd_mem_init();
-	#endif
-	
+#endif
+
 	// 初始化链表
 	jd_task_list_readying = JD_NULL;
 	jd_task_list_delaying = JD_NULL;
 
 	// 设置优先级为最低
 	jd_task_frist = jd_task_create(jd_main, JD_DEFAULT_STACK_SIZE, 127);
-	while (jd_task_frist == NULL)
+	while (jd_task_frist == JD_NULL)
 		; // 空闲任务不能创建则死循环
 
 	all_register_t *stack_register = (struct all_register *)jd_task_frist->stack_sp; // 将指针转换成寄存器指针
@@ -425,13 +425,13 @@ jd_int32_t jd_init(void)
 
 	jd_task_list_readying = &jd_task_frist->node; // 将任务挂在就绪链表上
 	jd_task_runing = jd_task_frist;				  // 保存当前任务为正在运行任务
-	
-	// jd_asm_systick_init(); //启动systick,hal库已自动使能systick
-	#ifdef JD_PRINTF_ENABLE
+
+// jd_asm_systick_init(); //启动systick,hal库已自动使能systick
+#ifdef JD_PRINTF_ENABLE
 	jd_printf("jdos has completed initialization\r\n");
 	jd_printf("Welcome!\r\n");
 	jd_printf("================\r\n");
-	#endif
+#endif
 	// 进入空闲任务
 	jd_asm_task_first_switch(&jd_task_frist->stack_sp, jd_main);
 	return JD_OK;

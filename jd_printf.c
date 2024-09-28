@@ -22,7 +22,7 @@ extern UART_HandleTypeDef huart1;
  */
 void jd_transmit(jd_uint8_t *pData, jd_uint16_t Size)
 {
-    //此处对接硬件发送的接口
+    // 此处对接硬件发送的接口
     HAL_UART_Transmit(&huart1, pData, Size, HAL_MAX_DELAY);
 }
 
@@ -214,7 +214,7 @@ void jd_printf(const jd_int8_t *format, ...)
             }
             case 'u':
             {
-                jd_uint32_t num = va_arg(args,jd_uint32_t);
+                jd_uint32_t num = va_arg(args, jd_uint32_t);
                 jd_printint(num, 10, width, zero_pad);
                 break;
             }
@@ -226,7 +226,7 @@ void jd_printf(const jd_int8_t *format, ...)
             }
             case 'b':
             {
-                jd_uint32_t num = va_arg(args,jd_uint32_t);
+                jd_uint32_t num = va_arg(args, jd_uint32_t);
                 jd_printint(num, 2, width, zero_pad);
                 break;
             }
@@ -250,4 +250,3 @@ void jd_printf(const jd_int8_t *format, ...)
     va_end(args);
 }
 #endif
-

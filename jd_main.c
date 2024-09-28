@@ -15,9 +15,9 @@ void task1()
 {
 	// while (1)
 	{
-		#ifdef JD_PRINTF_ENABLE
+#ifdef JD_PRINTF_ENABLE
 		jd_printf("task1\r\n");
-		#endif
+#endif
 		// jd_delay(100);
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 	};
@@ -27,10 +27,10 @@ void task2()
 
 	while (1)
 	{
-		#ifdef JD_PRINTF_ENABLE
+#ifdef JD_PRINTF_ENABLE
 		jd_printf("task2\r\n");
-		#endif
-		HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_7);
+#endif
+		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 		jd_delay(300);
 		/*
 		 test_task1 = jd_task_create(task1, 512, 3);
@@ -43,9 +43,9 @@ void task3()
 
 	while (1)
 	{
-		#ifdef JD_PRINTF_ENABLE
+#ifdef JD_PRINTF_ENABLE
 		jd_printf("task3\r\n");
-		#endif
+#endif
 		jd_delay(100);
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 	};
@@ -58,10 +58,10 @@ void task3()
 __weak void jd_main(void)
 {
 	test_task1 = jd_task_create(task1, 512, 3);
-	#ifdef JD_TIMER_ENABLE
+#ifdef JD_TIMER_ENABLE
 	if (test_task1 != JD_NULL)
 		jd_timer_start(test_task1, 380, JD_TIMER_LOOP);
-	#endif
+#endif
 
 	test_task2 = jd_task_create(task2, 512, 1);
 	if (test_task1 != JD_NULL)
@@ -70,7 +70,7 @@ __weak void jd_main(void)
 	test_task3 = jd_task_create(task3, 512, 2);
 	if (test_task1 != JD_NULL)
 		jd_task_run(test_task3);
-	
+
 	while (1)
 	{
 		// 注意此处调用延时切换任务，如果所有任务都不为就绪状态，程序将死循环，直到有就绪任务才会切换

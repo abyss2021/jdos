@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-11 11:09:06
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-09-27 22:40:06
+ * @LastEditTime: 2024-09-28 11:00:30
  * @FilePath: \jdos\jdos.h
  * @Description: jdos 头文件
  */
@@ -12,13 +12,10 @@
 
 #include "stm32f1xx_hal.h"
 
-
 /******************选择开启的功能************************/
-#define JD_PRINTF_ENABLE  //开启打印功能
-#define JD_MEMORY_ENABLE  //开启内存管理功能，关闭后请添加标准库
-#define JD_TIMER_ENABLE  //开启定时任务管理功能
-
-
+#define JD_PRINTF_ENABLE // 开启打印功能
+#define JD_MEMORY_ENABLE // 开启内存管理功能，关闭后请添加标准库
+#define JD_TIMER_ENABLE  // 开启定时任务管理功能
 
 /******************宏定义************************/
 /*开辟内存大小*/
@@ -155,11 +152,11 @@ extern void jd_asm_svc_task_switch(void);                    // 任务上下文�
 extern void jd_asm_svc_task_exit(void);                      // 任务推出
 
 /******************jd_timer************************/
-void jd_delay(jd_uint32_t ms);    
-#ifdef JD_TIMER_ENABLE                                                             // jdos延时，让出CPU使用权
+void jd_delay(jd_uint32_t ms);
+#ifdef JD_TIMER_ENABLE                                                                         // jdos延时，让出CPU使用权
 jd_int32_t jd_timer_start(jd_task_t *jd_task, jd_uint32_t ms, jd_timer_status_t timer_status); // 定时器任务创建
-jd_int32_t jd_timer_stop(jd_task_t *task);          // 定时器任务停止
-#endif                                           
+jd_int32_t jd_timer_stop(jd_task_t *task);                                                     // 定时器任务停止
+#endif
 
 /******************jd_task************************/
 jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_t priority); // 创建任务
