@@ -229,7 +229,7 @@ void jd_task_exit()
 	stack_register->pc = (jd_uint32_t)jd_task->entry;
 	stack_register->xpsr = 0x01000000L;
 
-	jd_task->status = JD_DELAY;
+	jd_task->status = JD_TASK_DELAY;
 
 	if (jd_task->timer_loop == JD_TIMER_LOOP)
 		// 将节点加入延时链表
@@ -239,7 +239,7 @@ void jd_task_exit()
 	// 获取数据域
 	jd_task = (jd_task_t *)jd_task_list_readying; // 获取任务数据
 	// 任务暂停或延时状态，或者当前任务优先级低，当前任务放弃CPU使用权
-	jd_task->status = JD_RUNNING;					   // 即将运行的任务改为正在运行状态
+	jd_task->status = JD_TASK_RUNNING;					   // 即将运行的任务改为正在运行状态
 	jd_task_runing = jd_task;						   // 更改当前为运行的任务
 	jd_task_next_stack_sp = &jd_task_runing->stack_sp; // 更新下一个任务全局栈指针变量
 
@@ -271,7 +271,7 @@ jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_
 
 	jd_new_task->timeout = 0;			  // 没有延时时间
 	jd_new_task->entry = task_entry;	  // 任务入口
-	jd_new_task->status = JD_PAUSE;		  // 创建任务，状态为暂停状态，等待启动
+	jd_new_task->status = JD_TASK_PAUSE;		  // 创建任务，状态为暂停状态，等待启动
 	jd_new_task->stack_size = stack_size; // 记录当前任务堆栈大小
 
 	jd_new_task->stack_sp = (jd_uint32_t)(jd_new_task->stack_origin_addr) + jd_new_task->stack_size - sizeof(struct all_register) - 4; // 腾出寄存器的空间
@@ -337,7 +337,7 @@ jd_int32_t jd_task_run(jd_task_t *jd_task)
 {
 	if (jd_task == JD_NULL)
 		return JD_ERR;
-	jd_task->status = JD_READY; // 将任务更改为就绪状态
+	jd_task->status = JD_TASK_READY; // 将任务更改为就绪状态
 
 	// 加入就绪链表
 	jd_task_list_readying = jd_node_in_rd(jd_task_list_readying, &jd_task->node);
@@ -361,7 +361,7 @@ jd_int32_t jd_task_pause(jd_task_t *jd_task)
 		return JD_ERR;
 
 	// 本来就为暂停状态
-	if (jd_task->status == JD_PAUSE)
+	if (jd_task->status == JD_TASK_PAUSE)
 		return JD_OK;
 
 	// 在就绪链表表头
@@ -383,7 +383,7 @@ jd_int32_t jd_task_pause(jd_task_t *jd_task)
 		// 直接删除节点
 		jd_node_insert(jd_task->node.previous, JD_NULL, jd_task->node.next);
 	}
-	jd_task->status = JD_PAUSE; // 将任务更改为暂停状态状态
+	jd_task->status = JD_TASK_PAUSE; // 将任务更改为暂停状态状态
 	// 清除任务节点信息
 	jd_task->node.next = JD_NULL;
 	jd_task->node.previous = JD_NULL;
@@ -419,7 +419,7 @@ jd_int32_t jd_init(void)
 	// jd_main任务没有退出的程序，故返回地址指向自己
 	stack_register->lr = (jd_uint32_t)jd_main;
 
-	jd_task_frist->status = JD_READY; // 任务就绪
+	jd_task_frist->status = JD_TASK_READY; // 任务就绪
 
 	// jd_task_frist->node->addr = jd_task_frist; // 记录节点内存地址，方便通过节点找到任务数据域
 
