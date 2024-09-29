@@ -8,7 +8,7 @@
 JD_ICRS				EQU 0XE000ED04	;中断控制及状态寄存器
 JD_PRI_14 			EQU 0XE000ED23	;PendSV的优先级设置寄存器
 JD_SYSTICK_CTRL 	EQU 0xE000E010	;SysTick控制及状态寄存器
-JD_POWER_SLEEP 		EQU 0xE000ED10	;SysTick控制及状态寄存器
+JD_POWER_SLEEP 		EQU 0xE000ED10	;睡眠控制寄存器
 	
 	IMPORT jd_task_stack_sp
 	IMPORT jd_task_next_stack_sp
@@ -203,9 +203,10 @@ jd_asm_power_sleep 	PROC
 					AND R1,#0xF9
 					STR R1,[R0]
 					WFI
+					
+					BX LR
 					ENDP
 
 	;防止编译器报警
-	NOP
 	NOP
 	END

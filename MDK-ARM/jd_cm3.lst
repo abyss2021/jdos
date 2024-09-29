@@ -24,8 +24,8 @@ ARM Macro Assembler    Page 1
                                                             �态寄存器
    11 00000000 E000ED10 
                        JD_POWER_SLEEP
-                               EQU              0xE000ED10  ;SysTick控制及�
-                                                            �态寄存器
+                               EQU              0xE000ED10  ;睡眠控制寄存
+                                                            器
    12 00000000         
    13 00000000                 IMPORT           jd_task_stack_sp
    14 00000000                 IMPORT           jd_task_next_stack_sp
@@ -316,19 +316,20 @@ ARM Macro Assembler    Page 5
   203 000000E8 F001 01F9       AND              R1,#0xF9
   204 000000EC 6001            STR              R1,[R0]
   205 000000EE BF30            WFI
-  206 000000F0                 ENDP
-  207 000000F0         
-  208 000000F0         ;防止编译器报警
-  209 000000F0 BF00            NOP
-  210 000000F2 BF00            NOP
-  211 000000F4                 END
-              E000ED23 
+  206 000000F0         
+  207 000000F0 4770            BX               LR
+  208 000000F2                 ENDP
+  209 000000F2         
+  210 000000F2         ;防止编译器报警
+  211 000000F2 BF00            NOP
+  212 000000F4                 END
 
 
 
 ARM Macro Assembler    Page 6 
 
 
+              E000ED23 
               E000ED04 
               00000000 
               00000000 
