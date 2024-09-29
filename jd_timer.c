@@ -22,7 +22,7 @@ void jd_delay(jd_uint32_t ms)
 		return;
 
 	jd_asm_cps_disable();
-	jd_task_runing->status = JD_DELAY;
+	jd_task_runing->status = JD_TASK_DELAY;
 	jd_task_runing->timeout = jd_time + ms; // 将延时时间写入节点
 	// 删除就绪链表中的节点
 	jd_task_list_readying = jd_node_delete(jd_task_list_readying, &jd_task_runing->node);
@@ -37,7 +37,7 @@ void jd_delay(jd_uint32_t ms)
 	jd_task = (jd_task_t *)jd_task_list_readying; // 获取任务数据
 
 	// 任务暂停或延时状态，或者当前任务优先级低，当前任务放弃CPU使用权
-	jd_task->status = JD_RUNNING;					   // 即将运行的任务改为正在运行状态
+	jd_task->status = JD_TASK_RUNNING;					   // 即将运行的任务改为正在运行状态
 	jd_task_stack_sp = &jd_task_runing->stack_sp;	   // 更新当前任务全局栈指针变量
 	jd_task_runing = jd_task;						   // 更改当前为运行的任务
 	jd_task_next_stack_sp = &jd_task_runing->stack_sp; // 更新下一个任务全局栈指针变量
@@ -83,7 +83,7 @@ jd_int32_t jd_timer_start(jd_task_t *jd_task, jd_uint32_t ms, jd_timer_status_t 
 	stack_register->lr = (jd_uint32_t)jd_task_exit;
 
 	// 判断是否在就绪链表中
-	if (jd_task->status == JD_RUNNING || jd_task->status == JD_READY)
+	if (jd_task->status == JD_TASK_RUNNING || jd_task->status == JD_TASK_READY)
 	{
 		// 删除就绪链表中的节点
 		jd_task_list_readying = jd_node_delete(jd_task_list_readying, &jd_task->node);

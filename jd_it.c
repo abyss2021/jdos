@@ -1,8 +1,8 @@
 /*
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-18 16:12:28
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-09-27 18:11:16
+ * @LastEditors: 江小鉴 abyss_er@163.com
+ * @LastEditTime: 2024-09-29 09:06:17
  * @FilePath: \jdos\jd_it.c
  * @Description: jdos异常管理
  */
@@ -51,9 +51,9 @@ void jd_PendSV_Handler(void)
 
 	// 获取数据域
 	jd_task = (jd_task_t *)jd_task_list_readying; // 获取任务数据
-	jd_task_runing->status = JD_READY;
+	jd_task_runing->status = JD_TASK_READY;
 	// 任务暂停或延时状态，或者当前任务优先级低，当前任务放弃CPU使用权
-	jd_task->status = JD_RUNNING;					   // 即将运行的任务改为正在运行状态
+	jd_task->status = JD_TASK_RUNNING;					   // 即将运行的任务改为正在运行状态
 	jd_task_stack_sp = &jd_task_runing->stack_sp;	   // 更新当前任务全局栈指针变量
 	jd_task_runing = jd_task;						   // 更改当前为运行的任务
 	jd_task_next_stack_sp = &jd_task_runing->stack_sp; // 更新下一个任务全局栈指针变量

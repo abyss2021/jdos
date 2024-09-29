@@ -8,6 +8,7 @@
 JD_ICRS				EQU 0XE000ED04	;中断控制及状态寄存器
 JD_PRI_14 			EQU 0XE000ED23	;PendSV的优先级设置寄存器
 JD_SYSTICK_CTRL 	EQU 0xE000E010	;SysTick控制及状态寄存器
+JD_POWER_SLEEP 		EQU 0xE000ED10	;SysTick控制及状态寄存器
 	
 	IMPORT jd_task_stack_sp
 	IMPORT jd_task_next_stack_sp
@@ -189,6 +190,21 @@ jd_asm_pendsv_handler   	PROC	;切换上下文
 								
 								BX LR
 							ENDP
+
+jd_asm_power_sleep 	PROC
+					EXPORT jd_asm_power_sleep
+
+					;SLEEPDEEP = 0;进入轻度睡眠，内核停止，外设不停止
+					;SLEEP-NOW：如果SLEEPONEXIT位被清除，当WRI或WFE被执行时，微控制器立即进入睡眠模式。
+					;SLEEP-ON-EXIT：如果SLEEPONEXIT位被置位，系统从最低优先级的中断处理程序中退出时，微控制器就立即进入睡眠模式。
+					
+					LDR R0,=JD_POWER_SLEEP
+					LDR R1,[R0]
+					AND R1,#0xF9
+					STR R1,[R0]
+					WFI
+					ENDP
+
 	;防止编译器报警
 	NOP
 	NOP

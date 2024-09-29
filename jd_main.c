@@ -1,8 +1,8 @@
 /*
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-09 10:14:21
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-09-27 18:21:03
+ * @LastEditors: 江小鉴 abyss_er@163.com
+ * @LastEditTime: 2024-09-29 09:56:27
  * @FilePath: \jdos\jd_main.c
  * @Description: jd main
  */
@@ -75,6 +75,6 @@ __weak void jd_main(void)
 	{
 		// 注意此处调用延时切换任务，如果所有任务都不为就绪状态，程序将死循环，直到有就绪任务才会切换
 		// 应该在此处休眠或者其他不重要的工作
-		HAL_Delay(100);
+		jd_asm_power_sleep();
 	};
 }
