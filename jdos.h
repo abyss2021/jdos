@@ -1,8 +1,8 @@
 /*
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-11 11:09:06
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-09-28 11:00:30
+ * @LastEditors: 江小鉴 abyss_er@163.com
+ * @LastEditTime: 2024-09-29 10:19:58
  * @FilePath: \jdos\jdos.h
  * @Description: jdos 头文件
  */
@@ -26,7 +26,7 @@
 #define JD_OK 1
 #define JD_ERR 2
 
-/*系统默认堆栈大小*/
+/*任务默认堆栈大小*/
 #define JD_DEFAULT_STACK_SIZE 512
 
 // jdos变量重新定义
@@ -44,10 +44,10 @@ typedef jd_uint32_t jd_time_t;
 /*枚举任务状态*/
 typedef enum jd_task_status
 {
-    JD_READY = 0, // 任务就绪状态
-    JD_RUNNING,   // 任务运行状态
-    JD_DELAY,     // 任务延时状态
-    JD_PAUSE,     // 任务暂停状态
+    JD_TASK_READY = 0, // 任务就绪状态
+    JD_TASK_RUNNING,   // 任务运行状态
+    JD_TASK_DELAY,     // 任务延时状态
+    JD_TASK_PAUSE,     // 任务暂停状态
 } jd_task_status_t;
 
 /*定时任务使用状态*/
@@ -147,9 +147,9 @@ extern void jd_asm_pendsv_handler(void);                     // PendSV切换上�
 extern void jd_asm_systick_init(void);                       // systick初始化
 extern void jd_asm_cps_disable(void);                        // 除能 NMI 和硬 fault 之外的所有异常
 extern void jd_asm_cps_enable(void);                         // 使能中断
-extern void jd_asm_svc_handler(void);                        // pendsv异常处理
+extern void jd_asm_svc_handler(void);                        // svc异常处理
 extern void jd_asm_svc_task_switch(void);                    // 任务上下文切换
-extern void jd_asm_svc_task_exit(void);                      // 任务推出
+extern void jd_asm_svc_task_exit(void);                      // 任务退出
 
 /******************jd_timer************************/
 void jd_delay(jd_uint32_t ms);
@@ -183,6 +183,9 @@ void jd_free(void *ptr);               // free
 /******************jd_printf************************/
 #ifdef JD_PRINTF_ENABLE
 void jd_printf(const jd_int8_t *format, ...);
+
+/******************jd_power************************/
+void jd_asm_power_sleep(void);
 #endif
 
 #endif
