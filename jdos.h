@@ -147,9 +147,9 @@ extern void jd_asm_pendsv_handler(void);                     // PendSV切换上�
 extern void jd_asm_systick_init(void);                       // systick初始化
 extern void jd_asm_cps_disable(void);                        // 除能 NMI 和硬 fault 之外的所有异常
 extern void jd_asm_cps_enable(void);                         // 使能中断
-extern void jd_asm_svc_handler(void);                        // pendsv异常处理
+extern void jd_asm_svc_handler(void);                        // svc异常处理
 extern void jd_asm_svc_task_switch(void);                    // 任务上下文切换
-extern void jd_asm_svc_task_exit(void);                      // 任务推出
+extern void jd_asm_svc_task_exit(void);                      // 任务退出
 
 /******************jd_timer************************/
 void jd_delay(jd_uint32_t ms);
