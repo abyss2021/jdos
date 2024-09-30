@@ -128,7 +128,7 @@ jd_asm_systick_init			PROC	;systick初始化，hal库已经初始化，这里不
 								MOV R1, #0
 								STR R1, [R0] ; 先停止SysTick，以防意外产生异常请求
 								
-								LDR R1, =0x3FF ; 让SysTick每1024周期计完一次。
+								LDR R1, =72000 ; 让SysTick每72000周期计完一次,主频为72Mhz，计时时间为1ms
 								STR R1, [R0,#4] ; 写入重装载的值
 								STR R1, [R0,#8] ; 往STCVR中写任意的数，以确保清除COUNTFLAG标志
 								

@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-18 16:11:38
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-09-28 10:58:10
+ * @LastEditTime: 2024-09-30 09:07:25
  * @FilePath: \jdos\jd_task.c
  * @Description: 任务管理
  */
@@ -283,7 +283,6 @@ jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_
 	stack_register->xpsr = 0x01000000L; // 由于Armv7-M只支持执行Thumb指令，因此必须始终将其值保持为1，否则任务切换会异常
 
 	jd_new_task->priority = priority; // 设置优先级
-	// jd_new_task->node->addr = jd_new_task; // 记录节点内存地址，方便通过节点找到任务数据域
 
 	jd_new_task->timer_loop = JD_TIMER_NOTIMER;	 // 不是定时任务
 	jd_new_task->auto_delate = JD_TASK_NODELATE; //	任务执行完成后不自动回收内存，任务不删除，下次可直接运行

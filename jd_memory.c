@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-23 09:36:38
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-09-29 10:52:09
+ * @LastEditTime: 2024-09-30 09:05:08
  * @FilePath: \jdos\jd_memory.c
  * @Description: 用于内存管理
  */
@@ -45,7 +45,7 @@ void *jd_malloc(jd_uint32_t mem_size)
         if (jd_mem_temp->used == JD_MEM_FREE && (mem_size + sizeof(jd_mem_t) <= jd_mem_temp->mem_size))
         {
             jd_mem_temp->used = JD_MEM_USED; // 标记为使用状态
-            // 当前内存空间不够分割，则将整块内存进行分配，防止内存管理中出现泄露,剩余内存足够分割至少sizeof(jd_mem_t)+1的空间
+            // 防止内存管理中出现泄露,剩余内存足够分割至少sizeof(jd_mem_t)+1的空间
             if ((jd_mem_temp->mem_size - mem_size) > sizeof(jd_mem_t))
             {
                 jd_mem_new_free = (jd_mem_t *)(((jd_uint8_t *)jd_mem_temp) + mem_size + sizeof(jd_mem_t)); // 将剩余的内存添加上内存块信息
