@@ -1,8 +1,8 @@
 /*
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-18 16:11:38
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-09-30 09:07:25
+ * @LastEditors: 江小鉴 abyss_er@163.com
+ * @LastEditTime: 2024-11-07 17:10:13
  * @FilePath: \jdos\jd_task.c
  * @Description: 任务管理
  */
@@ -221,7 +221,7 @@ void jd_task_exit()
 		jd_task_delete(jd_task);
 	}
 
-	jd_task->stack_sp = (jd_uint32_t)(jd_task->stack_origin_addr) + jd_task->stack_size - sizeof(struct all_register) - 4; // 腾出寄存器的空间
+	jd_task->stack_sp = (jd_uint32_t)((jd_task->stack_origin_addr) + jd_task->stack_size - sizeof(struct all_register))&0xfffffffc; // 腾出寄存器的空间
 	all_register_t *stack_register = (struct all_register *)jd_task->stack_sp;											   // 将指针转换成寄存器指针
 
 	// 设置必要数据
@@ -274,7 +274,7 @@ jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_
 	jd_new_task->status = JD_TASK_PAUSE;		  // 创建任务，状态为暂停状态，等待启动
 	jd_new_task->stack_size = stack_size; // 记录当前任务堆栈大小
 
-	jd_new_task->stack_sp = (jd_uint32_t)(jd_new_task->stack_origin_addr) + jd_new_task->stack_size - sizeof(struct all_register) - 4; // 腾出寄存器的空间
+	jd_new_task->stack_sp = (jd_uint32_t)((jd_new_task->stack_origin_addr) + jd_new_task->stack_size - sizeof(struct all_register))&0xfffffffc; // 腾出寄存器的空间
 	all_register_t *stack_register = (struct all_register *)jd_new_task->stack_sp;													   // 将指针转换成寄存器指针
 
 	// 将任务运行数据搬移到内存中

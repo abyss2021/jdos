@@ -215,12 +215,17 @@
           <WinNumber>1</WinNumber>
           <ItemText>jd_task_list_delaying</ItemText>
         </Ww>
+        <Ww>
+          <count>13</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>jd_task_frist</ItemText>
+        </Ww>
       </WatchWindow1>
       <MemoryWindow1>
         <Mm>
           <WinNumber>1</WinNumber>
           <SubType>0</SubType>
-          <ItemText>0xE000ED10</ItemText>
+          <ItemText>0x20000254-4</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow1>

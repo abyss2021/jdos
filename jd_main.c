@@ -31,7 +31,7 @@ void task2()
 		jd_printf("task2\r\n");
 #endif
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
-		jd_delay(300);
+		jd_delay(150);
 		/*
 		 test_task1 = jd_task_create(task1, 512, 3);
 		 if (test_task1 != JD_NULL)
@@ -46,7 +46,7 @@ void task3()
 #ifdef JD_PRINTF_ENABLE
 		jd_printf("task3\r\n");
 #endif
-		jd_delay(100);
+		jd_delay(320);
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 	};
 }

@@ -3,7 +3,7 @@
 <title>Static Call Graph - [jdos\jdos.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image jdos\jdos.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Mon Sep 30 09:49:04 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Thu Nov 07 17:47:12 2024
 <BR><P>
 <H3>Maximum Stack Usage =        208 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -899,7 +899,7 @@ Global Symbols
 <LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printf
 </UL>
 
-<P><STRONG><a name="[8f]"></a>jd_task_create</STRONG> (Thumb, 70 bytes, Stack size 16 bytes, jd_task.o(i.jd_task_create))
+<P><STRONG><a name="[8f]"></a>jd_task_create</STRONG> (Thumb, 74 bytes, Stack size 16 bytes, jd_task.o(i.jd_task_create))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = jd_task_create &rArr; jd_malloc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_malloc
@@ -917,7 +917,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_task_exit
 </UL>
 
-<P><STRONG><a name="[51]"></a>jd_task_exit</STRONG> (Thumb, 106 bytes, Stack size 16 bytes, jd_task.o(i.jd_task_exit))
+<P><STRONG><a name="[51]"></a>jd_task_exit</STRONG> (Thumb, 110 bytes, Stack size 16 bytes, jd_task.o(i.jd_task_exit))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = jd_task_exit &rArr; jd_task_delete &rArr; jd_free
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_asm_svc_task_exit
@@ -984,7 +984,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> jd_main.o(i.jd_main)
 </UL>
-<P><STRONG><a name="[4d]"></a>task2</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, jd_main.o(i.task2))
+<P><STRONG><a name="[4d]"></a>task2</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, jd_main.o(i.task2))
 <BR><BR>[Stack]<UL><LI>Max Depth = 192<LI>Call Chain = task2 &rArr; jd_printf &rArr; jd_printfloat &rArr; jd_printint &rArr; jd_putjd_int8_t &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printf
@@ -993,7 +993,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> jd_main.o(i.jd_main)
 </UL>
-<P><STRONG><a name="[4e]"></a>task3</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, jd_main.o(i.task3))
+<P><STRONG><a name="[4e]"></a>task3</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, jd_main.o(i.task3))
 <BR><BR>[Stack]<UL><LI>Max Depth = 192<LI>Call Chain = task3 &rArr; jd_printf &rArr; jd_printfloat &rArr; jd_printint &rArr; jd_putjd_int8_t &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printf
