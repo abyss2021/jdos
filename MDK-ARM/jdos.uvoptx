@@ -152,18 +152,18 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>11</LineNumber>
+          <LineNumber>51</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134222258</Address>
+          <Address>134219490</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\jd_cpu_u.c</Filename>
+          <Filename>..\jd_it.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\jdos\../jd_cpu_u.c\11</Expression>
+          <Expression>\\jdos\../jd_it.c\51</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -246,6 +246,11 @@
           <count>15</count>
           <WinNumber>1</WinNumber>
           <ItemText>jd_task_runing</ItemText>
+        </Ww>
+        <Ww>
+          <count>16</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>jd_cpu_u,0x0A</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>

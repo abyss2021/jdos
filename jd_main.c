@@ -31,7 +31,7 @@ void task2()
 		//jd_printf("task2\r\n");
 #endif
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
-		HAL_Delay(20);
+		//HAL_Delay(20);
 		jd_delay(80);
 		/*
 		 test_task1 = jd_task_create(task1, 512, 3);

@@ -3,6 +3,7 @@
 
 //100ms DWT最大计时次数
 jd_uint32_t jd_cpu_u_100_base = 0;
+jd_int32_t jd_cpu_u = 0;
 
 
 //cpu利用率初始化  全速运行100ms  得到最大运行时间

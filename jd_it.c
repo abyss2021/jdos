@@ -48,13 +48,18 @@ void HAL_IncTick(void)
 			static jd_uint8_t jd_cpu_time_100ms = 0;
 			if(++jd_cpu_time_100ms == 100)
 			{
-				jd_uint32_t jd_cpu_time = jd_cpu_u_time_get();  //15ns是64Mhz一条指令的时间，将时间转换成毫秒
+				jd_cpu_u = jd_cpu_u_time_get()/jd_cpu_u_100_base;
+				if(jd_cpu_u>100)
+				{
+					jd_cpu_u_100_base = ((float)jd_cpu_u_100_base)/((float)jd_cpu_u/100);
+				}
 				
 				#ifdef JD_PRINTF_ENABLE
-				jd_printf("jd_cpu_time:%f\r\n",(float)jd_cpu_time/jd_cpu_u_100_base);
+				jd_printf("jd_cpu_u:%d%%\r\n",jd_cpu_u);
 				#endif
 				
-				jd_cpu_time_100ms = 0;
+				jd_cpu_time_100ms	 = 0;
+				//jd_asm_dwt_time_stop();
 				jd_cpu_u_time_set0();
 			}
 

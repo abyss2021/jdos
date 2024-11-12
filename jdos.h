@@ -205,6 +205,7 @@ extern void jd_asm_dwt_time_stop(void);
 extern jd_uint32_t jd_asm_dwt_time_get(void);
 extern void jd_asm_dwt_time_set0(void);
 extern jd_uint32_t jd_cpu_u_100_base;
+extern jd_int32_t jd_cpu_u;
 #endif
 
 #endif
