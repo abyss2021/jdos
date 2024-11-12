@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-18 16:12:28
  * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-09-29 09:06:17
+ * @LastEditTime: 2024-11-12 14:03:14
  * @FilePath: \jdos\jd_it.c
  * @Description: jdos异常管理
  */
@@ -31,7 +31,10 @@ void HAL_IncTick(void)
 		}
 
 		jd_task_list_delaying = jd_node_delete(jd_task_list_delaying, jd_task_list_delaying); // 删除延时完成的节点
-		jd_task_run(jd_task);																  // 加入就绪链表
+		
+		jd_task->status = JD_TASK_READY; // 将任务更改为就绪状态
+		// 加入就绪链表
+		jd_task_list_readying = jd_node_in_rd(jd_task_list_readying, &jd_task->node);
 
 		if (jd_task_list_delaying == JD_NULL)
 			break;

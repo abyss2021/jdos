@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-18 16:11:38
  * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-11-07 17:10:13
+ * @LastEditTime: 2024-11-12 14:02:51
  * @FilePath: \jdos\jd_task.c
  * @Description: 任务管理
  */
@@ -340,6 +340,9 @@ jd_int32_t jd_task_run(jd_task_t *jd_task)
 
 	// 加入就绪链表
 	jd_task_list_readying = jd_node_in_rd(jd_task_list_readying, &jd_task->node);
+
+	//切换任务
+	jd_asm_pendsv_putup();
 
 	// 插入节点
 	return JD_OK;
