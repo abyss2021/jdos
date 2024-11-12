@@ -410,7 +410,9 @@ jd_int32_t jd_init(void)
 	jd_mem_init();
 #endif
 	
-	
+#ifdef JD_CPU_U_ENABLE
+	jd_cpu_u_init();
+#endif
 
 	// 初始化链表
 	jd_task_list_readying = JD_NULL;

@@ -223,8 +223,8 @@ jd_asm_dwt_init 	PROC	;cpu利用率初始化
 					ENDP
 				
 
-jd_asm_dwt_time_set0	PROC
-						EXPORT	jd_asm_dwt_time_set0
+jd_asm_dwt_set0	PROC
+						EXPORT	jd_asm_dwt_set0
 							
 						LDR R0,=JD_DWT_CYCCNT ;DWT清0
 						MOV R1,#0
@@ -233,8 +233,8 @@ jd_asm_dwt_time_set0	PROC
 						BX LR
 						ENDP
 
-jd_asm_dwt_time_start	PROC	;DWT计时开始
-						EXPORT 	jd_asm_dwt_time_start
+jd_asm_dwt_start	PROC	;DWT计时开始
+						EXPORT 	jd_asm_dwt_start
 
 						LDR R0,=JD_DWT_CTRL	;DWT启动计时
 						LDR R1,[R0]
@@ -244,8 +244,8 @@ jd_asm_dwt_time_start	PROC	;DWT计时开始
 						BX LR
 						ENDP
 							
-jd_asm_dwt_time_stop	PROC	;	DWT停止计时
-						EXPORT	jd_asm_dwt_time_stop
+jd_asm_dwt_stop	PROC	;	DWT停止计时
+						EXPORT	jd_asm_dwt_stop
 							
 						LDR R0,=JD_DWT_CTRL	;DWT启动计时
 						LDR R1,[R0]
@@ -255,8 +255,8 @@ jd_asm_dwt_time_stop	PROC	;	DWT停止计时
 						BX LR
 						ENDP
 
-jd_asm_dwt_time_get		PROC	;DWT计时获取
-						EXPORT	jd_asm_dwt_time_get
+jd_asm_dwt_get		PROC	;DWT计时获取
+						EXPORT	jd_asm_dwt_get
 							
 						LDR R0,=JD_DWT_CYCCNT
 						LDR R0,[R0]

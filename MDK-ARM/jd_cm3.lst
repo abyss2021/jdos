@@ -354,9 +354,9 @@ ARM Macro Assembler    Page 6
   223 000000FC                 ENDP
   224 000000FC         
   225 000000FC         
-  226 000000FC         jd_asm_dwt_time_set0
+  226 000000FC         jd_asm_dwt_set0
                                PROC
-  227 000000FC                 EXPORT           jd_asm_dwt_time_set0
+  227 000000FC                 EXPORT           jd_asm_dwt_set0
   228 000000FC         
   229 000000FC 4814            LDR              R0,=JD_DWT_CYCCNT ;DWT清0
   230 000000FE F04F 0100       MOV              R1,#0
@@ -365,9 +365,9 @@ ARM Macro Assembler    Page 6
   233 00000104 4770            BX               LR
   234 00000106                 ENDP
   235 00000106         
-  236 00000106         jd_asm_dwt_time_start
+  236 00000106         jd_asm_dwt_start
                                PROC                         ;DWT计时开始
-  237 00000106                 EXPORT           jd_asm_dwt_time_start
+  237 00000106                 EXPORT           jd_asm_dwt_start
   238 00000106         
   239 00000106 4813            LDR              R0,=JD_DWT_CTRL 
                                                             ;DWT启动计时
@@ -378,9 +378,9 @@ ARM Macro Assembler    Page 6
   244 00000110 4770            BX               LR
   245 00000112                 ENDP
   246 00000112         
-  247 00000112         jd_asm_dwt_time_stop
+  247 00000112         jd_asm_dwt_stop
                                PROC                         ; DWT停止计时
-  248 00000112                 EXPORT           jd_asm_dwt_time_stop
+  248 00000112                 EXPORT           jd_asm_dwt_stop
   249 00000112         
   250 00000112 4810            LDR              R0,=JD_DWT_CTRL 
                                                             ;DWT启动计时
@@ -397,9 +397,9 @@ ARM Macro Assembler    Page 7
   255 0000011C 4770            BX               LR
   256 0000011E                 ENDP
   257 0000011E         
-  258 0000011E         jd_asm_dwt_time_get
+  258 0000011E         jd_asm_dwt_get
                                PROC                         ;DWT计时获取
-  259 0000011E                 EXPORT           jd_asm_dwt_time_get
+  259 0000011E                 EXPORT           jd_asm_dwt_get
   260 0000011E         
   261 0000011E 480C            LDR              R0,=JD_DWT_CYCCNT
   262 00000120 6800            LDR              R0,[R0]
@@ -459,6 +459,14 @@ Symbol: jd_asm_cps_enable
    Uses
       At line 153 in file ..\jd_cm3.s
 Comment: jd_asm_cps_enable used once
+jd_asm_dwt_get 0000011E
+
+Symbol: jd_asm_dwt_get
+   Definitions
+      At line 258 in file ..\jd_cm3.s
+   Uses
+      At line 259 in file ..\jd_cm3.s
+Comment: jd_asm_dwt_get used once
 jd_asm_dwt_init 000000F0
 
 Symbol: jd_asm_dwt_init
@@ -467,33 +475,25 @@ Symbol: jd_asm_dwt_init
    Uses
       At line 215 in file ..\jd_cm3.s
 Comment: jd_asm_dwt_init used once
-jd_asm_dwt_time_get 0000011E
+jd_asm_dwt_set0 000000FC
 
-Symbol: jd_asm_dwt_time_get
-   Definitions
-      At line 258 in file ..\jd_cm3.s
-   Uses
-      At line 259 in file ..\jd_cm3.s
-Comment: jd_asm_dwt_time_get used once
-jd_asm_dwt_time_set0 000000FC
-
-Symbol: jd_asm_dwt_time_set0
+Symbol: jd_asm_dwt_set0
    Definitions
       At line 226 in file ..\jd_cm3.s
    Uses
       At line 227 in file ..\jd_cm3.s
-Comment: jd_asm_dwt_time_set0 used once
-jd_asm_dwt_time_start 00000106
+Comment: jd_asm_dwt_set0 used once
+jd_asm_dwt_start 00000106
 
-Symbol: jd_asm_dwt_time_start
+Symbol: jd_asm_dwt_start
    Definitions
       At line 236 in file ..\jd_cm3.s
    Uses
       At line 237 in file ..\jd_cm3.s
-Comment: jd_asm_dwt_time_start used once
-jd_asm_dwt_time_stop 00000112
+Comment: jd_asm_dwt_start used once
+jd_asm_dwt_stop 00000112
 
-Symbol: jd_asm_dwt_time_stop
+Symbol: jd_asm_dwt_stop
 
 
 
@@ -504,7 +504,7 @@ Relocatable symbols
       At line 247 in file ..\jd_cm3.s
    Uses
       At line 248 in file ..\jd_cm3.s
-Comment: jd_asm_dwt_time_stop used once
+Comment: jd_asm_dwt_stop used once
 jd_asm_pendsv_handler 000000B8
 
 Symbol: jd_asm_pendsv_handler

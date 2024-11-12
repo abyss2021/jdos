@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-11 11:09:06
  * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-09-29 10:19:58
+ * @LastEditTime: 2024-11-12 21:57:22
  * @FilePath: \jdos\jdos.h
  * @Description: jdos 头文件
  */
@@ -195,17 +195,17 @@ void jd_asm_power_sleep(void);
 
 /******************jd_cpu_u************************/
 #ifdef JD_CPU_U_ENABLE
+jd_uint32_t jd_cpu_u_get(void);
+
 void jd_cpu_u_init(void);
-void jd_cpu_u_time(void);
-void jd_cpu_u_time_set0(void);
-jd_uint32_t jd_cpu_u_time_get(void);
+void jd_cpu_u_start_stop(void);
+void jd_cpu_u_ctr(void);
+
 extern void jd_asm_dwt_init(void);
-extern void jd_asm_dwt_time_start(void);
-extern void jd_asm_dwt_time_stop(void);
-extern jd_uint32_t jd_asm_dwt_time_get(void);
-extern void jd_asm_dwt_time_set0(void);
-extern jd_uint32_t jd_cpu_u_100_base;
-extern jd_int32_t jd_cpu_u;
+extern void jd_asm_dwt_start(void);
+extern void jd_asm_dwt_stop(void);
+extern jd_uint32_t jd_asm_dwt_get(void);
+extern void jd_asm_dwt_set0(void);
 #endif
 
 #endif

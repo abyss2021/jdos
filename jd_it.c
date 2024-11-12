@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-18 16:12:28
  * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-11-12 14:03:14
+ * @LastEditTime: 2024-11-12 21:51:00
  * @FilePath: \jdos\jd_it.c
  * @Description: jdos异常管理
  */
@@ -45,24 +45,7 @@ void HAL_IncTick(void)
 	
 	#ifdef JD_CPU_U_ENABLE
 	//这里计算的是空闲任务的运行时间
-			static jd_uint8_t jd_cpu_time_100ms = 0;
-			if(++jd_cpu_time_100ms == 100)
-			{
-				jd_cpu_u = jd_cpu_u_time_get()/jd_cpu_u_100_base;
-				if(jd_cpu_u>100)
-				{
-					jd_cpu_u_100_base = ((float)jd_cpu_u_100_base)/((float)jd_cpu_u/100);
-				}
-				
-				#ifdef JD_PRINTF_ENABLE
-				jd_printf("jd_cpu_u:%d%%\r\n",jd_cpu_u);
-				#endif
-				
-				jd_cpu_time_100ms	 = 0;
-				//jd_asm_dwt_time_stop();
-				jd_cpu_u_time_set0();
-			}
-
+	jd_cpu_u_ctr();
 	#endif
 
 	jd_asm_cps_enable();
@@ -90,7 +73,7 @@ void jd_PendSV_Handler(void)
 	jd_task_next_stack_sp = &jd_task_runing->stack_sp; // 更新下一个任务全局栈指针变量
 	
 	#ifdef JD_CPU_U_ENABLE
-		jd_cpu_u_time();
+		jd_cpu_u_start_stop();
 	#endif
 	
 	jd_asm_cps_enable();
@@ -105,7 +88,7 @@ void jd_PendSV_Handler(void)
 void jd_SVC_Handler(void)
 {
 	#ifdef JD_CPU_U_ENABLE
-		jd_cpu_u_time();
+		jd_cpu_u_start_stop();
 	#endif
 	jd_asm_svc_handler();
 }

@@ -1,44 +1,90 @@
+/*
+ * @Author: 江小鉴 abyss_er@163.com
+ * @Date: 2024-11-12 18:00:28
+ * @LastEditors: 江小鉴 abyss_er@163.com
+ * @LastEditTime: 2024-11-12 22:01:09
+ * @FilePath: \jdos\jd_cpu_u.c
+ * @Description: CPU利用率监测
+ */
 #include "jdos.h"
 #ifdef JD_CPU_U_ENABLE
 
-//100ms DWT最大计时次数
-jd_uint32_t jd_cpu_u_100_base = 0;
+//标志位
+#define U_FLAG 1
+
 jd_int32_t jd_cpu_u = 0;
+jd_uint8_t jd_cpu_u_flag = 0;
 
-
-//cpu利用率初始化  全速运行100ms  得到最大运行时间
+/**
+ * @description: cpu利用率初始化  得到最大运行时间
+ * @return {*}
+ */
 void jd_cpu_u_init(void)
 {
 	jd_asm_dwt_init();
-	jd_asm_dwt_time_start();
-	HAL_Delay(100);
-	jd_asm_dwt_time_stop();
-	jd_cpu_u_100_base = jd_cpu_u_time_get();
-	jd_cpu_u_time_set0();
+	jd_asm_dwt_set0();
+	jd_asm_dwt_start();
 }
 
-//cpu计时逻辑
-void jd_cpu_u_time(void)
+/**
+ * @description: cpu计时逻辑
+ * @return {*}
+ */
+void jd_cpu_u_start_stop(void)
 {
-	if(jd_task_runing==jd_task_frist)
+	if(jd_cpu_u_flag == U_FLAG)
 	{
-			jd_asm_dwt_time_start();
+		if(jd_task_runing==jd_task_frist)
+		{
+				jd_asm_dwt_start();
+		}
+		else
+		{
+			jd_asm_dwt_stop();
+		}
 	}
-	else
+}
+
+/**
+ * @description: 返回CPU利用率
+ * @return {*}
+ */
+jd_uint32_t jd_cpu_u_get(void)
+{
+	return jd_cpu_u;
+}
+
+/**
+ * @description: 外部1ms周期性调用
+ * @return {*}
+ */
+void jd_cpu_u_ctr(void)
+{
+	static jd_uint8_t jd_cpu_time_100ctr = 0;
+	static jd_uint32_t jd_cpu_100max = 0;
+	
+	if(jd_time==100)
 	{
-		jd_asm_dwt_time_stop();
+		 jd_cpu_u_flag = U_FLAG;
+		 jd_cpu_100max = jd_asm_dwt_get();
+		 jd_cpu_u = jd_cpu_100max;
 	}
-}
+	if(jd_cpu_u_flag == U_FLAG)
+	{
+			if(++jd_cpu_time_100ctr == 100)
+		{
+			jd_cpu_u = 100-(float)jd_asm_dwt_get()/jd_cpu_100max*100;
 
-//获取空闲任务运行时间
-jd_uint32_t jd_cpu_u_time_get(void)
-{
-	return jd_asm_dwt_time_get();
-}
-
-//计时清0
-void jd_cpu_u_time_set0(void)
-{
-	jd_asm_dwt_time_set0();
+			
+			#ifdef JD_PRINTF_ENABLE
+			jd_printf("jd_cpu_u:%d%%\r\n",jd_cpu_u);
+			#endif
+			
+			jd_cpu_time_100ctr	 = 0;
+			jd_asm_dwt_stop();
+			jd_asm_dwt_set0();
+		}
+	}
+	
 }
 #endif
