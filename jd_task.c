@@ -206,7 +206,8 @@ jd_node_list_t *jd_node_in_rd(jd_node_list_t *list, jd_node_list_t *node)
 void jd_task_exit()
 {
 	jd_task_t *jd_task = jd_task_runing;
-
+	jd_asm_cps_disable();
+	
 	jd_task_entry = (jd_uint32_t)jd_task->entry;	// 传递程序入口值
 	jd_task_exit_entry = (jd_uint32_t)jd_task_exit; // 传递退出时程序销毁入口
 
@@ -244,6 +245,8 @@ void jd_task_exit()
 	jd_task_next_stack_sp = &jd_task_runing->stack_sp; // 更新下一个任务全局栈指针变量
 
 	// 这里不是悬挂PendSV异常，所以直接跳转会出发异常，寄存器数据不会自动出栈，应该使用SVC呼叫异常
+	
+	jd_asm_cps_enable();
 
 	jd_asm_svc_task_exit();
 }
@@ -406,6 +409,8 @@ jd_int32_t jd_init(void)
 	// 初始化内存
 	jd_mem_init();
 #endif
+	
+	
 
 	// 初始化链表
 	jd_task_list_readying = JD_NULL;

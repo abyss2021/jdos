@@ -15,6 +15,7 @@
  */
 void HAL_IncTick(void)
 {
+	jd_asm_cps_disable();
 	uwTick += uwTickFreq; // 系统自带不可删除,否则hal_delay等hal库函数不可用
 
 	jd_time++; // jd_lck++
@@ -40,6 +41,26 @@ void HAL_IncTick(void)
 			break;
 		jd_task = (jd_task_t *)jd_task_list_delaying; // 获取任务数据
 	}
+	
+	
+	#ifdef JD_CPU_U_ENABLE
+	//这里计算的是空闲任务的运行时间
+			static jd_uint8_t jd_cpu_time_100ms = 0;
+			if(++jd_cpu_time_100ms == 100)
+			{
+				jd_uint32_t jd_cpu_time = jd_cpu_u_time_get();  //15ns是64Mhz一条指令的时间，将时间转换成毫秒
+				
+				#ifdef JD_PRINTF_ENABLE
+				jd_printf("jd_cpu_time:%f\r\n",(float)jd_cpu_time/jd_cpu_u_100_base);
+				#endif
+				
+				jd_cpu_time_100ms = 0;
+				jd_cpu_u_time_set0();
+			}
+
+	#endif
+
+	jd_asm_cps_enable();
 
 	jd_asm_pendsv_putup();
 }
@@ -51,6 +72,8 @@ void HAL_IncTick(void)
 void jd_PendSV_Handler(void)
 {
 	jd_task_t *jd_task;
+	
+	jd_asm_cps_disable();
 
 	// 获取数据域
 	jd_task = (jd_task_t *)jd_task_list_readying; // 获取任务数据
@@ -60,6 +83,12 @@ void jd_PendSV_Handler(void)
 	jd_task_stack_sp = &jd_task_runing->stack_sp;	   // 更新当前任务全局栈指针变量
 	jd_task_runing = jd_task;						   // 更改当前为运行的任务
 	jd_task_next_stack_sp = &jd_task_runing->stack_sp; // 更新下一个任务全局栈指针变量
+	
+	#ifdef JD_CPU_U_ENABLE
+		jd_cpu_u_time();
+	#endif
+	
+	jd_asm_cps_enable();
 
 	jd_asm_pendsv_handler(); // 切换上下文
 }
@@ -70,5 +99,8 @@ void jd_PendSV_Handler(void)
  */
 void jd_SVC_Handler(void)
 {
+	#ifdef JD_CPU_U_ENABLE
+		jd_cpu_u_time();
+	#endif
 	jd_asm_svc_handler();
 }

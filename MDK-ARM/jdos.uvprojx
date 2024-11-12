@@ -448,6 +448,11 @@
               <FileType>2</FileType>
               <FilePath>..\jd_cm3.s</FilePath>
             </File>
+            <File>
+              <FileName>jd_cpu_u.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\jd_cpu_u.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

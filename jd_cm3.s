@@ -9,6 +9,10 @@ JD_ICRS				EQU 0XE000ED04	;中断控制及状态寄存器
 JD_PRI_14 			EQU 0XE000ED23	;PendSV的优先级设置寄存器
 JD_SYSTICK_CTRL 	EQU 0xE000E010	;SysTick控制及状态寄存器
 JD_POWER_SLEEP 		EQU 0xE000ED10	;睡眠控制寄存器
+JD_DEMCR			EQU 0xE000EDFC  ;DEMCR的地址 用于使能DWT
+JD_DWT_CYCCNT		EQU 0xE0001004	;DWT计数寄存器
+JD_DWT_CTRL			EQU 0xE0001000	;DWT控制寄存器
+	
 	
 	IMPORT jd_task_stack_sp
 	IMPORT jd_task_next_stack_sp
@@ -206,6 +210,61 @@ jd_asm_power_sleep 	PROC
 					
 					BX LR
 					ENDP
+						
+jd_asm_dwt_init 	PROC	;cpu利用率初始化
+					EXPORT jd_asm_dwt_init
+						
+					LDR R0,=JD_DEMCR ;使能DWT
+					LDR R1,[R0]
+					ORR R1,#0x1000000
+					STR R1,[R0]
+					
+					BX LR
+					ENDP
+				
+
+jd_asm_dwt_time_set0	PROC
+						EXPORT	jd_asm_dwt_time_set0
+							
+						LDR R0,=JD_DWT_CYCCNT ;DWT清0
+						MOV R1,#0
+						STR R1,[R0]
+						
+						BX LR
+						ENDP
+
+jd_asm_dwt_time_start	PROC	;DWT计时开始
+						EXPORT 	jd_asm_dwt_time_start
+
+						LDR R0,=JD_DWT_CTRL	;DWT启动计时
+						LDR R1,[R0]
+						ORR R1,#0x1
+						STR R1,[R0]
+	
+						BX LR
+						ENDP
+							
+jd_asm_dwt_time_stop	PROC	;	DWT停止计时
+						EXPORT	jd_asm_dwt_time_stop
+							
+						LDR R0,=JD_DWT_CTRL	;DWT启动计时
+						LDR R1,[R0]
+						AND R1,#0xFFFFFFFE
+						STR R1,[R0]
+						
+						BX LR
+						ENDP
+
+jd_asm_dwt_time_get		PROC	;DWT计时获取
+						EXPORT	jd_asm_dwt_time_get
+							
+						LDR R0,=JD_DWT_CYCCNT
+						LDR R0,[R0]
+	
+						BX LR
+						ENDP
+						
+
 
 	;防止编译器报警
 	NOP

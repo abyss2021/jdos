@@ -10,6 +10,7 @@
 "jdos\stm32f1xx_it.o"
 "jdos\stm32f1xx_hal_msp.o"
 "jdos\jd_cm3.o"
+"jdos\jd_cpu_u.o"
 "jdos\stm32f1xx_hal_gpio_ex.o"
 "jdos\stm32f1xx_hal_tim.o"
 "jdos\stm32f1xx_hal_tim_ex.o"

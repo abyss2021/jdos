@@ -16,6 +16,8 @@
 #define JD_PRINTF_ENABLE // 开启打印功能
 #define JD_MEMORY_ENABLE // 开启内存管理功能，关闭后请添加标准库
 #define JD_TIMER_ENABLE  // 开启定时任务管理功能
+#define JD_POWER_ENABLE  // 开启电源管理功能
+#define JD_CPU_U_ENABLE	//开启cpu利用率监测
 
 /******************宏定义************************/
 /*开辟内存大小*/
@@ -183,9 +185,26 @@ void jd_free(void *ptr);               // free
 /******************jd_printf************************/
 #ifdef JD_PRINTF_ENABLE
 void jd_printf(const jd_int8_t *format, ...);
+#endif
 
 /******************jd_power************************/
+#ifdef JD_POWER_ENABLE
 void jd_asm_power_sleep(void);
+#endif
+
+
+/******************jd_cpu_u************************/
+#ifdef JD_CPU_U_ENABLE
+void jd_cpu_u_init(void);
+void jd_cpu_u_time(void);
+void jd_cpu_u_time_set0(void);
+jd_uint32_t jd_cpu_u_time_get(void);
+extern void jd_asm_dwt_init(void);
+extern void jd_asm_dwt_time_start(void);
+extern void jd_asm_dwt_time_stop(void);
+extern jd_uint32_t jd_asm_dwt_time_get(void);
+extern void jd_asm_dwt_time_set0(void);
+extern jd_uint32_t jd_cpu_u_100_base;
 #endif
 
 #endif
