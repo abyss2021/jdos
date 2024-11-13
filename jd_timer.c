@@ -8,7 +8,7 @@
  */
 #include "jdos.h"
 
-extern void jd_asm_svc_task_switch(void);                    // 任务上下文切换
+extern void jd_asm_svc_task_switch(void); // 任务上下文切换
 
 /*系统时钟，单位ms*/
 jd_time_t jd_time = 0;
@@ -39,7 +39,7 @@ void jd_delay(jd_uint32_t ms)
 	jd_task = (jd_task_t *)jd_task_list_readying; // 获取任务数据
 
 	// 任务暂停或延时状态，或者当前任务优先级低，当前任务放弃CPU使用权
-	jd_task->status = JD_TASK_RUNNING;					   // 即将运行的任务改为正在运行状态
+	jd_task->status = JD_TASK_RUNNING;				   // 即将运行的任务改为正在运行状态
 	jd_task_stack_sp = &jd_task_runing->stack_sp;	   // 更新当前任务全局栈指针变量
 	jd_task_runing = jd_task;						   // 更改当前为运行的任务
 	jd_task_next_stack_sp = &jd_task_runing->stack_sp; // 更新下一个任务全局栈指针变量

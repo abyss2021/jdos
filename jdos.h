@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-11 11:09:06
  * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-11-13 09:05:38
+ * @LastEditTime: 2024-11-13 09:13:22
  * @FilePath: \jdos\jdos.h
  * @Description: jdos 头文件
  */
@@ -17,7 +17,7 @@
 #define JD_MEMORY_ENABLE // 开启内存管理功能，关闭后请添加标准库
 #define JD_TIMER_ENABLE  // 开启定时任务管理功能
 #define JD_POWER_ENABLE  // 开启电源管理功能
-#define JD_CPU_U_ENABLE	//开启cpu利用率监测
+#define JD_CPU_U_ENABLE  // 开启cpu利用率监测
 
 /******************宏定义************************/
 /*开辟内存大小*/
@@ -143,8 +143,8 @@ extern jd_uint32_t jd_task_exit_entry;        // 任务exit入口
 extern jd_time_t jd_time;                     // 系统时钟，单位ms
 
 /******************汇编函数************************/
-extern void jd_asm_cps_disable(void);                        // 除能 NMI 和硬 fault 之外的所有异常
-extern void jd_asm_cps_enable(void);                         // 使能中断
+extern void jd_asm_cps_disable(void); // 除能 NMI 和硬 fault 之外的所有异常
+extern void jd_asm_cps_enable(void);  // 使能中断
 
 /******************jd_timer************************/
 void jd_delay(jd_uint32_t ms);
@@ -177,21 +177,20 @@ void jd_free(void *ptr);               // free
 
 /******************jd_printf************************/
 #ifdef JD_PRINTF_ENABLE
-void jd_printf(const jd_int8_t *format, ...);
+void jd_printf(const jd_int8_t *format, ...); // 打印
 #endif
 
 /******************jd_power************************/
 #ifdef JD_POWER_ENABLE
-void jd_asm_power_sleep(void);
+void jd_asm_power_sleep(void); // 休眠
 #endif
-
 
 /******************jd_cpu_u************************/
 #ifdef JD_CPU_U_ENABLE
-jd_uint32_t jd_cpu_u_get(void);
-void jd_cpu_u_init(void);
-void jd_cpu_u_start_stop(void);
-void jd_cpu_u_ctr(void);
+jd_uint32_t jd_cpu_u_get(void); // 获取cpu利用率
+void jd_cpu_u_init(void);       // cpu利用率初始化
+void jd_cpu_u_start_stop(void); // 任务上下文切换时调用，计时逻辑
+void jd_cpu_u_ctr(void);        // cpu利用率计数，放在SysTick中1ms调用一次
 
 #endif
 

@@ -18,11 +18,10 @@ jd_task_t *jd_task_frist = NULL;			  // 创建一个系统空闲任务
 jd_uint32_t jd_task_entry;					  // 任务入口
 jd_uint32_t jd_task_exit_entry;				  // 任务exit入口
 
-
 extern void jd_asm_task_first_switch(jd_uint32_t *, void *); // 第一次进入任务
-extern void jd_asm_pendsv_putup(void);                       // 切换任务节点，悬挂PendSV异常，PendSV中进行上下文切换
-extern void jd_asm_systick_init(void);                       // systick初始化
-extern void jd_asm_svc_task_exit(void);                      // 任务退出
+extern void jd_asm_pendsv_putup(void);						 // 切换任务节点，悬挂PendSV异常，PendSV中进行上下文切换
+extern void jd_asm_systick_init(void);						 // systick初始化
+extern void jd_asm_svc_task_exit(void);						 // 任务退出
 
 /**
  * @description: 新节点插入链表中
@@ -213,7 +212,7 @@ void jd_task_exit()
 {
 	jd_task_t *jd_task = jd_task_runing;
 	jd_asm_cps_disable();
-	
+
 	jd_task_entry = (jd_uint32_t)jd_task->entry;	// 传递程序入口值
 	jd_task_exit_entry = (jd_uint32_t)jd_task_exit; // 传递退出时程序销毁入口
 
@@ -228,8 +227,8 @@ void jd_task_exit()
 		jd_task_delete(jd_task);
 	}
 
-	jd_task->stack_sp = (jd_uint32_t)((jd_task->stack_origin_addr) + jd_task->stack_size - sizeof(struct all_register))&0xfffffffc; // 腾出寄存器的空间
-	all_register_t *stack_register = (struct all_register *)jd_task->stack_sp;											   // 将指针转换成寄存器指针
+	jd_task->stack_sp = (jd_uint32_t)((jd_task->stack_origin_addr) + jd_task->stack_size - sizeof(struct all_register)) & 0xfffffffc; // 腾出寄存器的空间
+	all_register_t *stack_register = (struct all_register *)jd_task->stack_sp;														  // 将指针转换成寄存器指针
 
 	// 设置必要数据
 	stack_register->lr = (jd_uint32_t)jd_task_exit;
@@ -246,12 +245,12 @@ void jd_task_exit()
 	// 获取数据域
 	jd_task = (jd_task_t *)jd_task_list_readying; // 获取任务数据
 	// 任务暂停或延时状态，或者当前任务优先级低，当前任务放弃CPU使用权
-	jd_task->status = JD_TASK_RUNNING;					   // 即将运行的任务改为正在运行状态
+	jd_task->status = JD_TASK_RUNNING;				   // 即将运行的任务改为正在运行状态
 	jd_task_runing = jd_task;						   // 更改当前为运行的任务
 	jd_task_next_stack_sp = &jd_task_runing->stack_sp; // 更新下一个任务全局栈指针变量
 
 	// 这里不是悬挂PendSV异常，所以直接跳转会出发异常，寄存器数据不会自动出栈，应该使用SVC呼叫异常
-	
+
 	jd_asm_cps_enable();
 
 	jd_asm_svc_task_exit();
@@ -280,11 +279,11 @@ jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_
 
 	jd_new_task->timeout = 0;			  // 没有延时时间
 	jd_new_task->entry = task_entry;	  // 任务入口
-	jd_new_task->status = JD_TASK_PAUSE;		  // 创建任务，状态为暂停状态，等待启动
+	jd_new_task->status = JD_TASK_PAUSE;  // 创建任务，状态为暂停状态，等待启动
 	jd_new_task->stack_size = stack_size; // 记录当前任务堆栈大小
 
-	jd_new_task->stack_sp = (jd_uint32_t)((jd_new_task->stack_origin_addr) + jd_new_task->stack_size - sizeof(struct all_register))&0xfffffffc; // 腾出寄存器的空间
-	all_register_t *stack_register = (struct all_register *)jd_new_task->stack_sp;													   // 将指针转换成寄存器指针
+	jd_new_task->stack_sp = (jd_uint32_t)((jd_new_task->stack_origin_addr) + jd_new_task->stack_size - sizeof(struct all_register)) & 0xfffffffc; // 腾出寄存器的空间
+	all_register_t *stack_register = (struct all_register *)jd_new_task->stack_sp;																  // 将指针转换成寄存器指针
 
 	// 将任务运行数据搬移到内存中
 	stack_register->lr = (jd_uint32_t)jd_task_exit;
@@ -350,7 +349,7 @@ jd_int32_t jd_task_run(jd_task_t *jd_task)
 	// 加入就绪链表
 	jd_task_list_readying = jd_node_in_rd(jd_task_list_readying, &jd_task->node);
 
-	//切换任务
+	// 切换任务
 	jd_asm_pendsv_putup();
 
 	// 插入节点
@@ -415,7 +414,7 @@ jd_int32_t jd_init(void)
 	// 初始化内存
 	jd_mem_init();
 #endif
-	
+
 #ifdef JD_CPU_U_ENABLE
 	jd_cpu_u_init();
 #endif

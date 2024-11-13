@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-09 10:14:21
  * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-09-29 09:56:27
+ * @LastEditTime: 2024-11-13 09:15:28
  * @FilePath: \jdos\jd_main.c
  * @Description: jd main
  */
@@ -16,7 +16,7 @@ void task1()
 	// while (1)
 	{
 #ifdef JD_PRINTF_ENABLE
-		//jd_printf("task1\r\n");
+		// jd_printf("task1\r\n");
 #endif
 		// jd_delay(100);
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
@@ -28,7 +28,7 @@ void task2()
 	while (1)
 	{
 #ifdef JD_PRINTF_ENABLE
-		//jd_printf("task2\r\n");
+		// jd_printf("task2\r\n");
 #endif
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 		HAL_Delay(20);
@@ -44,7 +44,7 @@ void task3()
 	while (1)
 	{
 #ifdef JD_PRINTF_ENABLE
-		//jd_printf("task3\r\n");
+		// jd_printf("task3\r\n");
 #endif
 		jd_delay(320);
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
