@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-11 11:09:06
  * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-11-13 09:13:22
+ * @LastEditTime: 2024-11-13 21:32:54
  * @FilePath: \jdos\jdos.h
  * @Description: jdos 头文件
  */
@@ -173,6 +173,7 @@ void jd_task_exit(void);                                                        
 jd_uint32_t jd_mem_init(void);         // mem初始化
 void *jd_malloc(jd_uint32_t mem_size); // malloc
 void jd_free(void *ptr);               // free
+jd_uint32_t jd_mem_used_get(void);     //获取已经使用的内存空间大小       
 #endif
 
 /******************jd_printf************************/

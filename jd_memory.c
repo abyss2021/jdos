@@ -2,12 +2,13 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-23 09:36:38
  * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-11-13 16:52:59
+ * @LastEditTime: 2024-11-13 21:31:53
  * @FilePath: \jdos\jd_memory.c
  * @Description: 用于内存管理
  */
 #include "jdos.h"
 #ifdef JD_MEMORY_ENABLE
+
 #define JD_MEM_SIZE 0xC000
 #define JD_CPU_START_MEM 0x20000000
 
@@ -23,7 +24,7 @@ jd_uint32_t jd_mem_space;
  */
 jd_uint32_t jd_mem_init()
 {
-		jd_mem_space = jd_initial_sp_get();
+	jd_mem_space = jd_initial_sp_get();
     jd_mem_use = (jd_mem_t *)jd_mem_space; // 传入内存块地址
     // jd_mem_use->node.addr = jd_mem_use;    // 保存内存块地址
 
@@ -147,4 +148,34 @@ void jd_free(void *ptr)
     }
     ptr = JD_NULL;
 }
+
+
+
+/**
+ * @description: 获取已经使用的空间大小
+ * @return {*}
+ */
+jd_uint32_t jd_mem_used_get()
+{
+    jd_mem_t *jd_mem_temp;
+    jd_uint32_t jd_mem_used;
+    jd_mem_temp = jd_mem_use;
+    jd_mem_used = jd_mem_space-JD_CPU_START_MEM;
+    //遍历所有内存空间
+    while(1)
+    {
+
+        if(jd_mem_temp->used==JD_MEM_USED)   
+            jd_mem_used += jd_mem_temp->mem_size;
+				if(jd_mem_temp->node.next==JD_NULL)
+            break;
+				else
+						jd_mem_temp = (jd_mem_t *)jd_mem_temp->node.next;
+    }
+    #ifdef JD_PRINTF_ENABLE
+    jd_printf("used_mem/all_mem:%dKB/%dKB\r\n",jd_mem_used/1000,JD_MEM_SIZE/1000);
+    #endif
+    return jd_mem_used;
+}
+
 #endif
