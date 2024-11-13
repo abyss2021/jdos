@@ -46,10 +46,10 @@ void HAL_IncTick(void)
 		jd_task = (jd_task_t *)jd_task_list_delaying; // 获取任务数据
 	}
 
-#ifdef JD_CPU_U_ENABLE
+
 	// 这里计算的是空闲任务的运行时间
 	jd_cpu_u_ctr();
-#endif
+
 
 	jd_asm_cps_enable();
 

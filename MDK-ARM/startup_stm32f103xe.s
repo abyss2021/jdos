@@ -30,16 +30,18 @@
 ; </h>
 
 Stack_Size		EQU     0x400
+    EXPORT Stack_Size
 
                 AREA    STACK, NOINIT, READWRITE, ALIGN=3
 Stack_Mem       SPACE   Stack_Size
+    EXPORT Stack_Mem
 __initial_sp
                                                   
 ; <h> Heap Configuration
 ;   <o>  Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
 ; </h>
 
-Heap_Size      EQU     0x1000
+Heap_Size      EQU     0x200
 
                 AREA    HEAP, NOINIT, READWRITE, ALIGN=3
 __heap_base

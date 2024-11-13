@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-11-12 18:00:28
  * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-11-12 22:01:09
+ * @LastEditTime: 2024-11-13 10:52:08
  * @FilePath: \jdos\jd_cpu_u.c
  * @Description: CPU利用率监测
  */
@@ -69,7 +69,7 @@ void jd_cpu_u_ctr(void)
 	static jd_uint8_t jd_cpu_time_100ctr = 0;
 	static jd_uint32_t jd_cpu_100max = 0;
 
-	if (jd_time == 100)
+	if (jd_time == 100&&jd_cpu_u_flag!=U_FLAG)
 	{
 		jd_cpu_u_flag = U_FLAG;
 		jd_cpu_100max = jd_asm_dwt_get();

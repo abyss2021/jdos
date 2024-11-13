@@ -27,16 +27,11 @@ void task2()
 
 	while (1)
 	{
-#ifdef JD_PRINTF_ENABLE
 		// jd_printf("task2\r\n");
-#endif
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 		HAL_Delay(20);
 		jd_delay(80);
-		/*
-		 test_task1 = jd_task_create(task1, 512, 3);
-		 if (test_task1 != JD_NULL)
-			jd_task_run(test_task1);*/
+
 	};
 }
 void task3()

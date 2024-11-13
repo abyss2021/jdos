@@ -13,11 +13,14 @@ JD_DEMCR			EQU 0xE000EDFC  ;DEMCR的地址 用于使能DWT
 JD_DWT_CYCCNT		EQU 0xE0001004	;DWT计数寄存器
 JD_DWT_CTRL			EQU 0xE0001000	;DWT控制寄存器
 	
-	
 	IMPORT jd_task_stack_sp
 	IMPORT jd_task_next_stack_sp
 	IMPORT jd_task_entry
 	IMPORT jd_task_exit_entry
+	IMPORT jd_mem_space
+		
+	IMPORT Stack_Mem
+	IMPORT Stack_Size
 						AREA |.text|, CODE, READONLY, ALIGN=3
 
 jd_asm_task_first_switch 	PROC	;进入main
@@ -263,8 +266,16 @@ jd_asm_dwt_get		PROC	;DWT计时获取
 	
 						BX LR
 						ENDP
+							
+jd_initial_sp_get	PROC	
+					EXPORT jd_initial_sp_get
 						
-
+					LDR R0,=Stack_Mem
+					LDR R1,=Stack_Size
+					ADD R0,R1
+						
+					BX LR
+					ENDP
 
 	;防止编译器报警
 	NOP

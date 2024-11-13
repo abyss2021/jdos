@@ -1,16 +1,21 @@
 /*
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-23 09:36:38
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-09-30 09:05:08
+ * @LastEditors: 江小鉴 abyss_er@163.com
+ * @LastEditTime: 2024-11-13 16:52:59
  * @FilePath: \jdos\jd_memory.c
  * @Description: 用于内存管理
  */
 #include "jdos.h"
 #ifdef JD_MEMORY_ENABLE
+#define JD_MEM_SIZE 0xC000
+#define JD_CPU_START_MEM 0x20000000
+
+extern jd_uint32_t jd_initial_sp_get(void);
 
 jd_mem_t *jd_mem_use = JD_NULL;
-jd_uint8_t jd_mem_space[MEM_MAX_SIZE];
+jd_uint32_t jd_mem_space;
+
 
 /**
  * @description: 内存初始化
@@ -18,6 +23,7 @@ jd_uint8_t jd_mem_space[MEM_MAX_SIZE];
  */
 jd_uint32_t jd_mem_init()
 {
+		jd_mem_space = jd_initial_sp_get();
     jd_mem_use = (jd_mem_t *)jd_mem_space; // 传入内存块地址
     // jd_mem_use->node.addr = jd_mem_use;    // 保存内存块地址
 
@@ -25,7 +31,7 @@ jd_uint32_t jd_mem_init()
     jd_mem_use->node.previous = JD_NULL;
 
     jd_mem_use->used = JD_MEM_FREE;      // 初始为空闲内存
-    jd_mem_use->mem_size = MEM_MAX_SIZE; // 初始内存块大小
+    jd_mem_use->mem_size = JD_MEM_SIZE-(jd_mem_space-JD_CPU_START_MEM); // 初始内存块大小
 
     return JD_OK;
 }
