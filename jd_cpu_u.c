@@ -15,6 +15,12 @@
 jd_int32_t jd_cpu_u = 0;
 jd_uint8_t jd_cpu_u_flag = 0;
 
+extern void jd_asm_dwt_init(void);
+extern void jd_asm_dwt_start(void);
+extern void jd_asm_dwt_stop(void);
+extern jd_uint32_t jd_asm_dwt_get(void);
+extern void jd_asm_dwt_set0(void);
+
 /**
  * @description: cpu利用率初始化  得到最大运行时间
  * @return {*}

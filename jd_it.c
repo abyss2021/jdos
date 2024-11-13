@@ -9,6 +9,10 @@
 
 #include "jdos.h"
 
+extern void jd_asm_pendsv_putup(void);                       // 切换任务节点，悬挂PendSV异常，PendSV中进行上下文切换
+extern void jd_asm_pendsv_handler(void);                     // PendSV切换上下文
+extern void jd_asm_svc_handler(void);                        // svc异常处理
+
 /**
  * @description: hal库已自动使能systick，以下为hal库systick异常回调函数
  * @return {*}

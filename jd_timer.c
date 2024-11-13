@@ -8,6 +8,8 @@
  */
 #include "jdos.h"
 
+extern void jd_asm_svc_task_switch(void);                    // 任务上下文切换
+
 /*系统时钟，单位ms*/
 jd_time_t jd_time = 0;
 

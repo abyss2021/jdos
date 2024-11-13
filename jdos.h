@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-11 11:09:06
  * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-11-12 21:57:22
+ * @LastEditTime: 2024-11-13 09:05:38
  * @FilePath: \jdos\jdos.h
  * @Description: jdos 头文件
  */
@@ -143,15 +143,8 @@ extern jd_uint32_t jd_task_exit_entry;        // 任务exit入口
 extern jd_time_t jd_time;                     // 系统时钟，单位ms
 
 /******************汇编函数************************/
-extern void jd_asm_task_first_switch(jd_uint32_t *, void *); // 第一次进入任务
-extern void jd_asm_pendsv_putup(void);                       // 切换任务节点，悬挂PendSV异常，PendSV中进行上下文切换
-extern void jd_asm_pendsv_handler(void);                     // PendSV切换上下文
-extern void jd_asm_systick_init(void);                       // systick初始化
 extern void jd_asm_cps_disable(void);                        // 除能 NMI 和硬 fault 之外的所有异常
 extern void jd_asm_cps_enable(void);                         // 使能中断
-extern void jd_asm_svc_handler(void);                        // svc异常处理
-extern void jd_asm_svc_task_switch(void);                    // 任务上下文切换
-extern void jd_asm_svc_task_exit(void);                      // 任务退出
 
 /******************jd_timer************************/
 void jd_delay(jd_uint32_t ms);
@@ -196,16 +189,10 @@ void jd_asm_power_sleep(void);
 /******************jd_cpu_u************************/
 #ifdef JD_CPU_U_ENABLE
 jd_uint32_t jd_cpu_u_get(void);
-
 void jd_cpu_u_init(void);
 void jd_cpu_u_start_stop(void);
 void jd_cpu_u_ctr(void);
 
-extern void jd_asm_dwt_init(void);
-extern void jd_asm_dwt_start(void);
-extern void jd_asm_dwt_stop(void);
-extern jd_uint32_t jd_asm_dwt_get(void);
-extern void jd_asm_dwt_set0(void);
 #endif
 
 #endif

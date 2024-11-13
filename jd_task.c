@@ -18,6 +18,12 @@ jd_task_t *jd_task_frist = NULL;			  // 创建一个系统空闲任务
 jd_uint32_t jd_task_entry;					  // 任务入口
 jd_uint32_t jd_task_exit_entry;				  // 任务exit入口
 
+
+extern void jd_asm_task_first_switch(jd_uint32_t *, void *); // 第一次进入任务
+extern void jd_asm_pendsv_putup(void);                       // 切换任务节点，悬挂PendSV异常，PendSV中进行上下文切换
+extern void jd_asm_systick_init(void);                       // systick初始化
+extern void jd_asm_svc_task_exit(void);                      // 任务退出
+
 /**
  * @description: 新节点插入链表中
  * @param {jd_node_list_t} *node_previous 想要插入的链表节点处的上一个节点
