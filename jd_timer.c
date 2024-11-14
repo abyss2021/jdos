@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-18 09:10:51
  * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-09-26 12:30:39
+ * @LastEditTime: 2024-11-14 10:48:38
  * @FilePath: \jdos\jd_timer.c
  * @Description:用于定时管理
  */
@@ -73,6 +73,7 @@ jd_int32_t jd_timer_start(jd_task_t *jd_task, jd_uint32_t ms, jd_timer_status_t 
 	{
 		return JD_ERR;
 	}
+	jd_asm_cps_disable();
 	// 定时时间
 	jd_task->timer_loop_timeout = ms;
 	// 将延时时间写入节点
@@ -93,6 +94,8 @@ jd_int32_t jd_timer_start(jd_task_t *jd_task, jd_uint32_t ms, jd_timer_status_t 
 
 	// 将节点加入延时链表
 	jd_task_list_delaying = jd_node_in_rd(jd_task_list_delaying, &jd_task->node);
+
+	jd_asm_cps_enable();
 
 	return JD_OK;
 }

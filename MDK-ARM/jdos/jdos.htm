@@ -3,7 +3,7 @@
 <title>Static Call Graph - [jdos\jdos.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image jdos\jdos.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed Nov 13 22:17:56 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Thu Nov 14 11:00:58 2024
 <BR><P>
 <H3>Maximum Stack Usage =        208 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -466,14 +466,26 @@ Global Symbols
 <P><STRONG><a name="[df]"></a>jd_asm_systick_init</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, jd_cm3.o(.text), UNUSED)
 
 <P><STRONG><a name="[6b]"></a>jd_asm_cps_disable</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, jd_cm3.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_task_exit
+<BR><BR>[Called By]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_task_pause
+<LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_task_exit
+<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_timer_start
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_task_run
+<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_mem_used_get
+<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_free
 <LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_delay
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_PendSV_Handler
 <LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_IncTick
 </UL>
 
 <P><STRONG><a name="[6f]"></a>jd_asm_cps_enable</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, jd_cm3.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_task_exit
+<BR><BR>[Called By]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_task_pause
+<LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_task_exit
+<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_node_insert
+<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_timer_start
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_task_run
+<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_mem_used_get
+<LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_malloc
+<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_free
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_PendSV_Handler
 <LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_IncTick
 </UL>
@@ -618,7 +630,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[6a]"></a>HAL_IncTick</STRONG> (Thumb, 106 bytes, Stack size 24 bytes, jd_it.o(i.HAL_IncTick))
-<BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = HAL_IncTick &rArr; jd_cpu_u_ctr &rArr; __aeabi_fmul
+<BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = HAL_IncTick &rArr; jd_node_in_rd &rArr; jd_node_insert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_node_in_rd
 <LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_node_delete
@@ -768,7 +780,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f103xe.o(RESET)
 </UL>
 <P><STRONG><a name="[c]"></a>SysTick_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f1xx_it.o(i.SysTick_Handler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = SysTick_Handler &rArr; HAL_IncTick &rArr; jd_cpu_u_ctr &rArr; __aeabi_fmul
+<BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = SysTick_Handler &rArr; HAL_IncTick &rArr; jd_node_in_rd &rArr; jd_node_insert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_IncTick
 </UL>
@@ -854,7 +866,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[96]"></a>jd_delay</STRONG> (Thumb, 80 bytes, Stack size 16 bytes, jd_timer.o(i.jd_delay))
-<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = jd_delay &rArr; jd_node_in_rd
+<BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = jd_delay &rArr; jd_node_in_rd &rArr; jd_node_insert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_asm_svc_task_switch
 <LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_node_in_rd
@@ -865,10 +877,12 @@ Global Symbols
 <LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;task2
 </UL>
 
-<P><STRONG><a name="[98]"></a>jd_free</STRONG> (Thumb, 84 bytes, Stack size 16 bytes, jd_memory.o(i.jd_free))
-<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = jd_free
+<P><STRONG><a name="[98]"></a>jd_free</STRONG> (Thumb, 98 bytes, Stack size 16 bytes, jd_memory.o(i.jd_free))
+<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = jd_free &rArr; jd_node_insert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_node_insert
+<LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_asm_cps_enable
+<LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_asm_cps_disable
 </UL>
 <BR>[Called By]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_task_delete
 <LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;task3
@@ -887,7 +901,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[4b]"></a>jd_main</STRONG> (Thumb, 76 bytes, Stack size 0 bytes, jd_main.o(i.jd_main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = jd_main &rArr; jd_timer_start &rArr; jd_node_in_rd
+<BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = jd_main &rArr; jd_timer_start &rArr; jd_node_in_rd &rArr; jd_node_insert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_timer_start
 <LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_task_run
@@ -896,10 +910,11 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> jd_task.o(i.jd_init)
 </UL>
-<P><STRONG><a name="[a2]"></a>jd_malloc</STRONG> (Thumb, 74 bytes, Stack size 8 bytes, jd_memory.o(i.jd_malloc))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = jd_malloc
+<P><STRONG><a name="[a2]"></a>jd_malloc</STRONG> (Thumb, 82 bytes, Stack size 8 bytes, jd_memory.o(i.jd_malloc))
+<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = jd_malloc &rArr; jd_node_insert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_node_insert
+<LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_asm_cps_enable
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_task_create
 <LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;task3
@@ -913,16 +928,18 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_init
 </UL>
 
-<P><STRONG><a name="[a4]"></a>jd_mem_used_get</STRONG> (Thumb, 48 bytes, Stack size 8 bytes, jd_memory.o(i.jd_mem_used_get))
+<P><STRONG><a name="[a4]"></a>jd_mem_used_get</STRONG> (Thumb, 56 bytes, Stack size 8 bytes, jd_memory.o(i.jd_mem_used_get))
 <BR><BR>[Stack]<UL><LI>Max Depth = 200<LI>Call Chain = jd_mem_used_get &rArr; jd_printf &rArr; jd_printfloat &rArr; jd_printint &rArr; jd_putjd_int8_t &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_printf
+<LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_asm_cps_enable
+<LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_asm_cps_disable
 </UL>
 <BR>[Called By]<UL><LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;task3
 </UL>
 
 <P><STRONG><a name="[6c]"></a>jd_node_delete</STRONG> (Thumb, 52 bytes, Stack size 16 bytes, jd_task.o(i.jd_node_delete))
-<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = jd_node_delete
+<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = jd_node_delete &rArr; jd_node_insert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_node_insert
 </UL>
@@ -932,7 +949,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[6d]"></a>jd_node_in_rd</STRONG> (Thumb, 92 bytes, Stack size 24 bytes, jd_task.o(i.jd_node_in_rd))
-<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = jd_node_in_rd
+<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = jd_node_in_rd &rArr; jd_node_insert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_node_insert
 </UL>
@@ -943,8 +960,12 @@ Global Symbols
 <LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_IncTick
 </UL>
 
-<P><STRONG><a name="[99]"></a>jd_node_insert</STRONG> (Thumb, 62 bytes, Stack size 0 bytes, jd_task.o(i.jd_node_insert))
-<BR><BR>[Called By]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_task_pause
+<P><STRONG><a name="[99]"></a>jd_node_insert</STRONG> (Thumb, 68 bytes, Stack size 8 bytes, jd_task.o(i.jd_node_insert))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = jd_node_insert
+</UL>
+<BR>[Calls]<UL><LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_asm_cps_enable
+</UL>
+<BR>[Called By]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_task_pause
 <LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_malloc
 <LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_free
 <LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_node_in_rd
@@ -1006,7 +1027,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[9d]"></a>jd_task_create</STRONG> (Thumb, 74 bytes, Stack size 16 bytes, jd_task.o(i.jd_task_create))
-<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = jd_task_create &rArr; jd_malloc
+<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = jd_task_create &rArr; jd_malloc &rArr; jd_node_insert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_malloc
 </UL>
@@ -1015,7 +1036,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[ac]"></a>jd_task_delete</STRONG> (Thumb, 34 bytes, Stack size 8 bytes, jd_task.o(i.jd_task_delete))
-<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = jd_task_delete &rArr; jd_free
+<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = jd_task_delete &rArr; jd_task_pause &rArr; jd_node_insert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_task_pause
 <LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_free
@@ -1023,8 +1044,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_task_exit
 </UL>
 
-<P><STRONG><a name="[51]"></a>jd_task_exit</STRONG> (Thumb, 118 bytes, Stack size 16 bytes, jd_task.o(i.jd_task_exit))
-<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = jd_task_exit &rArr; jd_task_delete &rArr; jd_free
+<P><STRONG><a name="[51]"></a>jd_task_exit</STRONG> (Thumb, 124 bytes, Stack size 16 bytes, jd_task.o(i.jd_task_exit))
+<BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = jd_task_exit &rArr; jd_task_delete &rArr; jd_task_pause &rArr; jd_node_insert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_asm_svc_task_exit
 <LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_task_pause
@@ -1037,29 +1058,35 @@ Global Symbols
 <LI> jd_task.o(i.jd_task_exit)
 <LI> jd_timer.o(i.jd_timer_start)
 </UL>
-<P><STRONG><a name="[ad]"></a>jd_task_pause</STRONG> (Thumb, 76 bytes, Stack size 12 bytes, jd_task.o(i.jd_task_pause))
-<BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = jd_task_pause
+<P><STRONG><a name="[ad]"></a>jd_task_pause</STRONG> (Thumb, 84 bytes, Stack size 16 bytes, jd_task.o(i.jd_task_pause))
+<BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = jd_task_pause &rArr; jd_node_insert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_node_insert
+<LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_asm_cps_enable
+<LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_asm_cps_disable
 </UL>
 <BR>[Called By]<UL><LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_task_exit
 <LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_task_delete
 </UL>
 
-<P><STRONG><a name="[a0]"></a>jd_task_run</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, jd_task.o(i.jd_task_run))
-<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = jd_task_run &rArr; jd_node_in_rd
+<P><STRONG><a name="[a0]"></a>jd_task_run</STRONG> (Thumb, 42 bytes, Stack size 8 bytes, jd_task.o(i.jd_task_run))
+<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = jd_task_run &rArr; jd_node_in_rd &rArr; jd_node_insert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_node_in_rd
 <LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_asm_pendsv_putup
+<LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_asm_cps_enable
+<LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_asm_cps_disable
 </UL>
 <BR>[Called By]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_main
 </UL>
 
-<P><STRONG><a name="[9f]"></a>jd_timer_start</STRONG> (Thumb, 80 bytes, Stack size 16 bytes, jd_timer.o(i.jd_timer_start))
-<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = jd_timer_start &rArr; jd_node_in_rd
+<P><STRONG><a name="[9f]"></a>jd_timer_start</STRONG> (Thumb, 90 bytes, Stack size 16 bytes, jd_timer.o(i.jd_timer_start))
+<BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = jd_timer_start &rArr; jd_node_in_rd &rArr; jd_node_insert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_node_in_rd
 <LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_node_delete
+<LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_asm_cps_enable
+<LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_asm_cps_disable
 </UL>
 <BR>[Called By]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_main
 </UL>
@@ -1090,7 +1117,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> jd_main.o(i.jd_main)
 </UL>
 <P><STRONG><a name="[4d]"></a>task2</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, jd_main.o(i.task2))
-<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = task2 &rArr; jd_delay &rArr; jd_node_in_rd
+<BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = task2 &rArr; jd_delay &rArr; jd_node_in_rd &rArr; jd_node_insert
 </UL>
 <BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_delay
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_TogglePin
@@ -1098,7 +1125,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> jd_main.o(i.jd_main)
 </UL>
-<P><STRONG><a name="[4e]"></a>task3</STRONG> (Thumb, 84 bytes, Stack size 0 bytes, jd_main.o(i.task3))
+<P><STRONG><a name="[4e]"></a>task3</STRONG> (Thumb, 80 bytes, Stack size 0 bytes, jd_main.o(i.task3))
 <BR><BR>[Stack]<UL><LI>Max Depth = 200<LI>Call Chain = task3 &rArr; jd_mem_used_get &rArr; jd_printf &rArr; jd_printfloat &rArr; jd_printint &rArr; jd_putjd_int8_t &rArr; jd_transmit &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jd_mem_used_get

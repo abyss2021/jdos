@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-11 11:09:06
  * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-11-13 21:32:54
+ * @LastEditTime: 2024-11-14 10:29:54
  * @FilePath: \jdos\jdos.h
  * @Description: jdos 头文件
  */
@@ -114,23 +114,6 @@ typedef struct jd_task
     jd_task_auto_delate_t auto_delate; // 任务执行完成后是否需要系统销毁任务
 } jd_task_t;
 
-/*内存使用状态*/
-typedef enum jd_mem_used
-{
-    JD_MEM_USED = 1,
-    JD_MEM_FREE,
-} jd_mem_used_t;
-
-#pragma pack(4) // 4字节对齐
-/*内存控制块*/
-typedef struct jd_mem
-{
-    jd_node_list_t node;  // 链表节点
-    jd_mem_used_t used;   // 当前内存是否被使用
-    jd_uint32_t mem_size; // 当前整体内存块大小
-} jd_mem_t;
-#pragma pack() // 取消结构体对齐
-
 /******************全局变量************************/
 extern jd_node_list_t *jd_task_list_readying; // 创建就绪任务链表
 extern jd_node_list_t *jd_task_list_delaying; // 创建延时任务链表
@@ -164,12 +147,29 @@ void jd_main(void);                                                             
 
 jd_int32_t jd_node_insert(jd_node_list_t *node_previous, jd_node_list_t *node, jd_node_list_t *node_next); // 节点连接函数
 jd_node_list_t *jd_node_delete(jd_node_list_t *list, jd_node_list_t *node);                                // 删除节点
-jd_int64_t compare_priority(jd_task_t *task1, jd_task_t *task2);                                           // 比较函数，用于jd_node_in_rd中使用
 jd_node_list_t *jd_node_in_rd(jd_node_list_t *list, jd_node_list_t *node);                                 // 将节点插入就绪或者延时链表
 void jd_task_exit(void);                                                                                   // 任务执行完成后由系统调用
 
 /******************jd_memory************************/
 #ifdef JD_MEMORY_ENABLE
+
+/*内存使用状态*/
+typedef enum jd_mem_used
+{
+    JD_MEM_USED = 1,
+    JD_MEM_FREE,
+} jd_mem_used_t;
+
+#pragma pack(4) // 4字节对齐
+/*内存控制块*/
+typedef struct jd_mem
+{
+    jd_node_list_t node;  // 链表节点
+    jd_mem_used_t used;   // 当前内存是否被使用
+    jd_uint32_t mem_size; // 当前整体内存块大小
+} jd_mem_t;
+#pragma pack() // 取消结构体对齐
+
 jd_uint32_t jd_mem_init(void);         // mem初始化
 void *jd_malloc(jd_uint32_t mem_size); // malloc
 void jd_free(void *ptr);               // free
@@ -192,7 +192,6 @@ jd_uint32_t jd_cpu_u_get(void); // 获取cpu利用率
 void jd_cpu_u_init(void);       // cpu利用率初始化
 void jd_cpu_u_start_stop(void); // 任务上下文切换时调用，计时逻辑
 void jd_cpu_u_ctr(void);        // cpu利用率计数，放在SysTick中1ms调用一次
-
 #endif
 
 #endif

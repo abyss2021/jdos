@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-23 09:36:38
  * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-11-13 21:31:53
+ * @LastEditTime: 2024-11-14 10:38:59
  * @FilePath: \jdos\jd_memory.c
  * @Description: 用于内存管理
  */
@@ -33,7 +33,6 @@ jd_uint32_t jd_mem_init()
 
     jd_mem_use->used = JD_MEM_FREE;      // 初始为空闲内存
     jd_mem_use->mem_size = JD_MEM_SIZE-(jd_mem_space-JD_CPU_START_MEM); // 初始内存块大小
-
     return JD_OK;
 }
 
@@ -45,6 +44,10 @@ jd_uint32_t jd_mem_init()
 void *jd_malloc(jd_uint32_t mem_size)
 {
     jd_mem_t *jd_mem_temp, *jd_mem_new_free;
+
+    if(mem_size==JD_NULL)
+        return JD_NULL;
+  
     jd_mem_temp = jd_mem_use;
     while (1)
     {
@@ -80,11 +83,11 @@ void *jd_malloc(jd_uint32_t mem_size)
         // 遍历完成，没有足够的空间进行分配，返回JD_NULL
         if (jd_mem_temp->node.next == JD_NULL)
         {
+            jd_asm_cps_enable();
             return JD_NULL;
         }
         jd_mem_temp = (jd_mem_t *)jd_mem_temp->node.next;
     }
-
     return (void *)(((jd_uint8_t *)jd_mem_temp) + sizeof(jd_mem_t)); // 返回分配的地址
 }
 
@@ -96,6 +99,10 @@ void *jd_malloc(jd_uint32_t mem_size)
 void jd_free(void *ptr)
 {
     jd_mem_t *jd_mem_old, *jd_mem_previous, *jd_mem_next, *jd_mem_next_next;
+
+    if(ptr==JD_NULL)
+        return;
+    jd_asm_cps_disable();    
     jd_mem_old = (jd_mem_t *)((jd_uint8_t *)ptr - sizeof(jd_mem_t)); // 获取控制块信息
 
     jd_mem_old->used = JD_MEM_FREE;
@@ -147,6 +154,7 @@ void jd_free(void *ptr)
         }
     }
     ptr = JD_NULL;
+    jd_asm_cps_enable();
 }
 
 
@@ -159,6 +167,7 @@ jd_uint32_t jd_mem_used_get()
 {
     jd_mem_t *jd_mem_temp;
     jd_uint32_t jd_mem_used;
+    jd_asm_cps_disable();
     jd_mem_temp = jd_mem_use;
     jd_mem_used = jd_mem_space-JD_CPU_START_MEM;
     //遍历所有内存空间
@@ -173,8 +182,10 @@ jd_uint32_t jd_mem_used_get()
 						jd_mem_temp = (jd_mem_t *)jd_mem_temp->node.next;
     }
     #ifdef JD_PRINTF_ENABLE
-    jd_printf("used_mem/all_mem:%dKB/%dKB\r\n",jd_mem_used/1000,JD_MEM_SIZE/1000);
+    jd_printf("used mem:%dKB/%dKB\r\n",jd_mem_used/1000,JD_MEM_SIZE/1000);
     #endif
+
+    jd_asm_cps_enable();
     return jd_mem_used;
 }
 

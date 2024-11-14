@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-18 16:11:38
  * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-11-12 14:02:51
+ * @LastEditTime: 2024-11-14 11:00:55
  * @FilePath: \jdos\jd_task.c
  * @Description: 任务管理
  */
@@ -35,6 +35,7 @@ jd_int32_t jd_node_insert(jd_node_list_t *node_previous, jd_node_list_t *node, j
 	// 传入节点无效，无法插入
 	if (node_previous == JD_NULL && node_next == JD_NULL)
 	{
+		jd_asm_cps_enable();
 		return JD_ERR;
 	}
 	// 连接前后两个节点
@@ -91,8 +92,9 @@ jd_int32_t jd_node_insert(jd_node_list_t *node_previous, jd_node_list_t *node, j
 jd_node_list_t *jd_node_delete(jd_node_list_t *list, jd_node_list_t *node)
 {
 	if (list == JD_NULL || node == JD_NULL)
+	{
 		return JD_NULL;
-
+	}
 	// 判断节点是否在表头
 	if (node == list)
 	{
@@ -226,6 +228,7 @@ void jd_task_exit()
 		// 删除任务
 		jd_task_delete(jd_task);
 	}
+	jd_asm_cps_disable();
 
 	jd_task->stack_sp = (jd_uint32_t)((jd_task->stack_origin_addr) + jd_task->stack_size - sizeof(struct all_register)) & 0xfffffffc; // 腾出寄存器的空间
 	all_register_t *stack_register = (struct all_register *)jd_task->stack_sp;														  // 将指针转换成寄存器指针
@@ -273,6 +276,7 @@ jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_
 	if (jd_new_task == NULL)
 		return JD_NULL; // 判断分配空间是否成功
 
+
 	jd_new_task->node.next = JD_NULL;						   // 初始化节点指针
 	jd_new_task->node.previous = JD_NULL;					   // 初始化节点指针
 	jd_new_task->stack_origin_addr = (jd_uint32_t)jd_new_task; // 记录栈底指针
@@ -294,6 +298,7 @@ jd_task_t *jd_task_create(void (*task_entry)(), jd_uint32_t stack_size, jd_int8_
 
 	jd_new_task->timer_loop = JD_TIMER_NOTIMER;	 // 不是定时任务
 	jd_new_task->auto_delate = JD_TASK_NODELATE; //	任务执行完成后不自动回收内存，任务不删除，下次可直接运行
+
 
 	return jd_new_task; // 返回当前任务节点
 }
@@ -331,7 +336,9 @@ jd_int32_t jd_task_auto_delate(jd_task_t *jd_task)
 {
 	if (jd_task == JD_NULL)
 		return JD_ERR;
+	jd_asm_cps_disable();
 	jd_task->auto_delate = JD_TASK_DELATE;
+	jd_asm_cps_enable();
 	return JD_OK;
 }
 
@@ -344,10 +351,11 @@ jd_int32_t jd_task_run(jd_task_t *jd_task)
 {
 	if (jd_task == JD_NULL)
 		return JD_ERR;
+	jd_asm_cps_disable();	
 	jd_task->status = JD_TASK_READY; // 将任务更改为就绪状态
-
 	// 加入就绪链表
 	jd_task_list_readying = jd_node_in_rd(jd_task_list_readying, &jd_task->node);
+	jd_asm_cps_enable();
 
 	// 切换任务
 	jd_asm_pendsv_putup();
@@ -374,6 +382,8 @@ jd_int32_t jd_task_pause(jd_task_t *jd_task)
 	if (jd_task->status == JD_TASK_PAUSE)
 		return JD_OK;
 
+	jd_asm_cps_disable();
+
 	// 在就绪链表表头
 	if (jd_task_list_readying == &jd_task->node)
 	{
@@ -397,6 +407,8 @@ jd_int32_t jd_task_pause(jd_task_t *jd_task)
 	// 清除任务节点信息
 	jd_task->node.next = JD_NULL;
 	jd_task->node.previous = JD_NULL;
+
+	jd_asm_cps_enable();
 	return JD_OK;
 }
 
