@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-18 16:11:38
  * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-11-14 11:00:55
+ * @LastEditTime: 2024-11-14 11:35:29
  * @FilePath: \jdos\jd_task.c
  * @Description: 任务管理
  */
@@ -355,11 +355,15 @@ jd_int32_t jd_task_run(jd_task_t *jd_task)
 	jd_task->status = JD_TASK_READY; // 将任务更改为就绪状态
 	// 加入就绪链表
 	jd_task_list_readying = jd_node_in_rd(jd_task_list_readying, &jd_task->node);
+
+	if(jd_task_list_readying==&jd_task->node)
+	{
+		jd_asm_cps_enable();
+		// 优先级高切换任务
+		jd_asm_pendsv_putup();
+	}
+
 	jd_asm_cps_enable();
-
-	// 切换任务
-	jd_asm_pendsv_putup();
-
 	// 插入节点
 	return JD_OK;
 }
