@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-18 16:12:28
  * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-11-12 21:51:00
+ * @LastEditTime: 2024-11-15 13:49:20
  * @FilePath: \jdos\jd_it.c
  * @Description: jdos异常管理
  */
@@ -24,6 +24,8 @@ void HAL_IncTick(void)
 
 	jd_time++; // jd_lck++
 	// 判断延时表头是否到达时间，若没有到达时间，则切换，若到达时间则将任务加入到就绪任务,再切换任务
+	
+	
 	jd_task_t *jd_task;
 	jd_task = (jd_task_t *)jd_task_list_delaying; // 获取任务数据
 
@@ -46,14 +48,23 @@ void HAL_IncTick(void)
 		jd_task = (jd_task_t *)jd_task_list_delaying; // 获取任务数据
 	}
 
-
+	#ifdef JD_CPU_U_ENABLE
 	// 这里计算的是空闲任务的运行时间
 	jd_cpu_u_ctr();
+	#endif
 
-
+	//下一个任务是正在运行的任务，不切换上下文
+	if(jd_task_list_readying == &jd_task_runing->node)
+	{
+		#ifdef JD_CPU_U_ENABLE
+		jd_cpu_u_start_stop();
+		#endif
+	}
+	else
+	{
+		jd_asm_pendsv_putup();
+	}
 	jd_asm_cps_enable();
-
-	jd_asm_pendsv_putup();
 }
 
 /**

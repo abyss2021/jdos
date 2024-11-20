@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-23 09:36:38
  * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-11-14 10:38:59
+ * @LastEditTime: 2024-11-15 16:40:55
  * @FilePath: \jdos\jd_memory.c
  * @Description: 用于内存管理
  */
@@ -182,7 +182,7 @@ jd_uint32_t jd_mem_used_get()
 						jd_mem_temp = (jd_mem_t *)jd_mem_temp->node.next;
     }
     #ifdef JD_PRINTF_ENABLE
-    jd_printf("used mem:%dKB/%dKB\r\n",jd_mem_used/1000,JD_MEM_SIZE/1000);
+    //jd_printf("used mem:%dKB/%dKB\r\n",jd_mem_used/1000,JD_MEM_SIZE/1000);
     #endif
 
     jd_asm_cps_enable();

@@ -2,7 +2,7 @@
  * @Author: 江小鉴 abyss_er@163.com
  * @Date: 2024-09-09 10:14:21
  * @LastEditors: 江小鉴 abyss_er@163.com
- * @LastEditTime: 2024-11-13 22:18:46
+ * @LastEditTime: 2024-11-15 16:44:59
  * @FilePath: \jdos\jd_main.c
  * @Description: jd main
  */
@@ -29,7 +29,7 @@ void task2()
 	{
 		// jd_printf("task2\r\n");
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
-		HAL_Delay(20);
+		//HAL_Delay(20);
 		jd_delay(80);
 
 	};
@@ -41,16 +41,7 @@ void task3()
 #ifdef JD_PRINTF_ENABLE
 		// jd_printf("task3\r\n");
 #endif
-		jd_mem_used_get();
-		jd_uint32_t *test_sp1 = jd_malloc(1024*20);
-		jd_mem_used_get();
-		jd_uint32_t *test_sp2 = jd_malloc(1024*10);
-		jd_mem_used_get();
-		jd_delay(320);
-		jd_free(test_sp1);
-		jd_mem_used_get();
-		jd_free(test_sp2);
-		jd_mem_used_get();
+		  jd_delay(320);
 		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
 	};
 }

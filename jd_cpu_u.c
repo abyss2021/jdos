@@ -82,7 +82,7 @@ void jd_cpu_u_ctr(void)
 			jd_cpu_u = 100 - (float)jd_asm_dwt_get() / jd_cpu_100max * 100;
 
 #ifdef JD_PRINTF_ENABLE
-			//jd_printf("jd_cpu_u:%d%%\r\n", jd_cpu_u);
+			jd_printf("jd_cpu_u:%d%%\r\n", jd_cpu_u);
 #endif
 
 			jd_cpu_time_100ctr = 0;
