@@ -19,7 +19,7 @@ jdos通过简单的设计，为嵌入式系统提供了一个轻量级的实时�
 1.jdos文件
 jdos非常简单，只有9个文件，将这9个文件加入到自己的工程当中。
 
-![输入图片说明]([https://mjj.pub/upload/491a08e1daa3bfb8da84dad1034a155.png](https://mjj.pub/upload/image-oghz.png))
+![输入图片说明](https://mjj.pub/upload/image-oghz.png)
 
 2.修改启动文件。
 关闭中断，防止系统未初始化导致异常。
