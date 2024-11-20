@@ -4,7 +4,7 @@ jdos-简单OS！
 
 ![输入图片说明](https://mjj.pub/upload/640c459ba60d1ce5cc5d577c29f40da.png)
 
-jdos是一个简单的操作系统，实现了内存管理、任务管理、定时管理和异常管理。
+jdos是一个简单的RTOS实时操作系统，实现了内存管理、任务管理、定时管理和异常管理。
 
 jdos通过简单的设计，为嵌入式系统提供了一个轻量级的实时操作系统解决方案。
 
@@ -17,14 +17,18 @@ jdos通过简单的设计，为嵌入式系统提供了一个轻量级的实时�
 目前只有KEIL下的工程，KEIL工程通过Stm32CubeMX生成的最小工程，没用添加其他功能，使用的单片机为stm32f103rct6，移植仅仅只需要修改几行代码，说明如下：
 
 1.jdos文件
-jdos非常简单，只有7个文件，将这7个文件加入到自己的工程当中。
+jdos非常简单，只有9个文件，将这9个文件加入到自己的工程当中。
 
-![输入图片说明](https://mjj.pub/upload/491a08e1daa3bfb8da84dad1034a155.png)
+![输入图片说明]([https://mjj.pub/upload/491a08e1daa3bfb8da84dad1034a155.png](https://mjj.pub/upload/image-oghz.png))
 
 2.修改启动文件。
 关闭中断，防止系统未初始化导致异常。
 
 ![输入图片说明](https://mjj.pub/upload/8efeaff06365f8a0ab9a3cc0bf4c948-ppmf.png)
+
+同时将Stack_Size和Stack_Mem共享出去。
+
+![输入图片说明](https://mjj.pub/upload/image-yjkf.png)
 
 3.修改main文件，加入系统初始化函数。
 
